@@ -6,16 +6,16 @@
         <template slot="title" slot-scope="props"><!-- use scope="props" when vue < 2.5.0 -->
           <span :class="props.labelClass" :style="props.labelStyle" style="height:24px;">
             <span class="demo-icon demo-icon-big" style="font-size:20px;vertical-align:middle;"></span>
-            <span style="vertical-align:middle;">手机</span>
+            <span style="vertical-align:middle;">Phone</span>
           </span>
         </template>
       </popup-picker>
     </group>
     <br>
     <div class="picker-buttons">
-       <x-button type="primary" @click.native="value1=[]">将值置为空</x-button>
-       <x-button type="primary" @click.native="changeList10">重新赋值列表</x-button>
-       <x-button type="primary" @click.native="changeList11">push方式更改列表</x-button>
+       <x-button type="primary" @click.native="value1=[]">Set value to blank</x-button>
+       <x-button type="primary" @click.native="changeList10">Reassign the list</x-button>
+       <x-button type="primary" @click.native="changeList11">push way to change the list</x-button>
      </div>
      <group title="double columns">
        <popup-picker :title="title2" :data="list2" v-model="value2"></popup-picker>
@@ -30,7 +30,7 @@
 
      <br>
      <div class="picker-buttons">
-       <x-button type="primary" @click.native="changeList21">push方式更改列表</x-button>
+       <x-button type="primary" @click.native="changeList21">push way to change the list</x-button>
      </div>
 
      <br>
@@ -43,16 +43,16 @@
      </group>
 
      <br>
-     <group title="隐藏时不影响其他popup-picker的mask">
+     <group title="Masking does not affect other popup-picker masks">
        <x-switch title="ishide popup-picker" v-model="switch6"></x-switch>
-       <popup-picker v-if="!switch6" title="显示值" :data="['我不会影响遮罩层'.split('')]" v-model="value6"></popup-picker>
+       <popup-picker v-if="!switch6" title="Display value" :data="['I do not affect the mask layer'.split('')]" v-model="value6"></popup-picker>
      </group>
 
      <br>
      <br>
 
-     <group title="显示格式化">
-      <popup-picker title="时间" :inline-desc="`当前值[${formatDemoValue}]`"v-model="formatDemoValue" :data="[['01','02','03'],['11','12','13']]" :display-format="format"></popup-picker>
+     <group title="Display formatting">
+      <popup-picker title="time" :inline-desc="`The current value[${formatDemoValue}]`"v-model="formatDemoValue" :data="[['01','02','03'],['11','12','13']]" :display-format="format"></popup-picker>
      </group>
   </div>
 </template>

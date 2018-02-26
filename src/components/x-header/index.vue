@@ -32,6 +32,7 @@
 back_text:
   en: Back
   zh-CN: 返回
+  es: Espalda
 </i18n>
 
 <script>

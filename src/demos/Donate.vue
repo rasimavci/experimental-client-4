@@ -1,11 +1,11 @@
 <template>
   <div class="donate">
     <img src="https://i.loli.net/2017/10/26/59f15b02a1739.jpg" class="donate-img">
-    <p class="desc">感谢捐赠，但是捐赠并不会让你在该项目上有任何特权。
+    <p class="desc">Thanks for the donation, but donating does not give you any privilege on the project.
     <br>
-    购买【世界和我】产品也是支持该项目发展。
+    The purchase of [World and Me] products is also supporting the development of the project.
     <br>
-    （天猫搜索 livingearth）
+(Lynx search livingearth)
     </p>
   </div>
 </template>

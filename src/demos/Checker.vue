@@ -3,8 +3,8 @@
     <divider>{{ $t('Radio: no default value') }}</divider>
     <div class="box">
       <checker v-model="demo1" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-      <checker-item value="1">{{ $t('潘') }}</checker-item>
-      <checker-item value="2">{{ $t('闲') }}</checker-item>
+      <checker-item value="1">{{ $t('Pan') }}</checker-item>
+      <checker-item value="2">{{ $t('idle') }}</checker-item>
       <checker-item value="3">{{ $t('邓') }}</checker-item>
       <checker-item value="4">{{ $t('小') }}</checker-item>
       <checker-item value="5">{{ $t('驴') }}</checker-item>
@@ -17,8 +17,8 @@
     <divider>{{ $t('radioRequired') }}</divider>
     <div class="box">
       <checker v-model="demo1Required" radio-required default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-      <checker-item value="1">{{ $t('潘') }}</checker-item>
-      <checker-item value="2">{{ $t('闲') }}</checker-item>
+      <checker-item value="1">{{ $t('Pan') }}</checker-item>
+      <checker-item value="2">{{ $t('idle') }}</checker-item>
       <checker-item value="3">{{ $t('邓') }}</checker-item>
       <checker-item value="4">{{ $t('小') }}</checker-item>
       <checker-item value="5">{{ $t('驴') }}</checker-item>
@@ -73,9 +73,9 @@
     <divider>{{ $t('Checkbox') }}</divider>
     <div class="box">
        <checker v-model="demo1Checkbox" type="checkbox" default-item-class="demo1-item" selected-item-class="demo1-item-selected">
-        <checker-item :value="1">{{ $t('白') }}</checker-item>
-        <checker-item :value="2">{{ $t('富') }}</checker-item>
-        <checker-item :value="3">{{ $t('美') }}</checker-item>
+        <checker-item :value="1">{{ $t('White') }}</checker-item>
+        <checker-item :value="2">{{ $t('rich') }}</checker-item>
+        <checker-item :value="3">{{ $t('nice') }}</checker-item>
       </checker>
       <br>
       <span>{{ $t('Current value is') }}: {{demo1Checkbox}}</span>
@@ -137,10 +137,10 @@
           default-item-class="demo4-item"
           selected-item-class="demo4-item-selected"
           disabled-item-class="demo4-item-disabled">
-            <checker-item :value="$t('花跟叶')" @on-item-click="onItemClick"> {{ $t('花跟叶') }} </checker-item>
-            <checker-item :value="$t('鸟与树')" @on-item-click="onItemClick"> {{ $t('鸟与树') }} </checker-item>
-            <checker-item :value="$t('我和你')" @on-item-click="onItemClick"> {{ $t('我和你') }} </checker-item>
-            <checker-item :value="$t('全套礼品装')" disabled @on-item-click="onItemClick"> {{ $t('全套礼品装') }} </checker-item>
+            <checker-item :value="$t('Flower with leaves')" @on-item-click="onItemClick"> {{ $t('Flower with leaves') }} </checker-item>
+            <checker-item :value="$t('Bird and tree')" @on-item-click="onItemClick"> {{ $t('Bird and tree') }} </checker-item>
+            <checker-item :value="$t('Me and you')" @on-item-click="onItemClick"> {{ $t('Me and you') }} </checker-item>
+            <checker-item :value="$t('A full set of gift equipment')" disabled @on-item-click="onItemClick"> {{ $t('A full set of gift equipment') }} </checker-item>
           </checker>
         </div>
       </popup>
@@ -169,7 +169,7 @@
 
 <i18n>
 'Radio: no default value':
-  zh-CN: 单选，默认不选中任何项
+  zh-CN: Radio, the default is not selected any item
 潘:
   en: A
 闲:

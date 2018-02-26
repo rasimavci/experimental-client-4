@@ -11,7 +11,7 @@
 
 <i18n>
 'Do you agree?':
-  zh-CN: 同意不？
+  zh-CN: Agree not?
 </i18n>
 
 <script>

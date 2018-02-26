@@ -23,7 +23,7 @@
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe606;</span>
           </cell>
           </cell>
-          <cell title="Contacts" link="project/donate" @click.native="drawerVisibility = false">
+          <cell title="Contacts" link="contact" @click.native="drawerVisibility = false">
           </cell>
           </cell>
           <cell title="Chat" link="project/donate" @click.native="drawerVisibility = false">
@@ -164,10 +164,17 @@ export default {
       if (path === '/component/demo') {
         this.$router.replace('/demo')
         return
-      }
-      if (path === '/demo') {
+      } else if (path === '/demo') {
         setTimeout(() => {
           this.box = document.querySelector('#demo_list_box')
+          if (this.box) {
+            this.box.removeEventListener('scroll', this.handler, false)
+            this.box.addEventListener('scroll', this.handler, false)
+          }
+        }, 1000)
+      } else if (path === '/contact') {
+        setTimeout(() => {
+          this.box = document.querySelector('#contact')
           if (this.box) {
             this.box.removeEventListener('scroll', this.handler, false)
             this.box.addEventListener('scroll', this.handler, false)
@@ -222,7 +229,7 @@ export default {
     title () {
       if (this.route.path === '/') return 'Smart Office'
       if (this.route.path === '/project/donate') return 'Donate'
-      if (this.route.path === '/demo') return 'Demo list'
+      if (this.route.path === '/demo') return 'Smart Office'
       return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
     },
     viewTransition () {
@@ -236,7 +243,8 @@ export default {
       menus: {
         'language.noop': '<span class="menu-title">Language</span>',
         'zh-CN': '中文',
-        'en': 'English'
+        'en': 'English',
+        'es': 'Espanol'
       },
       drawerVisibility: false,
       showMode: 'push',

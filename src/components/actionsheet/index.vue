@@ -32,7 +32,8 @@
 <i18n>
 cancel:
   en: cancel
-  zh-CN: 取消
+  zh-CN: cancel
+  es: Cancelar
 </i18n>
 
 <script>

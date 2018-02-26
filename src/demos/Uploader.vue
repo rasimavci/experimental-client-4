@@ -1,9 +1,9 @@
 <template>
   <div>
-    <divider>没有封装组件，引入样式使用</divider>
+    <divider>No package components, the introduction of the use of style</divider>
     <div class="weui-uploader" style="padding:15px;">
       <div class="weui-uploader__hd">
-          <p class="weui-uploader__title">图片上传</p>
+          <p class="weui-uploader__title">upload picture</p>
           <div class="weui-uploader__info">0/2</div>
       </div>
       <div class="weui-uploader__bd">

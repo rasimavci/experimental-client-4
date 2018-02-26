@@ -1,8 +1,8 @@
 <template>
-  <div style="text-align:center;">{{ $t('貌似示例不存在')}}</div>
+  <div style="text-align:center;">{{ $t('Looks like the example does not exist')}}</div>
 </template>
 
 <i18n>
-貌似示例不存在:
+Looks like the example does not exist:
   en: Sorry, demo doesn't exist
 </i18n>

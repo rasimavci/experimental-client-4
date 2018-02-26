@@ -39,9 +39,9 @@
 
 <i18n>
 Use in cell:
-  zh-CN: 在 cell 中使用
+  zh-CN: Used in cell
 Custom template:
-  zh-CN: 自定义模版
+  zh-CN: Custom template
 'Date: 2018-08-01':
   zh-CN: 日期：2018-08-01
 </i18n>

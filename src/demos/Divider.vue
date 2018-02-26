@@ -6,7 +6,7 @@
 
 <i18n>
 I have bottom line:
-  zh-CN: 我是有底线的
+  zh-CN: I have a bottom line
 </i18n>
 
 <script>

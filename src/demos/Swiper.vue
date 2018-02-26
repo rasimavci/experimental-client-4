@@ -64,7 +64,7 @@
 
     <br/>
     <br/>
-    <divider>华丽的分割线</divider>
+    <divider>Gorgeous dividing line</divider>
 
     <group-title>引入swiper-item自定义item内容，用height定义高度</group-title>
     <swiper auto height="100px">
@@ -82,7 +82,7 @@
 
     <group-title>垂直方向文字滚动</group-title>
     <swiper auto height="30px" direction="vertical" :interval=2000 class="text-scroll" :show-dots="false">
-      <swiper-item><p>义务爱了 完成传奇世界H5-王者归来任务 获得20金币</p></swiper-item>
+      <swiper-item><p>Obligation to love to complete the legendary world H5 - Return of the king to get 20 gold coins</p></swiper-item>
       <swiper-item><p>基本世神 兑换《传奇世界H5》畅玩级礼包 消耗30金币</p></swiper-item>
       <swiper-item><p>零哥章魚 完成传奇世界H5-王者归来任务 获得30金币</p></swiper-item>
       <swiper-item><p>做迎而為 兑换【饿了么】畅享美食红包 消耗20金币</p></swiper-item>
@@ -132,7 +132,7 @@ const urlList = baseList.map((item, index) => ({
   url: 'http://m.baidu.com',
   img: item.img,
   fallbackImg: item.fallbackImg,
-  title: `(可点击)${item.title}`
+  title: `(Clickable)${item.title}`
 }))
 
 const demoList = imgList.map((one, index) => ({

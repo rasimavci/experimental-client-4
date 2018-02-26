@@ -8,6 +8,7 @@ import Vuex from 'vuex'
 import vuexI18n from 'vuex-i18n'
 import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
+import createKandy from '../kandy.link.js'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -94,22 +95,22 @@ const wx = Vue.wechat
 const http = Vue.http
 
 /**
-* -------------------------- 微信分享 ----------------------
-* 请不要直接复制下面代码
+* -------------------------- WeChat to share ----------------------
+* Please do not copy the following code directly
 */
 
 if (process.env.NODE_ENV === 'production') {
   wx.ready(() => {
     console.log('wechat ready')
     wx.onMenuShareAppMessage({
-      title: 'VUX', // 分享标题
+      title: 'VUX', // Share title
       desc: '基于 WeUI 和 Vue 的移动端 UI 组件库',
       link: 'https://vux.li?x-page=wechat_share_message',
       imgUrl: 'https://static.vux.li/logo_520.png'
     })
 
     wx.onMenuShareTimeline({
-      title: 'VUX', // 分享标题
+      title: 'VUX', // Share title
       desc: '基于 WeUI 和 Vue 的移动端 UI 组件库',
       link: 'https://vux.li?x-page=wechat_share_timeline',
       imgUrl: 'https://static.vux.li/logo_520.png'
@@ -167,7 +168,7 @@ router.beforeEach(function (to, from, next) {
     if (!fromIndex || parseInt(toIndex, 10) > parseInt(fromIndex, 10) || (toIndex === '0' && fromIndex === '0')) {
       store.commit('updateDirection', {direction: 'forward'})
     } else {
-      // 判断是否是ios左滑返回
+      // Judge whether ios left slide back
       if (!isPush && (Date.now() - endTime) < 377) {
         store.commit('updateDirection', {direction: ''})
       } else {
@@ -203,3 +204,49 @@ new Vue({
   router,
   render: h => h(App)
 }).$mount('#app')
+
+// This line is used to create a new instans of Kandy
+const kandy = createKandy({
+  authentication: {
+    subscription: {
+      expires: 3600,
+      service: ['IM', 'Presence', 'call'],
+      protocol: 'https',
+      server: 'spidr-ucc.genband.com',
+      version: '1',
+      port: '443'
+    },
+    websocket: {
+      protocol: 'wss',
+      server: 'spidr-ucc.genband.com',
+      port: '443'
+    }
+  },
+  logs: {
+    logLevel: 'debug',
+    enableFcsLogs: true
+  },
+  call: {
+    chromeExtensionId: 'put real extension ID here',
+    serverProvidedTurnCredentials: true,
+    iceserver: [
+      {
+        url: 'stun:turn-ucc-1.genband.com:3478?transport=udp'
+      },
+      {
+        url: 'stun:turn-ucc-2.genband.com:3478?transport=udp'
+      },
+      {
+        url: 'turns:turn-ucc-1.genband.com:443?transport=tcp',
+        credential: ''
+      },
+      {
+        url: 'turns:turn-ucc-2.genband.com:443?transport=tcp',
+        credential: ''
+      }
+    ]
+  }
+})
+
+createKandy()
+kandy.connect('ravci@genband.com')
