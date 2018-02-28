@@ -46,12 +46,45 @@ if (/zh/.test(nowLocale)) {
   Vue.i18n.set('en')
 }
 
+// let callId
+let local = document.getElementById('local-container')
+let remote = document.getElementById('remote-container')
+const myVideoResolution = {
+  height: 640,
+  width: 480
+}
+
+const options = {
+  isAudioEnabled: true, // document.getElementById ('isAudioEnabled').checked,
+  isVideoEnabled: false, // document.getElementById ('isVideoEnabled').checked,
+  sendInitialVideo: false, // document.getElementById ('sendInitialVideo').checked,
+  sendScreenShare: false, // document.getElementById ('sendScreenShare').checked,
+  videoResolution: myVideoResolution,
+  // localVideoContainer: this.$ref.local-container, // document.getElementById('local-container'),
+  // remoteVideoContainer: this.$ref.remote-container //document.getElementById('remote-container')
+  localVideoContainer: local, // document.getElementById ('local-container'), //olmadi this.$refs.container1, //
+  remoteVideoContainer: remote // document.getElementById ('remote-container'),
+}
+
 store.registerModule('vux', {
   state: {
     demoScrollTop: 0,
     isLoading: false,
-    direction: 'forward'
+    direction: 'forward',
+    showPlacement: 'left',
+    currentPage: 'main',
+    activeCallRinging: '',
+    activeCallExist: '',
+    activeCallInCall: '',
+    activeCallOnHold: '',
+    activeCallEnded: '',
+    activeCallState: '',
+    callstart: '',
+    activeCall: { state: '', id: '' },
+    user: {},
+    history: []
   },
+
   mutations: {
     updateDemoPosition (state, payload) {
       state.demoScrollTop = payload.top
@@ -61,11 +94,116 @@ store.registerModule('vux', {
     },
     updateDirection (state, payload) {
       state.direction = payload.direction
+    },
+    updateShowPlacement (state, payload) {
+      console.log('mutated with ' + payload.top)
+      state.showPlacement = payload.top
+    },
+    updateCurrentPage (state, payload) {
+      console.log('mutated with ' + payload.top)
+      state.currentPage = payload.top
+    },
+    SET_USER_WITHID ({commit}, top) {
+      console.log('dispatching with ' + top)
+    },
+    INITIALIZE_ACTIVE_CALL (state) {
+      state.activeCall.state = ''
+      state.activeCall.mediaSate = ''
+      state.activeCall.muted = ''
+      state.activeCall.state = ''
+    },
+    SET_ACTIVECALL_STATE  (state, top) {
+      state.activeCall.state = top
+      state.activeCallState = top
+    },
+    SET_ACTIVECALL_ID  (state, top) {
+      state.activeCall.id = top
+      // state.activeCallState = top
+    },
+    SET_ACTIVE_CALL (state, call) {
+      console.log('set chat participant as ' + call)
+      state.activeCall = call
+    },
+    REFRESH_CALLLOGS (state, logs) {
+      console.log('refresh call logs')
+      state.history = logs
+    },
+    SET_PRESENCE (state, args) {
+      const params = {
+        status: '',
+        activity: '',
+        note: args[1]
+      }
+      console.log('Peer: setPresence state.. : ' + args[0])
+
+      switch (args[0]) {
+        case '0':
+          params.status = 'open'
+          params.activity = 'unknown'
+          break
+        case '1':
+          params.status = 'closed'
+          params.activity = 'unknown'
+          break
+        case '2':
+          params.status = 'open'
+          params.activity = 'away'
+          break
+        case '3':
+          params.status = 'open'
+          params.activity = 'lunch'
+          break
+        case '4':
+          params.status = 'closed'
+          params.activity = 'busy'
+          break
+        case '5':
+          params.status = 'closed'
+          params.activity = 'vacation'
+          break
+        case '6':
+          params.status = 'open'
+          params.activity = 'other'
+          params.note = 'be right Back'
+          break
+        default:
+          break
+      }
     }
   },
   actions: {
     updateDemoPosition ({commit}, top) {
       commit({type: 'updateDemoPosition', top: top})
+    },
+    connect ({ commit }, credentials) {
+     // addEventListeners()
+      console.log(
+      'credentials' + credentials.username + ' ' + credentials.password
+    )
+      kandy.connect(credentials)
+      addEventListeners()
+      commit({type: 'INITIALIZE_ACTIVE_CALL'})
+    },
+    disconnect ({ commit }) {
+      kandy.disconnect()
+    },
+    updateShowPlacement ({commit}, top) {
+      console.log('dispatching with ' + top)
+      commit({type: 'updateShowPlacement', top: top})
+    },
+    updateCurrentPage ({commit}, top) {
+      console.log('dispatching with ' + top)
+      commit({type: 'updateCurrentPage', top: top})
+    },
+    call ({commit}, params) {
+      console.log('call to:' + params.callee)
+      options.isVideoEnabled = params.mode
+      options.sendInitialVideo = params.mode
+      kandy.call.make(params.callee, options)
+      commit('SET_ACTIVECALL_STATE', 'IN_CALL')
+    },
+    end ({commit}, callee) {
+      kandy.call.end(this.state.vux.activeCall.id)
     }
   }
 })
@@ -247,6 +385,42 @@ const kandy = createKandy({
     ]
   }
 })
+
+function addEventListeners () {
+  kandy.on('auth:change', function (data) {
+    console.log('auth:change Event Data: ' + JSON.stringify(data))
+    if (kandy.getConnection().isConnected === true) {
+      //  store.dispatch ('refresh')
+      kandy.contacts.refresh()
+      kandy.call.history.fetch()
+      // this.refreshContacts ()
+      // retrieveCallLogs ()
+      // Kandyjs.getCallLogs ()
+      // Kandyjs.fetchConversations ()
+      // Kandyjs.searchDirectory ()
+    }
+  })
+
+  kandy.on('call:start', function (params) {
+    // commit('SET_ACTIVECALL_ID', params.callId)
+    store.commit({type: 'SET_ACTIVECALL_ID', top: params.callId})
+    const calls = kandy.call.getAll()
+    calls.forEach(function (call) {
+      console.log('all call ids currently : ' + params.callId)
+      // change activeCall
+      if (call.id === params.callId) {
+        store.vux.commit('SET_ACTIVE_CALL', call)
+        // store.dispatch('toggleActiveCall')
+        // store.commit (types.SET_ACTIVE_CALL, call)
+      }
+    })
+  })
+
+  kandy.on('callHistory:change', function (params) {
+    let logs = kandy.call.history.get()
+    store.vux.commit('REFRESH_CALLLOGS', logs)
+  })
+}
 
 createKandy()
 kandy.connect('ravci@genband.com')

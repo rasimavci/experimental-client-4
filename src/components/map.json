@@ -40,6 +40,7 @@
   "cookie": "src/tools/cookie/index.js",
   "Countdown": "src/components/countdown/index.vue",
   "Contact": "src/components/contact/index.vue",
+  "contact": "src/components/contact/index.vue",
   "Countup": "src/components/countup/index.vue",
   "dateFormat": "src/tools/date/format.js",
   "dateRange": "src/tools/date/range.js",

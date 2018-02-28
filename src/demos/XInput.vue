@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <group title="禁用内置验证及显示成功或者错误样式">
-      <x-input title="禁用验证" placeholder="I'm placeholder" novalidate :icon-type="iconType" :show-clear="false" @on-blur="onBlur" placeholder-align="right"></x-input>
+    <group title="Disable built-in verification and display success or error patterns">
+      <x-input title="Disable verification" placeholder="I'm placeholder" novalidate :icon-type="iconType" :show-clear="false" @on-blur="onBlur" placeholder-align="right"></x-input>
     </group>
     <div style="padding:15px;">
       <x-button @click.native="iconType = 'success'" type="primary"> set success</x-button>
@@ -10,18 +10,18 @@
       <x-button @click.native="iconType = ''" type="primary"> set empty</x-button>
     </div>
 
-    <group title="is-type传入function">
-      <x-input title="必须输入2333" :is-type="be2333" placeholder="I'm placeholder"></x-input>
+    <group title="is-type Incoming function">
+      <x-input title="You must enter 2333" :is-type="be2333" placeholder="I'm placeholder"></x-input>
     </group>
 
     <group title="mask">
-      <x-input title="手机号码格式化" mask="999 9999 9999" v-model="maskValue" :max="13" is-type="china-mobile"></x-input>
+      <x-input title="Phone number formatting" mask="999 9999 9999" v-model="maskValue" :max="13" is-type="china-mobile"></x-input>
       <cell title="value" :value="maskValue"></cell>
       <x-input title="(99) 9-99" mask="(99) 9-99" v-model="maskValue2" :max="9"></x-input>
     </group>
 
-    <group title="使用icon代替title">
-      <x-input title="必须输入2333" :is-type="be2333" placeholder="I'm placeholder">
+    <group title="Use icon instead of title">
+      <x-input title="You must enter 2333" :is-type="be2333" placeholder="I'm placeholder">
         <img slot="label" style="padding-right:10px;display:block;" src="http://dn-placeholder.qbox.me/110x110/FF2D55/000" width="24" height="24">
       </x-input>
     </group>

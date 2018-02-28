@@ -16,44 +16,64 @@
 
       <!-- drawer content -->
       <div slot="drawer">
-        <group title="Profile Rasim Avci" style="margin-top:20px;">
-          <cell title="Demo" link="/demo" value="Demo" @click.native="drawerVisibility = false">
+        <group title="Profile Rasim Avci" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
+          <cell title="Presences" link="/component/presences" value="Presences" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
           </cell>
-          <cell data-v-5d4fb59a title="   Favorites" link="project/donate" @click.native="drawerVisibility = false">
+
+
+          <cell title="Login" link="/component/login" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
+          </cell>
+          <cell title="Call" link="/component/call" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
+          </cell>
+          <cell data-v-5d4fb59a title="   Favorites" link="/component/favorites" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe606;</span>
           </cell>
+          <cell title="Contacts" link="/component/contact" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Contacts" link="contact" @click.native="drawerVisibility = false">
-          </cell>
-          </cell>
-          <cell title="Chat" link="project/donate" @click.native="drawerVisibility = false">
+          <cell title="Chat" link="/component/messages" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe608;</span>
           </cell>
-          </cell>
-          <cell title="History" link="project/donate" @click.native="drawerVisibility = false">
+          <cell title="History" link="/component/history" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe619;</span>
           </cell>
-          </cell>
-          <cell title="   Dialpad" link="project/donate" @click.native="drawerVisibility = false">
+          <cell title="   Dialpad" link="/component/dialpad" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe661;</span>
           </cell>
+          <cell title="Sessions" link="/component/sessions" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Sessions" link="project/donate" @click.native="drawerVisibility = false">
-          </cell>
-          </cell>
-          <cell title="Collaboration" link="project/donate" @click.native="drawerVisibility = false">
-          </cell>
-          </cell>
-          <cell title="Buy me a coffee" link="project/donate" @click.native="drawerVisibility = false">
-          </cell>
-          <cell title="Github" link="http://github.com/airyland/vux" value="Star me" @click.native="drawerVisibility = false">
+          <cell title="Collaboration" link="/component/conference" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
         </group>
-        <group title="showMode">
+        <group title="showMode" v-show="this.stateShowPlacement === 'left'">
           <radio v-model="showMode" :options="['push', 'overlay']" @on-change="onShowModeChange"></radio>
         </group>
-        <group title="placement">
+        <group title="placement" v-show="this.stateShowPlacement === 'left'">
           <radio v-model="showPlacement" :options="['left', 'right']" @on-change="onPlacementChange"></radio>
+        </group>
+        </group>
+        <group title="showMode" v-show="this.stateShowPlacement === 'left'">
+          <radio v-model="showMode" :options="['push', 'overlay']" @on-change="onShowModeChange"></radio>
+        </group>
+        <group title="Manage" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
+          <radio v-model="showPlacement" :options="['Create Contact']" @on-change="onPlacementChange"></radio>
+        </group>
+        <group title="Sort By" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
+          <radio v-model="showPlacement" :options="['Last Name', 'First Name', 'Availability']" @on-change="onPlacementChange"></radio>
+        </group>
+        <group title="Sources" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
+          <radio v-model="showPlacement" :options="['Personal Addressbook', 'Global Addressbook']" @on-change="onPlacementChange"></radio>
+        </group>
+        <group title="Show..." v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'history'">
+          <radio v-model="showPlacement" :options="['Incoming Call', 'Outgoing Call', 'Missed Call', 'Message', 'Conference']" @on-change="onPlacementChange"></radio>
+        </group>
+        <group title="Display As" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'favorites'">
+          <radio v-model="showPlacement" :options="['Tiles', 'List']" @on-change="onPlacementChange"></radio>
+        </group>
+        <group title="Sort By" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'favorites'">
+          <radio v-model="showPlacement" :options="['Last Name', 'First Name', 'Availability']" @on-change="onPlacementChange"></radio>
+        </group>
+        <group title="Display" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'messages'">
+          <radio v-model="showPlacement" :options="['New', 'Saved']" @on-change="onPlacementChange"></radio>
         </group>
       </div>
 
@@ -72,6 +92,8 @@
           </span>
         </x-header>
 
+
+
         <!-- remember to import BusPlugin in main.js if you use components: x-img and sticky -->
         <transition
         @after-enter="$vux.bus && $vux.bus.$emit('vux:after-view-enter')"
@@ -79,7 +101,7 @@
           <router-view class="router-view"></router-view>
         </transition>
 
-        <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="!isTabbarDemo" slot="bottom">
+        <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="this.stateCurrentPage !== 'dialpad' && this.stateCurrentPage !== 'call'" slot="bottom">
           <tabbar-item :link="{path:'/'}" :selected="route.path === '/'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
             <span slot="label">Chat</span>
@@ -104,6 +126,15 @@ import { Radio, Group, Cell, Badge, Drawer, Actionsheet, ButtonTab, ButtonTabIte
 import { mapState, mapActions } from 'vuex'
 
 export default {
+  created: function () {
+  //  this.onPlacementChange(this.stateShowPlacement)
+  //  console.log('showPlacement value ' + this.stateShowPlacement)
+    this.showPlacement = 'left'
+    this.showPlacementValue = 'left'
+  //  setTimeout(one => {
+  //    this.drawerVisibility = !this.drawerVisibility
+  //   }, 300)
+  },
   directives: {
     TransferDom
   },
@@ -123,6 +154,10 @@ export default {
     Actionsheet
   },
   methods: {
+    onCellClick () {
+      /** hide drawer before changing showMode **/
+      console.log('cell clicked')
+    },
     onShowModeChange (val) {
       /** hide drawer before changing showMode **/
       this.drawerVisibility = false
@@ -138,7 +173,14 @@ export default {
       }, 400)
     },
     onClickMore () {
-      this.showMenu = true
+      if (this.stateShowPlacement === 'left') {
+        this.showMenu = true
+      } else {
+        this.showPlacementValue = 'right'
+        setTimeout(one => {
+          this.drawerVisibility = !this.drawerVisibility
+        }, 300)
+      }
     },
     changeLocale (locale) {
       this.$i18n.set(locale)
@@ -152,6 +194,9 @@ export default {
     this.handler = () => {
       if (this.path === '/demo') {
         this.box = document.querySelector('#demo_list_box')
+        this.updateDemoPosition(this.box.scrollTop)
+      } else if (this.path === '/contact') {
+        this.box = document.querySelector('#contact')
         this.updateDemoPosition(this.box.scrollTop)
       }
     }
@@ -187,6 +232,8 @@ export default {
   },
   computed: {
     ...mapState({
+      stateShowPlacement: state => state.vux.showPlacement,
+      stateCurrentPage: state => state.vux.currentPage,
       route: state => state.route,
       path: state => state.route.path,
       deviceready: state => state.app.deviceready,
@@ -201,6 +248,9 @@ export default {
       return false
     },
     leftOptions () {
+      this.showPlacementValue = 'left'
+      this.$store.dispatch('updateShowPlacement', 'left')
+      this.$store.dispatch('updateCurrentPage', 'main')
       return {
         showBack: this.route.path !== '/'
       }
@@ -230,6 +280,7 @@ export default {
       if (this.route.path === '/') return 'Smart Office'
       if (this.route.path === '/project/donate') return 'Donate'
       if (this.route.path === '/demo') return 'Smart Office'
+      if (this.route.path === '/contact') return 'Smart Office Contact'
       return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
     },
     viewTransition () {

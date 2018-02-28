@@ -9,7 +9,7 @@
       <x-switch title="default max-height=100%" v-model="show12"></x-switch>
       <x-switch title="set max-height=50%" v-model="show13"></x-switch>
     </group>
-    
+
     <div v-transfer-dom>
       <popup v-model="show" @on-hide="log('hide')" @on-show="log('show')">
         <div class="popup0">
@@ -22,7 +22,7 @@
     </div>
 
     <toast v-model="showToast">You did it!</toast>
-    
+
     <div v-transfer-dom>
       <popup v-model="show1" height="100%">
         <div class="popup1">
@@ -32,7 +32,7 @@
         </div>
       </popup>
     </div>
-    
+
     <div v-transfer-dom>
       <popup v-model="show3">
         <div class="popup2">
@@ -44,7 +44,7 @@
         </div>
       </popup>
     </div>
-    
+
     <div v-transfer-dom>
       <popup v-model="show4">
         <div class="popup2">
@@ -55,7 +55,7 @@
         </div>
       </popup>
     </div>
-    
+
     <div v-transfer-dom>
       <popup v-model="show5" :hide-on-blur=false>
         <div class="popup2">
@@ -66,7 +66,7 @@
         </div>
       </popup>
     </div>
-    
+
     <div v-transfer-dom>
       <popup v-model="show6">
         <div class="popup1">
@@ -74,7 +74,7 @@
             <x-switch title="Popup address" v-model="show6"></x-switch>
           </group>
           <group>
-            <x-address :title="title6" v-model="value6" :list="addressData" placeholder="请选择地址" inline-desc="可以设置placeholder" :popup-style="{zIndex: 502}"></x-address>
+            <x-address :title="title6" v-model="value6" :list="addressData" placeholder="Please select address" inline-desc="Placeholder can be set" :popup-style="{zIndex: 502}"></x-address>
           </group>
         </div>
       </popup>
@@ -83,7 +83,7 @@
     <group>
       <x-switch title="transparent background" v-model="show7"></x-switch>
     </group>
-    
+
     <div v-transfer-dom>
       <popup v-model="show7" height="270px" is-transparent>
         <div style="width: 95%;background-color:#fff;height:250px;margin:0 auto;border-radius:5px;padding-top:10px;">
@@ -113,7 +113,7 @@
         </div>
       </popup>
     </div>
-    
+
     <div v-transfer-dom>
       <popup v-model="show9" position="right">
         <div style="width:200px;">
@@ -187,7 +187,7 @@ export default {
       show4: false,
       show5: false,
       show6: false,
-      title6: '默认空的',
+      title6: 'The default is empty',
       value6: [],
       show7: false,
       showToast: false,

@@ -1,29 +1,29 @@
 <template>
   <div>
     <tab>
-      <tab-item selected @on-item-click="onItemClick">已发货</tab-item>
-      <tab-item @on-item-click="onItemClick">未发货</tab-item>
-      <tab-item @on-item-click="onItemClick">全部订单</tab-item>
+      <tab-item selected @on-item-click="onItemClick">Shipped</tab-item>
+      <tab-item @on-item-click="onItemClick">Not shipped</tab-item>
+      <tab-item @on-item-click="onItemClick">All orders</tab-item>
     </tab>
     <br/>
     <br/>
-    <divider>手动切换</divider>
+    <divider>Switch manually</divider>
     <tab v-model="index01" prevent-default @on-before-index-change="switchTabItem">
-      <tab-item selected>已发货</tab-item>
-      <tab-item>未发货</tab-item>
-      <tab-item>全部订单</tab-item>
+      <tab-item selected>Shipped</tab-item>
+      <tab-item>Not shipped</tab-item>
+      <tab-item>All orders</tab-item>
     </tab>
     <br/>
     <br/>
-    <divider>定义bar固定宽度</divider>
+    <divider>Define bar fixed width</divider>
     <tab :line-width="1" custom-bar-width="60px">
-      <tab-item selected>已发货</tab-item>
-      <tab-item>未发货</tab-item>
-      <tab-item>全部订单</tab-item>
+      <tab-item selected>Shipped</tab-item>
+      <tab-item>Not shipped</tab-item>
+      <tab-item>All orders</tab-item>
     </tab>
     <br/>
     <br/>
-    <divider>使用函数定义bar宽度</divider>
+    <divider>Use the function to define the bar width</divider>
     <tab :line-width="1" :custom-bar-width="getBarWidth">
       <tab-item selected>AA</tab-item>
       <tab-item>AAAA</tab-item>
@@ -35,11 +35,11 @@
     <divider>{{ $t('set bar-active-color')}}</divider>
     <div style="width: 100%;overflow:scroll;-webkit-overflow-scrolling:touch;">
       <tab style="width:500px;" bar-active-color="#668599" :line-width="1">
-        <tab-item>已发货</tab-item>
-        <tab-item selected>未发货</tab-item>
-        <tab-item>全部订单</tab-item>
-        <tab-item>全部订单</tab-item>
-        <tab-item>全部订单</tab-item>
+        <tab-item>Shipped</tab-item>
+        <tab-item selected>Not shipped</tab-item>
+        <tab-item>All orders</tab-item>
+        <tab-item>All orders</tab-item>
+        <tab-item>All orders</tab-item>
       </tab>
     </div>
 
@@ -48,18 +48,18 @@
     <br/>
     <divider>different active class</divider>
     <tab :animate="false">
-      <tab-item active-class="active-6-1">已发货</tab-item>
-      <tab-item active-class="active-6-2" selected>未发货</tab-item>
-      <tab-item active-class="active-6-3">全部订单</tab-item>
+      <tab-item active-class="active-6-1">Shipped</tab-item>
+      <tab-item active-class="active-6-2" selected>Not shipped</tab-item>
+      <tab-item active-class="active-6-3">All orders</tab-item>
     </tab>
     <br/>
     <br/>
     <br/>
     <divider>no animation</divider>
     <tab :animate="false">
-      <tab-item>已发货</tab-item>
-      <tab-item selected>未发货</tab-item>
-      <tab-item>全部订单</tab-item>
+      <tab-item>Shipped</tab-item>
+      <tab-item selected>Not shipped</tab-item>
+      <tab-item>All orders</tab-item>
     </tab>
     <br/>
     <br/>
@@ -75,8 +75,8 @@
     <br/>
     <divider>tab-item badge</divider>
     <tab>
-      <tab-item selected badge-label="1">收到的消息</tab-item>
-      <tab-item badge-background="#38C972" badge-color="#fff" badge-label="2">发出的消息</tab-item>
+      <tab-item selected badge-label="1">Received news</tab-item>
+      <tab-item badge-background="#38C972" badge-color="#fff" badge-label="2">Message sent</tab-item>
     </tab>
     <br/>
     <br/>
@@ -127,7 +127,7 @@ set bar-active-color:
 
 <script>
 import { Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem } from 'vux'
-const list = () => ['精选', '美食', '电影', '酒店', '外卖']
+const list = () => ['Featured', 'Food', 'the film', 'Hotel', 'Takeaway']
 
 export default {
   components: {
@@ -143,11 +143,11 @@ export default {
     return {
       index01: 0,
       list2: list(),
-      demo2: '美食',
-      list3: ['收到的消息', '发出的消息'],
-      demo3: '收到的消息',
-      list4: ['正在放映', '即将上映'],
-      demo4: '即将上映',
+      demo2: 'Food',
+      list3: ['Received news', 'Message sent'],
+      demo3: 'Received news',
+      list4: ['Being shown', 'coming soon'],
+      demo4: 'coming soon',
       demoDisabled: 'A',
       index: 0,
       getBarWidth: function (index) {

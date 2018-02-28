@@ -66,13 +66,13 @@
       <flexbox-item class="vux-1px-r">
         <a class="item item6">
           <div class="img lvyou"></div>
-          <div class="text">{{ $t('旅游') }}</div>
+          <div class="text">{{ $t('tourism') }}</div>
         </a>
       </flexbox-item>
       <flexbox-item class="vux-1px-r">
         <a class="item item7">
           <div class="img daijinquan"></div>
-          <div class="text">{{ $t('代金券') }}</div>
+          <div class="text">{{ $t('Vouchers') }}</div>
         </a>
       </flexbox-item>
       <flexbox-item>

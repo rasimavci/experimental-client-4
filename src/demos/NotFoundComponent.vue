@@ -5,4 +5,5 @@
 <i18n>
 Looks like the example does not exist:
   en: Sorry, demo doesn't exist
+  es: Lo sentimos, la demo no existe
 </i18n>
