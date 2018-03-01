@@ -16,6 +16,7 @@ props:
     type: String
     default: 'Back'
     en: the back text
+    es: geri
     zh-CN: 返回文字
   left-options.preventGoBack:
     type: Boolean

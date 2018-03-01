@@ -1,64 +1,24 @@
 <template>
   <div>
 
-    <div class='modal-container' display='none'>
-      <div class='input-group' v-show='!activeCallRinging'>
-        <input type='text' class='form-control' v-model='callee' placeholder='Search for a log...'>
-        <span class='input-group-btn'>
-          <label>History will be listed here</label>
-        </span>
-      </div>
-    </div>
 
-    <div class='keypad'>
-      <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
-        <div>
+      <button-tab>
+        <button-tab-item selected @click.native="show = 'all'">{{ $t('All') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'incoming'">{{ $t('Incoming') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'outgoing'">{{ $t('Outgoing') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
+      </button-tab>
 
-          <button class='button' @click='connect()'>
-            Login
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div id="message-list">
-      <div id="list-header">
-        <h2>History</h2>
-        <div class="btn-group btn-group-justified" role="group">
-          <!-- All Contacts button -->
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" @click="show = 'all'" :class="{active: show === 'all'}">
-              All
-            </button>
-          </div>
-          <!-- Favorites Button -->
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" @click="show = 'incoming'" :class="{active: show === 'incoming'}">
-              Incoming
-            </button>
-          </div>
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" @click="show = 'outgoing'" :class="{active: show === 'outgoing'}">
-              Outgoing
-            </button>
-          </div>
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default" @click="show = 'missed'" :class="{active: show === 'missed'}">
-              Missed
-            </button>
-          </div>
-        </div>
-      </div>
       <!-- render calllogs in a list -->
       <div class="container">
         <div class="list-group">
-          <a v-for="(contact, index) in getCallLogs" :key='contact.recordId' class="list-group-item" href="#" :class="{active: activeNote === contact}" @click="updateActiveCall(contact)">
+          <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
             <h4 class="list-group-item-heading">
               <i :class="[
                   'glyphicon',
-                  contact['direction'] === 'incoming' ? 'glyphicon-import' : 'glyphicon-export'
+                  logrecord['direction'] === 'incoming' ? 'glyphicon-import' : 'glyphicon-export'
                   ]"></i>
-              {{contact.callerName}} {{contact.startTime.trim ().substring (0, 4)}}
+              {{logrecord.callerName}} {{logrecord.startTime.trim ().substring (0, 4)}}
             </h4>
           </a>
         </div>
@@ -94,7 +54,7 @@ Call prompt by using plugin:
 </i18n>
 
 <script>
-import { Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
+import { ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
 export default {
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'history')
@@ -104,6 +64,9 @@ export default {
     TransferDom
   },
   components: {
+    ButtonTab,
+    ButtonTabItem,
+    Divider,
     Confirm,
     Group,
     XSwitch,
@@ -114,7 +77,7 @@ export default {
       callee: '',
       activeCallRinging: false,
       activeCallExist: false,
-      show: '',
+      show: 'all',
       show2: false,
       show3: false,
       show4: false,
@@ -199,14 +162,14 @@ export default {
   computed: {
     getCallLogs () {
       if (this.show === 'all') {
-        console.log(this.$store.state.history)
-        return this.$store.state.history
+        console.log(this.$store.state.vux.history)
+        return this.$store.state.vux.history
       } else if (this.show === 'incoming') {
-        return this.$store.state.history.filter(note => note.direction === 'incoming')
+        return this.$store.state.vux.history.filter(note => note.direction === 'incoming')
       } else if (this.show === 'outgoing') {
-        return this.$store.state.history.filter(note => note.direction === 'outgoing')
+        return this.$store.state.vux.history.filter(note => note.direction === 'outgoing')
       } else if (this.show === 'missed') {
-        return this.$store.state.history.filter(note => note.direction === 'missed')
+        return this.$store.state.vux.history.filter(note => note.direction === 'missed')
       }
     }
   }

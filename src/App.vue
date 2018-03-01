@@ -55,8 +55,11 @@
           <radio v-model="showMode" :options="['push', 'overlay']" @on-change="onShowModeChange"></radio>
         </group>
         <group title="Manage" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
-          <radio v-model="showPlacement" :options="['Create Contact']" @on-change="onPlacementChange"></radio>
+          <radio v-model="showPlacement" :options="['Create Contact']" @on-change="onCreateContact"></radio>
+          <cell title="Create Contact" @click.native="onCreateContact" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
+          </cell>
         </group>
+
         <group title="Sort By" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
           <radio v-model="showPlacement" :options="['Last Name', 'First Name', 'Availability']" @on-change="onPlacementChange"></radio>
         </group>
@@ -154,6 +157,9 @@ export default {
     Actionsheet
   },
   methods: {
+    onCreateContact () {
+      this.$store.dispatch('updateAddContact', true)
+    },
     onCellClick () {
       /** hide drawer before changing showMode **/
       console.log('cell clicked')

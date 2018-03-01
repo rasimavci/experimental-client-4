@@ -1,25 +1,50 @@
 <template>
   <div>
 
+      <button-tab>
+        <button-tab-item selected @click.native="showdata = 'all'">{{ $t('All Contacts') }}</button-tab-item>
+        <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
+      </button-tab>
+
+      <!-- render calllogs in a list -->
+      <div class="container">
+        <div class="list-group">
+          <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
+            <h4 class="list-group-item-heading">
+              <i :class="[
+                  'glyphicon',
+                  logrecord['direction'] === 'incoming' ? 'glyphicon-import' : 'glyphicon-export'
+                  ]"></i>
+              {{logrecord.firstName}} {{logrecord.lastName}}
+            </h4>
+          </a>
+        </div>
+      </div>
 
     <div style="padding:2px;">
-      <x-button @click.native="show1=true" type="primary">Create</x-button>
+      <x-button @click.native="onCreateContact" type="primary">Create</x-button>
     </div>
     <div style="padding:2px;">
       <x-button @click.native="edit=true" type="primary">{{ $t('Edit') }}</x-button>
     </div>
     <div style="padding:2px;">
-      <x-button @click.native="add=true" type="primary"> {{ $t('Add') }} </x-button>
+      <x-button @click.native="addContact" type="primary"> {{ $t('Add') }} </x-button>
     </div>
 
 
   <div v-transfer-dom>
-      <alert v-model="show" :title="$t('Smart Office')" @on-show="onShow" @on-hide="onHide"> {{ $t('Version 4.~') }}</alert>
+      <alert v-model="currentPageAddContact" :title="$t('Smart Office')" @on-show="onShow" @on-hide="onHide"> {{ $t('Version 4.~') }}</alert>
     </div>
     <div v-transfer-dom>
-      <popup v-model="show1" height="100%">
+      <popup v-if="this.currentPageAddContact" height="100%">
         <div class="popup1">
-    <label>Create Screen</label>
+
+<div id="block_container">
+    <div id="bloc1" @click="show1 = false">Back</div>
+    <div id="bloc3">Create Profile</div>
+    <div id="bloc2" @click="show1 = false">Save</div>
+</div>
+
           <group>
       <x-img :src="src" :webp-src="`${src}?type=webp`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" :offset="-100" container="#vux_view_box_body"></x-img>
           </group>
@@ -38,10 +63,7 @@
 
     <checklist :title="$t('SETTINGS')" :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
-          <group>
-            <x-switch title="Close" v-model="show1"></x-switch>
-      <x-button @click.native="toast" type="primary">Create</x-button>
-          </group>
+
 
         </div>
       </popup>
@@ -51,7 +73,13 @@
     <div v-transfer-dom>
       <popup v-model="edit" height="100%">
         <div class="popup1">
-        <label>Edit Screen</label>
+
+<div id="block_container">
+    <div id="bloc1" @click="edit = false">Back</div>
+    <div id="bloc3">Edit Profile</div>
+    <div id="bloc2" @click="edit = true">Edit</div>
+</div>
+
           <group>
 
         <img  src="../assets/demo/call_outline_blue.png">
@@ -76,10 +104,7 @@
     <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist001" @on-change="change"></checklist>
     <checklist :label-position="labelPosition" required :options="commonList3" v-model="checklist001" @on-change="change"></checklist>
 
-          <group>
-            <x-switch title="Close" v-model="show1"></x-switch>
-      <x-button @click.native="toast" type="primary">Save</x-button>
-          </group>
+
 
         </div>
       </popup>
@@ -105,8 +130,11 @@
       <x-input :placeholder="$t('Email')"></x-input>
           </group>
 
-          <group :title="$t('SETTINGS')">
 
+
+
+
+          <group :title="$t('SETTINGS')">
     <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
     <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist001" @on-change="change"></checklist>
     <checklist :label-position="labelPosition" required :options="commonList3" v-model="checklist001" @on-change="change"></checklist>
@@ -125,9 +153,13 @@
 </template>
 
 <script>
-import { XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
+import { ButtonTab, ButtonTabItem, Divider, XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
+  ...mapState({
+    currentPageAddContact: state => state.vux.currentPageAddContact
+  }),
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'contact')
     this.$store.dispatch('updateShowPlacement', 'right')
@@ -136,6 +168,9 @@ export default {
     TransferDom
   },
   components: {
+    ButtonTab,
+    ButtonTabItem,
+    Divider,
     XImg,
     Checklist,
     Alert,
@@ -151,6 +186,7 @@ export default {
   },
   data () {
     return {
+      showdata: 'all',
       error: false,
       checklist001: true,
       src: 'https://o5omsejde.qnssl.com/demo/test1.jpg',
@@ -184,6 +220,9 @@ export default {
     }
   },
   methods: {
+    onCreateContact () {
+      this.$store.dispatch('updateAddContact', true)
+    },
     log (str) {
       console.log(str)
     },
@@ -209,6 +248,24 @@ export default {
     success () {
     },
     change () {
+    },
+    addcontact () {
+      this.add = true
+      this.$store.dispatch('updateCurrentPage', 'addcontact')
+    },
+    onClickBack () {
+      // this.add = true
+    }
+  },
+  computed: {
+    ...mapGetters(['mystate']),
+    getContacts () {
+      if (this.showdata === 'all') {
+        console.log(this.$store.state.vux.contacts)
+        return this.$store.state.vux.contacts
+      } else if (this.showdata === 'favorites') {
+        return this.$store.state.vux.contacts // this.$store.state.vux.contacts.filter(note => note.direction === 'incoming')
+      }
     }
   },
   watch: {
@@ -254,5 +311,33 @@ export default {
     transform: translateX(-50%) translateY(-50%) scale(4);
     color: #000;
   }
+  .img1 {
+    float: right;
+  }
+  .img2 {
+    float: left;
+  }
+}
+#block_container
+{
+    text-align:center;
+}
+
+#bloc1
+{
+    display:inline;
+    float:left;
+}
+
+#bloc2
+{
+    display:inline;
+    float:right;
+}
+
+#bloc3
+{
+    display:inline;
+    float:center;
 }
 </style>

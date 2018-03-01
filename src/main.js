@@ -29,6 +29,7 @@ const componentsLocales = require('json-loader!yaml-loader!./locales/components.
 
 const finalLocales = {
   'en': objectAssign(vuxLocales['en'], componentsLocales['en']),
+  'es': objectAssign(vuxLocales['es'], componentsLocales['es']),
   'zh-CN': objectAssign(vuxLocales['zh-CN'], componentsLocales['zh-CN'])
 }
 
@@ -42,6 +43,8 @@ Vue.use(LocalePlugin)
 const nowLocale = Vue.locale.get()
 if (/zh/.test(nowLocale)) {
   Vue.i18n.set('zh-CN')
+} else if (/es/.test(nowLocale)) {
+  Vue.i18n.set('es')
 } else {
   Vue.i18n.set('en')
 }
@@ -82,7 +85,9 @@ store.registerModule('vux', {
     callstart: '',
     activeCall: { state: '', id: '' },
     user: {},
-    history: []
+    history: [],
+    contacts: [],
+    currentPageAddContact: false
   },
 
   mutations: {
@@ -127,6 +132,7 @@ store.registerModule('vux', {
     REFRESH_CALLLOGS (state, logs) {
       console.log('refresh call logs')
       state.history = logs
+      console.log(logs)
     },
     SET_PRESENCE (state, args) {
       const params = {
@@ -169,6 +175,15 @@ store.registerModule('vux', {
         default:
           break
       }
+    },
+    UPDATE_ADDCONTACT (state, payload) {
+      console.log('mutated with ' + payload.top)
+      state.currentPageAddContact = true
+    },
+
+    REFRESH_DIRECTORY (state, data) {
+      console.log('data refreshed')
+      if (data) state.contacts = data
     }
   },
   actions: {
@@ -195,6 +210,10 @@ store.registerModule('vux', {
       console.log('dispatching with ' + top)
       commit({type: 'updateCurrentPage', top: top})
     },
+    updateAddContact ({commit}, top) {
+      console.log('dispatching with ' + top)
+      commit({type: 'UPDATE_ADDCONTACT', top: true})
+    },
     call ({commit}, params) {
       console.log('call to:' + params.callee)
       options.isVideoEnabled = params.mode
@@ -205,6 +224,9 @@ store.registerModule('vux', {
     end ({commit}, callee) {
       kandy.call.end(this.state.vux.activeCall.id)
     }
+  },
+  getters: {
+  //  mystate: state => return state.vux.currentPageAddContact
   }
 })
 
@@ -242,14 +264,14 @@ if (process.env.NODE_ENV === 'production') {
     console.log('wechat ready')
     wx.onMenuShareAppMessage({
       title: 'VUX', // Share title
-      desc: '基于 WeUI 和 Vue 的移动端 UI 组件库',
+      desc: 'Mobile UI component library based on WeUI and Vue',
       link: 'https://vux.li?x-page=wechat_share_message',
       imgUrl: 'https://static.vux.li/logo_520.png'
     })
 
     wx.onMenuShareTimeline({
       title: 'VUX', // Share title
-      desc: '基于 WeUI 和 Vue 的移动端 UI 组件库',
+      desc: 'Mobile UI component library based on WeUI and Vue',
       link: 'https://vux.li?x-page=wechat_share_timeline',
       imgUrl: 'https://static.vux.li/logo_520.png'
     })
@@ -387,7 +409,7 @@ const kandy = createKandy({
 })
 
 function addEventListeners () {
-  kandy.on('auth:change', function (data) {
+  kandy.on('auth:change', data => {
     console.log('auth:change Event Data: ' + JSON.stringify(data))
     if (kandy.getConnection().isConnected === true) {
       //  store.dispatch ('refresh')
@@ -401,7 +423,7 @@ function addEventListeners () {
     }
   })
 
-  kandy.on('call:start', function (params) {
+  kandy.on('call:start', params => {
     // commit('SET_ACTIVECALL_ID', params.callId)
     store.commit({type: 'SET_ACTIVECALL_ID', top: params.callId})
     const calls = kandy.call.getAll()
@@ -409,16 +431,21 @@ function addEventListeners () {
       console.log('all call ids currently : ' + params.callId)
       // change activeCall
       if (call.id === params.callId) {
-        store.vux.commit('SET_ACTIVE_CALL', call)
+        store.commit('SET_ACTIVE_CALL', call)
         // store.dispatch('toggleActiveCall')
         // store.commit (types.SET_ACTIVE_CALL, call)
       }
     })
   })
 
-  kandy.on('callHistory:change', function (params) {
+  kandy.on('callHistory:change', params => {
     let logs = kandy.call.history.get()
-    store.vux.commit('REFRESH_CALLLOGS', logs)
+    store.commit('REFRESH_CALLLOGS', logs)
+  })
+
+  kandy.on('contacts:change', params => {
+    store.commit('REFRESH_DIRECTORY', params.contacts)
+    // store.dispatch ('refresh', params.contacts)
   })
 }
 
