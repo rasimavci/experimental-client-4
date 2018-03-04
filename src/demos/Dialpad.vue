@@ -127,13 +127,21 @@
       </div>
     </div>
 
+    <group class="block_container" v-if="textAreaVisible">
+      <x-textarea :max="20" :placeholder="$t('placeholder')" class="bloc1"></x-textarea>
+              <img slot="icon" src="../assets/demo/send_message.png">
+
+      <x-button @click.native="sendMessage" type="primary">Send</x-button>
+
+    </group>
+
     <tabbar>
       <tabbar-item>
         <img slot="icon" src="../assets/demo/dp_action_keyboard.png">
         <span slot="label">Keyboard</span>
       </tabbar-item>
       <tabbar-item show-dot>
-        <img slot="icon" src="../assets/demo/images.png">
+        <img slot="icon" src="../assets/demo/images.png" @click="textAreaVisible = true">
         <span slot="label">Message</span>
       </tabbar-item>
       <tabbar-item>
@@ -154,7 +162,7 @@
 </template>
 
 <script>
-import { Tabbar, TabbarItem, Group, Cell } from 'vux'
+import { XButton, XTextarea, Tabbar, TabbarItem, Group, Cell } from 'vux'
 import { mapState } from 'vuex'
 
 // import KandyJs from '../kandy'
@@ -171,6 +179,8 @@ export default {
   },
   data () {
     return {
+      textAreaVisible: false,
+      hasCollaborationService: false,
       isShowKeypad: true,
       activeCall: false,
       callee: '',
@@ -210,6 +220,8 @@ export default {
     busy: state => state.busy
   }),
   components: {
+    XButton,
+    XTextarea,
     Tabbar,
     TabbarItem,
     Group,
@@ -316,11 +328,13 @@ export default {
       this.$store.dispatch('call', 'saynaci@genband.com')
     },
     sendMessage () {
-      const messageObject = {
-        participant: 'saynaci@genband.com',
-        message: this.callee
+      let messageToSend = {
+        type: 'IM',
+        text: 'deneme', // this.callee
+        userId: 'bkocak@genband.com'
       }
-      this.$store.dispatch('send', messageObject)
+      console.log('send clicked')
+      this.$store.dispatch('sendMessage', messageToSend)
     },
     sendMessage2 () {
       const messageObject = {
@@ -607,6 +621,23 @@ export default {
 .keypad-container button:hover div {
   /* background-color: #1abc9c; */
   color: white !important;
+}
+
+#block_container
+{
+    text-align:center;
+}
+
+#bloc1
+{
+    position: absolute;
+    bottom: 0;
+}
+
+#bloc2
+{
+    display:inline;
+    float:right;
 }
 
 </style>

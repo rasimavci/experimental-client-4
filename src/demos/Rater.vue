@@ -2,10 +2,10 @@
   <div>
     <group title="Normal Usage">
       <cell title="set default score = 5" inline-desc="total 5 stars if not specified">
-        <rater v-model="data3"></rater>
+        <rater v-model="data3" :max="1" ></rater>
       </cell>
       <cell title="change color">
-        <rater v-model="data3" :max="6" active-color="#04BE02"></rater>
+        <rater v-model="data3" :max="1" active-color="#04BE02"></rater>
       </cell>
     </group>
 
@@ -74,7 +74,7 @@ export default {
     return {
       data1: 0,
       data2: 5,
-      data3: 5,
+      data3: 1,
       data4: 3,
       data41: 3.7,
       data42: 3.5,

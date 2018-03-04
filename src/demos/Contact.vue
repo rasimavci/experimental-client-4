@@ -6,11 +6,41 @@
         <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
       </button-tab>
 
-      <!-- render calllogs in a list -->
+    <group>
+      <cell>
+        <img  src="../assets/demo/genband.png">
+        Meetme Audio Conference</cell>
+      <cell-form-preview :list="getContacts"></cell-form-preview>
+    </group>
+
+    <group>
+          <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCell(logrecord)">
+      <img  src="../assets/demo/avatar_generic.png">
+      <cell :title="$t(logrecord.firstName + ' ' + logrecord.lastName)" value="hello">Personal</cell>
+          </a>
+    </group>
+
+    <group>
+      <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item">
+      <cell :title="$t(logrecord.firstName + ' ' + logrecord.lastName)" :value="$t('Personal')" @click.native="onClick"></cell>
+          </a>
+    </group>
+
+    <group>
+      <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
+
+      <cell class="bloc1" valueAlign: left value="deneme">
+        <img  src="../assets/demo/avatar_generic.png">
+        {{logrecord.firstName}} {{logrecord.lastName}}</cell>
+          </a>
+    </group>
+
+      <!-- render contacts in a list -->
       <div class="container">
         <div class="list-group">
           <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
             <h4 class="list-group-item-heading">
+                      <img  src="../assets/demo/avatar_generic.png">
               <i :class="[
                   'glyphicon',
                   logrecord['direction'] === 'incoming' ? 'glyphicon-import' : 'glyphicon-export'
@@ -22,7 +52,7 @@
       </div>
 
     <div style="padding:2px;">
-      <x-button @click.native="onCreateContact" type="primary">Create</x-button>
+      <x-button @click.native="create=true" type="primary">Create</x-button>
     </div>
     <div style="padding:2px;">
       <x-button @click.native="edit=true" type="primary">{{ $t('Edit') }}</x-button>
@@ -32,24 +62,23 @@
     </div>
 
 
-  <div v-transfer-dom>
-      <alert v-model="currentPageAddContact" :title="$t('Smart Office')" @on-show="onShow" @on-hide="onHide"> {{ $t('Version 4.~') }}</alert>
-    </div>
+
     <div v-transfer-dom>
-      <popup v-if="this.currentPageAddContact" height="100%">
-        <div class="popup1">
+    <popup v-model="create" height="100%">
+    <div class="popup1">
 
-<div id="block_container">
-    <div id="bloc1" @click="show1 = false">Back</div>
-    <div id="bloc3">Create Profile</div>
-    <div id="bloc2" @click="show1 = false">Save</div>
-</div>
+    <popup-header
+    :left-text="$t('Back')"
+    :right-text="$t('Save')"
+    :title="$t('Create Profile')"
+    @on-click-left="create = false"
+    @on-click-right="edit = false">
+    </popup-header></popup-header>
 
-          <group>
-      <x-img :src="src" :webp-src="`${src}?type=webp`" @on-success="success" @on-error="error" class="ximg-demo" error-class="ximg-error" :offset="-100" container="#vux_view_box_body"></x-img>
-          </group>
-          <group :placeholder="$t('IDENTIFICATION')">
-      <x-input :placeholder="$t('First Name')"></x-input>
+
+
+      <group :placeholder="$t('IDENTIFICATION')">
+      <x-input :placeholder="$t(this.selectedContact.firstName)"></x-input>
       <x-input :placeholder="$t('Last Name*')"></x-input>
       <x-input :placeholder="$t('NickName*')"></x-input>
       <x-input :placeholder="$t('User ID')"></x-input>
@@ -61,53 +90,143 @@
       <x-input :placeholder="$t('Work*')"></x-input>
           </group>
 
-    <checklist :title="$t('SETTINGS')" :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
-
+    <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
 
         </div>
       </popup>
     </div>
+
+
+    <div v-transfer-dom>
+      <popup v-model="contact" height="100%">
+        <div class="popup1">
+
+    <popup-header
+    :left-text="$t('Back')"
+    :right-text="$t('Edit')"
+    :title="$t()"
+    @on-click-left="contact = false"
+    @on-click-right="favorites = true">
+    </popup-header></popup-header>
+
+      <cell <img  src="../assets/demo/avatar_generic.png"><h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
+        <img  src="../assets/demo/call_outline_blue.png">
+        <img src="../assets/demo/video_outline_blue.png">
+         <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
+
+      </cell>
+
+
+    <group :title="$t('CONTACT')">
+      <cell :title="$t('Home ' +  this.selectedContact.homePhone ) ">
+        {{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</cell>
+      </cell>
+      <cell :title="$t('mobile ' +  this.selectedContact.workPhone ) ">
+      </cell>
+      <cell :title="$t('Work ' +  this.selectedContact.workPhone ) ">
+                <img  src="../assets/demo/call_outline_blue2.png">
+      </cell>
+      <cell :title="$t('Mobile ' +  this.selectedContact.mobilePhone ) ">
+      </cell>
+      <cell :title="$t('Nickname ' +  this.selectedContact.nickname ) ">
+      </cell>
+      <cell :title="$t('User ID ' +  this.selectedContact.userId ) ">
+      </cell>
+      <cell :title="$t('Email ' +  this.selectedContact.email ) ">
+      </cell>
+    </group>
+
+          <group :title="$t('SETTINGS')">
+      <cell :title="$t('Manage Favorites')"
+          @click.native="favorites = true">
+      </cell>
+      <cell :title="$t('Remove From Personal Contacts List')"
+          @click.native="confirmDelete = true">
+      </cell>
+    <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
+
+         </group>
+        </div>
+      </popup>
+    </div>
+
 
 
     <div v-transfer-dom>
       <popup v-model="edit" height="100%">
         <div class="popup1">
 
-<div id="block_container">
-    <div id="bloc1" @click="edit = false">Back</div>
-    <div id="bloc3">Edit Profile</div>
-    <div id="bloc2" @click="edit = true">Edit</div>
-</div>
+    <popup-header
+    :left-text="$t('Back')"
+    :right-text="$t('Save')"
+    :title="$t()"
+    @on-click-left="edit = false"
+    @on-click-right="edit = false">
+    </popup-header></popup-header>
 
-          <group>
-
+      <cell <img  src="../assets/demo/avatar_generic.png"><h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
         <img  src="../assets/demo/call_outline_blue.png">
         <img src="../assets/demo/video_outline_blue.png">
-         <img src="../assets/demo/dp_action_keyboard.png">
+         <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
 
-          </group>
-          <group :placeholder="$t('IDENTIFICATION')">
-      <x-input :placeholder="$t('First Name')"></x-input>
-      <x-input :placeholder="$t('Last Name*')"></x-input>
-      <x-input :placeholder="$t('NickName*')"></x-input>
-      <x-input :placeholder="$t('User ID')"></x-input>
-      <x-input :placeholder="$t('Email')"></x-input>
-          </group>
+      </cell>
+
           <group :title="$t('CONTACT')">
-      <x-input :placeholder="$t('Home*')"></x-input>
-      <x-input :placeholder="$t('mobile*')"></x-input>
-      <x-input :placeholder="$t('Work*')"></x-input>
+      <x-input :title="$t('Home')" :placeholder="$t(this.selectedContact.homePhone)">Home</x-input>
+      <x-input :title="$t('Mobile')" :placeholder="$t(this.selectedContact.mobilePhone)"></x-input>
+      <x-input :title="$t('work')" :placeholder="$t(this.selectedContact.workPhone)"></x-input>
+      <x-input :title="$t('Nickname')" :placeholder="$t(this.selectedContact.nickName)"></x-input>
+      <x-input :title="$t('User ID')" :placeholder="$t(this.selectedContact.userId)"></x-input>
+      <x-input :title="$t('Email')" :placeholder="$t(this.selectedContact.email)"></x-input>
           </group>
 
-    <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
-    <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist001" @on-change="change"></checklist>
-    <checklist :label-position="labelPosition" required :options="commonList3" v-model="checklist001" @on-change="change"></checklist>
+          <group :title="$t('SETTINGS')">
+    <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
+         </group>
+        </div>
+      </popup>
+    </div>
 
+    <div v-transfer-dom>
+      <popup v-model="favorites" height="100%">
+        <div class="popup1">
+
+    <popup-header
+    :left-text="$t('Back')"
+    :right-text="$t('Ok')"
+    :title="$t('Manage Favorites')"
+    @on-click-left="favorites = false"
+    @on-click-right="edit = false">
+    </popup-header></popup-header>
+
+    <group title="__">
+      <cell title="Mahmut Oztemur">
+        <rater v-model="data1" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+      </cell>
+      <cell title="Burak Kocak">
+        <rater v-model="data2" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+      </cell>
+      <cell title="Burak Kocak">
+        <rater v-model="data3" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+      </cell>
+    </group>
 
         </div>
       </popup>
+    </div>
+
+    <div v-transfer-dom>
+      <confirm v-model="confirmDelete"
+      :title="$t('Delete Contact')"
+      :confirmText="$t('Ok')"
+      @on-cancel="confirmDelete=false"
+      @on-confirm="onConfirm"
+      @on-show="onShow"
+      @on-hide="onHide">
+        <p style="text-align:center;">{{ $t('Are you sure?') }}</p>
+      </confirm>
     </div>
 
     <div v-transfer-dom>
@@ -136,8 +255,8 @@
 
           <group :title="$t('SETTINGS')">
     <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
-    <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist001" @on-change="change"></checklist>
-    <checklist :label-position="labelPosition" required :options="commonList3" v-model="checklist001" @on-change="change"></checklist>
+    <checklist :label-position="labelPosition" required :options2="commonList2" v-model="checklist001" @on-change="change"></checklist>
+    <checklist :label-position="labelPosition" required :options3="commonList3" v-model="checklist001" @on-change="change"></checklist>
           </group>
           <group>
             <x-switch title="Close" v-model="show1"></x-switch>
@@ -153,7 +272,7 @@
 </template>
 
 <script>
-import { ButtonTab, ButtonTabItem, Divider, XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
+import { Confirm, Rater, CellBox, CellFormPreview, PopupHeader, ButtonTab, ButtonTabItem, Divider, XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
@@ -168,6 +287,11 @@ export default {
     TransferDom
   },
   components: {
+    Confirm,
+    Rater,
+    CellBox,
+    CellFormPreview,
+    PopupHeader,
     ButtonTab,
     ButtonTabItem,
     Divider,
@@ -186,7 +310,10 @@ export default {
   },
   data () {
     return {
+      confirmDelete: false,
+      selectedContact: {},
       showdata: 'all',
+      list: [],
       error: false,
       checklist001: true,
       src: 'https://o5omsejde.qnssl.com/demo/test1.jpg',
@@ -194,9 +321,15 @@ export default {
       type: '',
       show2: false,
       addressData: ChinaAddressData,
+      data1: 1,
+      data2: 1,
+      data3: 1,
       show: false,
+      create: false,
+      contact: false,
       edit: false,
       add: false,
+      favorites: false,
       show1: false,
       show3: false,
       show4: false,
@@ -220,6 +353,9 @@ export default {
     }
   },
   methods: {
+    change (val, label) {
+      console.log('change', val, label)
+    },
     onCreateContact () {
       this.$store.dispatch('updateAddContact', true)
     },
@@ -236,6 +372,7 @@ export default {
       console.log('on cancel')
     },
     onConfirm () {
+      console.log('contact deleted')
     },
     onConfirm5 () {
     },
@@ -247,21 +384,26 @@ export default {
     },
     success () {
     },
-    change () {
-    },
     addcontact () {
       this.add = true
       this.$store.dispatch('updateCurrentPage', 'addcontact')
     },
     onClickBack () {
       // this.add = true
+    },
+    updateActiveCell (args) {
+      this.selectedContact = args
+      this.contact = true
+      console.log('edit ' + args.firstName)
     }
+
   },
   computed: {
     ...mapGetters(['mystate']),
     getContacts () {
       if (this.showdata === 'all') {
         console.log(this.$store.state.vux.contacts)
+        this.list = this.$store.state.vux.contacts
         return this.$store.state.vux.contacts
       } else if (this.showdata === 'favorites') {
         return this.$store.state.vux.contacts // this.$store.state.vux.contacts.filter(note => note.direction === 'incoming')

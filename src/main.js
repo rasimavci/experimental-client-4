@@ -9,6 +9,8 @@ import vuexI18n from 'vuex-i18n'
 import VueRouter from 'vue-router'
 import { sync } from 'vuex-router-sync'
 import createKandy from '../kandy.link.js'
+import IMService from 'index.js'
+import _ from 'lodash'
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -87,6 +89,8 @@ store.registerModule('vux', {
     user: {},
     history: [],
     contacts: [],
+    conversations: [],
+    conversations2: [],
     currentPageAddContact: false
   },
 
@@ -180,10 +184,17 @@ store.registerModule('vux', {
       console.log('mutated with ' + payload.top)
       state.currentPageAddContact = true
     },
-
     REFRESH_DIRECTORY (state, data) {
       console.log('data refreshed')
       if (data) state.contacts = data
+    },
+    SET_CONVERSATIONS (state, conversations) {
+      state.conversations = conversations
+      state.conversations2 = state.conversations[1]
+    },
+    ADD_CONVERSATION (state, conversation) {
+      state.conversations.push(conversation)
+      state.conversations2.push(state.conversations[1])
     }
   },
   actions: {
@@ -223,6 +234,22 @@ store.registerModule('vux', {
     },
     end ({commit}, callee) {
       kandy.call.end(this.state.vux.activeCall.id)
+    },
+    getMessages: ({ commit }) => {
+      let messages = IMService.getMessages()
+      let conversations = _.cloneDeep(messages)
+      commit({type: 'SET_CONVERSATIONS', conversations})
+      // store.dispatch('setConversations', _.cloneDeep(messages))
+    },
+    sendMessage: ({ commit }, messageToSend) => {
+      console.log('console sends message' + messageToSend.text)
+      let conv = kandy.conversation.get(messageToSend.userId)
+      let part = {
+        type: messageToSend.type,
+        text: messageToSend.text
+      }
+      let message = conv.createMessage(part)
+      message.send()
     }
   },
   getters: {
@@ -415,6 +442,7 @@ function addEventListeners () {
       //  store.dispatch ('refresh')
       kandy.contacts.refresh()
       kandy.call.history.fetch()
+      store.dispatch('getMessages')
       // this.refreshContacts ()
       // retrieveCallLogs ()
       // Kandyjs.getCallLogs ()
@@ -446,6 +474,35 @@ function addEventListeners () {
   kandy.on('contacts:change', params => {
     store.commit('REFRESH_DIRECTORY', params.contacts)
     // store.dispatch ('refresh', params.contacts)
+  })
+
+  kandy.on('conversations:change', res => {
+    let conv = kandy.conversation.get(res.conversationId)
+    let messages = {
+      conversationId: res.conversationId,
+      messages: conv.getMessages()
+    }
+    IMService.saveMessage(messages)
+    store.dispatch('getMessages')
+  })
+
+  kandy.on('conversations:new', params => {
+    console.log('new conversation' + params.conversation)
+    store.commit('ADD_CONVERSATION', params.conversation)
+  })
+
+  kandy.on('messages:change', res => {
+    let conv = kandy.conversation.get(res.conversationId)
+    let messages = {
+      conversationId: res.conversationId,
+      messages: conv.getMessages()
+    }
+    IMService.saveMessage(messages)
+    store.dispatch('getMessages')
+  })
+
+  kandy.on('messages:error', res => {
+    console.log(res)
   })
 }
 

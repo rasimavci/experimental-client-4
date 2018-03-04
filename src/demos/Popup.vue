@@ -74,7 +74,7 @@
             <x-switch title="Popup address" v-model="show6"></x-switch>
           </group>
           <group>
-            <x-address :title="title6" v-model="value6" :list="addressData" placeholder="Please select address" inline-desc="Placeholder can be set" :popup-style="{zIndex: 502}"></x-address>
+            <x-address :title="title6" v-model="value6" :list="addressData" placeholder="请选择地址" inline-desc="可以设置placeholder" :popup-style="{zIndex: 502}"></x-address>
           </group>
         </div>
       </popup>
@@ -164,7 +164,6 @@
 
 <script>
 import { TransferDom, Popup, Group, Cell, XButton, XSwitch, Toast, XAddress, ChinaAddressData } from 'vux'
-
 export default {
   directives: {
     TransferDom
@@ -187,7 +186,7 @@ export default {
       show4: false,
       show5: false,
       show6: false,
-      title6: 'The default is empty',
+      title6: '默认空的',
       value6: [],
       show7: false,
       showToast: false,
@@ -218,7 +217,6 @@ export default {
 
 <style lang="less" scoped>
 @import '~vux/src/styles/close.less';
-
 .popup0 {
   padding-bottom:15px;
   height:200px;

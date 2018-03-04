@@ -9,6 +9,14 @@
         <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
       </button-tab>
 
+
+    <group :title="$t('This will be data for the group')">
+          <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="getDate(logrecord.startTime)">
+      <img  src="../assets/demo/avatar_generic.png">
+      <cell :title="$t(logrecord.callerName)">{{logrecord.startTime.trim ().substring (0, 4)}}</cell>
+          </a>
+    </group>
+
       <!-- render calllogs in a list -->
       <div class="container">
         <div class="list-group">
@@ -54,7 +62,8 @@ Call prompt by using plugin:
 </i18n>
 
 <script>
-import { ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
+import { Cell, ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
+import Moment from 'moment'
 export default {
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'history')
@@ -64,6 +73,7 @@ export default {
     TransferDom
   },
   components: {
+    Cell,
     ButtonTab,
     ButtonTabItem,
     Divider,
@@ -74,6 +84,7 @@ export default {
   },
   data () {
     return {
+      moment: Moment,
       callee: '',
       activeCallRinging: false,
       activeCallExist: false,
@@ -155,6 +166,10 @@ export default {
         },
         onConfirm (msg) {
           alert(msg)
+        },
+        getDate (timestamp) {
+          console.log(Moment(timestamp).calendar())
+          return Moment(timestamp).calendar()
         }
       })
     }

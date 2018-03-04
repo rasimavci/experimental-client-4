@@ -31,9 +31,11 @@
 <i18n>
 cancel_text:
   en: cancel
+  es: cancelar
   zh-CN: 取消
 confirm_text:
   en: done
+  es: hecho
   zh-CN: 确定
 </i18n>
 
