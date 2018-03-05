@@ -17,10 +17,31 @@
               </div>
           </div>
         </swiper-item>
-
       </swiper>
     </div>
 
+    <tabbar>
+      <tabbar-item>
+        <img slot="icon" src="../assets/demo/dp_action_keyboard.png">
+        <span slot="label">Keyboard</span>
+      </tabbar-item>
+      <tabbar-item show-dot>
+        <img slot="icon" src="../assets/demo/add_party_outline_blue.png" @click="textAreaVisible = true">
+        <span slot="label">Message</span>
+      </tabbar-item>
+      <tabbar-item>
+        <img slot="icon" src="../assets/demo/hold_outline_blue.png" @click="makeCall(false)">
+        <span slot="label">Call</span>
+      </tabbar-item>
+      <tabbar-item badge="2">
+        <img slot="icon" src="../assets/demo/mute_outline_blue.png" @click="makeCall(true)">
+        <span slot="label">Vide Call</span>
+      </tabbar-item>
+      <tabbar-item badge="2">
+        <img slot="icon" src="../assets/demo/dp_action_voicemail.png">
+        <span slot="label">VoiceMail</span>
+      </tabbar-item>
+    </tabbar>
 
 
   </div>
@@ -32,7 +53,7 @@ set bar-active-color:
 </i18n>
 
 <script>
-import { Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem } from 'vux'
+import { Tabbar, TabbarItem, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem } from 'vux'
 import { mapState } from 'vuex'
 
 const list = () => ['CHAT', 'VOICE', 'VIDEO', 'PEOPLE']
@@ -59,6 +80,8 @@ export default {
     busy: state => state.busy
   }),
   components: {
+    Tabbar,
+    TabbarItem,
     Tab,
     TabItem,
     Sticky,

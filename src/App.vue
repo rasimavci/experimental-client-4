@@ -288,6 +288,7 @@ export default {
       if (this.route.path === '/project/donate') return 'Donate'
       if (this.route.path === '/demo') return 'Smart Office'
       if (this.route.path === '/contact') return 'Smart Office Contact'
+      if (this.route.path === '/component/messages') return 'Inbox'
       return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
     },
     viewTransition () {

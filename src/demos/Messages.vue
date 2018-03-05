@@ -4,37 +4,39 @@
 
       <button-tab>
         <button-tab-item selected @click.native="show = 'all'">{{ $t('All') }}</button-tab-item>
-        <button-tab-item @click.native="show = 'incoming'">{{ $t('Unread Messages') }}</button-tab-item>
+        <button-tab-item @click.native="showConversation = true">{{ $t('Unread Messages') }}</button-tab-item>
       </button-tab>
 
     <group :title="$t('This will be data for the group')">
-          <a v-for="conv in getConversations2" :key='conv.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
+          <a v-for="conv in getConversations" :key='conv.deneme' class="list-group-item" href="#" @click="showConversation=true">
       <img  src="../assets/demo/avatar_generic.png">
       <cell :title="$t(conv.conversationId)"></cell>
           </a>
     </group>
 
-    <group :title="$t('This will be data for the group')">
-          <a v-for="conv in getConversations" :key='conv.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
-     <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(conv[0].conversationId)"></cell>
-          </a>
-          <a v-for="conv in getConversations" :key='conv.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(conv[1].conversationId)"></cell>
-          </a>
-          <a v-for="conv in getConversations" :key='conv.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(conv[2].conversationId)"></cell>
-          </a>
-    </group>
 
-    <group :title="$t('This will be data for the group')" v-model="showConversation">
-          <a v-for="conv in getConversations2" :key='conv.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(conv[0].conversationId)"></cell>
+    <div v-transfer-dom>
+      <popup v-model="showConversation" height="100%">
+        <div class="popup1">
+
+    <popup-header
+    :left-text="$t('Back')"
+    :right-text="$t('Edit')"
+    :title="$t('Inbox')"
+    @on-click-left="showConversation = false"
+    @on-click-right="favorites = true">
+    </popup-header></popup-header>
+
+
+      <a v-for="msg in getConversations2" :key='msg.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
+        <group :title="$t(getTime(msg.timestamp))">
+         <cell :title="$t(msg.parts[0].text)"></cell>
+       </group>
           </a>
-    </group>
+
+        </div>
+      </popup>
+    </div>
 
   </div>
 </template>
@@ -65,7 +67,7 @@ Call prompt by using plugin:
 </i18n>
 
 <script>
-import { Cell, ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
+import { Popup, PopupHeader, Cell, ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
 import Moment from 'moment'
 // import { mapState } from 'vuex';
 
@@ -78,6 +80,8 @@ export default {
     TransferDom
   },
   components: {
+    Popup,
+    PopupHeader,
     Cell,
     ButtonTab,
     ButtonTabItem,
@@ -89,6 +93,8 @@ export default {
   },
   data () {
     return {
+      selectedContact: '',
+      selectedConv: '',
       showConversation: false,
       moment: Moment,
       callee: '',
@@ -102,6 +108,13 @@ export default {
     }
   },
   methods: {
+    getTime (timestamp) {
+      let myStr = String(timestamp)
+      let time1 = myStr.slice(0, 2) + ':' + myStr.slice(2)
+      let time = time1.trim().substring(0, 5)
+      console.log('time' + time)
+      return time
+    },
     onCancel () {
       console.log('on cancel')
     },
@@ -174,7 +187,9 @@ export default {
           alert(msg)
         },
         getDate (conv) {
+          this.showConversation = true
           console.log(conv.conversationId)
+          this.selectedConv = conv
           // console.log(Moment(timestamp).calendar())
           // return Moment(timestamp).calendar()
         }
@@ -184,19 +199,16 @@ export default {
   computed: {
     getConversations2 () {
       if (this.show === 'all') {
-        console.log('conversations2 ' + this.$store.state.vux.conversations2)
-        return this.$store.state.vux.conversations2
+        let mymsg = this.$store.state.vux.conversations.conversations[0].messages
+        console.log('messages ' + mymsg[0].timestamp)
+        return this.$store.state.vux.conversations.conversations[0].messages
       } else if (this.show === 'incoming') {
         return this.$store.state.vux.conversations.filter(note => note.direction === 'incoming')
       }
     },
     getConversations () {
       if (this.show === 'all') {
-        console.log('conversations ' + this.$store.state.vux.conversations)
-        console.log('conversations1 ' + this.$store.state.vux.conversations[1])
-        let conv = this.$store.state.vux.conversations[0]
-        console.log('conv ' + conv[1].conversationId)
-        return this.$store.state.vux.conversations
+        return this.$store.state.vux.conversations.conversations
       } else if (this.show === 'incoming') {
         return this.$store.state.vux.conversations.filter(note => note.direction === 'incoming')
       }

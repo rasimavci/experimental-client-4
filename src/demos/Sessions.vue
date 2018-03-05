@@ -1,25 +1,22 @@
 <template>
   <div>
 
-    <div class='modal-container' display='none'>
-      <div class='input-group' v-show='!activeCallRinging'>
-        <input type='text' class='form-control' v-model='callee' placeholder='Search for a log...'>
-        <span class='input-group-btn'>
-<label>Sessions will be listed here</label>
-        </span>
-      </div>
-      </div>
 
-     <div class='keypad'>
-        <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
-          <div>
+      <button-tab>
+        <button-tab-item selected @click.native="show = 'all'">{{ $t('All') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'incoming'">{{ $t('Incoming') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'outgoing'">{{ $t('Outgoing') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
+      </button-tab>
 
-            <button class='button' @click='connect()'>
-              Login
-            </button>
-          </div>
-        </div>
-      </div>
+
+      <!-- render active calls in a list -->
+    <group :title="$t('Active Call')">
+          <a v-for="call in getCalls" :key='call.recordId' class="list-group-item" href="#" @click="goCall(call)">
+      <img  src="../assets/demo/avatar_generic.png">
+      <cell :title="$t(call.calleeName)">{{call.state}} {{call.startTime}}</cell>
+          </a>
+    </group>
 
 
   </div>
@@ -51,7 +48,8 @@ Call prompt by using plugin:
 </i18n>
 
 <script>
-import { Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
+import { Cell, ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
+import Moment from 'moment'
 export default {
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'sessions')
@@ -61,6 +59,10 @@ export default {
     TransferDom
   },
   components: {
+    Cell,
+    ButtonTab,
+    ButtonTabItem,
+    Divider,
     Confirm,
     Group,
     XSwitch,
@@ -68,10 +70,11 @@ export default {
   },
   data () {
     return {
+      moment: Moment,
       callee: '',
       activeCallRinging: false,
       activeCallExist: false,
-      show: false,
+      show: 'all',
       show2: false,
       show3: false,
       show4: false,
@@ -79,6 +82,9 @@ export default {
     }
   },
   methods: {
+    goCall () {
+      this.$router.push('call')
+    },
     onCancel () {
       console.log('on cancel')
     },
@@ -149,8 +155,33 @@ export default {
         },
         onConfirm (msg) {
           alert(msg)
+        },
+        getDate (timestamp) {
+          console.log(Moment(timestamp).calendar())
+          return Moment(timestamp).calendar()
+        },
+        getTime (timestamp) {
+          // let myStr = String(timestamp)
+          let time1 = timestamp.slice(0, 2) + ':' + timestamp.slice(2)
+          let time = time1.trim().substring(0, 5)
+          console.log('time' + time)
+          return time
         }
       })
+    }
+  },
+  computed: {
+    getCalls () {
+      if (this.show === 'all') {
+        console.log(this.$store.state.vux.calls)
+        return this.$store.state.vux.calls
+      } else if (this.show === 'incoming') {
+        return this.$store.state.vux.calls.filter(note => note.direction === 'incoming')
+      } else if (this.show === 'outgoing') {
+        return this.$store.state.vux.calls.filter(note => note.direction === 'outgoing')
+      } else if (this.show === 'missed') {
+        return this.$store.state.vux.calls.filter(note => note.direction === 'missed')
+      }
     }
   }
 }

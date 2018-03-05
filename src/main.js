@@ -87,6 +87,7 @@ store.registerModule('vux', {
     callstart: '',
     activeCall: { state: '', id: '' },
     user: {},
+    calls: [],
     history: [],
     contacts: [],
     conversations: [],
@@ -195,6 +196,10 @@ store.registerModule('vux', {
     ADD_CONVERSATION (state, conversation) {
       state.conversations.push(conversation)
       state.conversations2.push(state.conversations[1])
+    },
+    UPDATE_CALLS (state, calls) {
+      console.log('add call if not exist')
+      state.calls = calls
     }
   },
   actions: {
@@ -231,9 +236,16 @@ store.registerModule('vux', {
       options.sendInitialVideo = params.mode
       kandy.call.make(params.callee, options)
       commit('SET_ACTIVECALL_STATE', 'IN_CALL')
+      commit('SET_ACTIVECALL', params)
     },
     end ({commit}, callee) {
       kandy.call.end(this.state.vux.activeCall.id)
+      // const calls = kandy.call.getAll()
+      // calls.forEach(function (call) {
+      //   if (call.id === this.state.vux.activeCall.id) {
+      //     kandy.call.end(this.state.vux.activeCall.id)
+      //   }
+      // })
     },
     getMessages: ({ commit }) => {
       let messages = IMService.getMessages()
@@ -503,6 +515,21 @@ function addEventListeners () {
 
   kandy.on('messages:error', res => {
     console.log(res)
+  })
+
+  kandy.on('call:stateChange', function (call) {
+    store.commit('SET_ACTIVECALL_STATE', call.state)
+    store.commit('SET_ACTIVECALL', call)
+    var calls = kandy.call.getAll()
+    store.commit('UPDATE_CALLS', calls)
+    kandy.call.getAll().filter(function (call) {
+      // if (call.state === 'IN_CALL') {
+      //   store.dispatch('setActiveCallId', { callId: call.id })
+      // } else if (call.state === 'ENDED') {
+      //   store.dispatch('toggleActiveCall')
+      // }
+    })
+      // kandy.contacts.search(state.lastCallee, 'USERNAME')
   })
 }
 

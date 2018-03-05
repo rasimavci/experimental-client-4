@@ -127,13 +127,20 @@
       </div>
     </div>
 
-    <group class="block_container" v-if="textAreaVisible">
-      <x-textarea :max="20" :placeholder="$t('placeholder')" class="bloc1"></x-textarea>
+    <group class="block_container" v-if="textAreaVisible1">
+      <x-textarea :max="20" :placeholder="$t('placeholder')" class="bloc1" value="myText"></x-textarea>
               <img slot="icon" src="../assets/demo/send_message.png">
 
       <x-button @click.native="sendMessage" type="primary">Send</x-button>
-
     </group>
+
+    <div v-transfer-dom>
+      <popup v-model="textAreaVisible" position="bottom">
+        <div class="position-vertical-demo">
+        I'm on bottom.
+        </div>
+      </popup>
+    </div>
 
     <tabbar>
       <tabbar-item>
@@ -162,7 +169,7 @@
 </template>
 
 <script>
-import { XButton, XTextarea, Tabbar, TabbarItem, Group, Cell } from 'vux'
+import { Popup, XButton, XTextarea, Tabbar, TabbarItem, Group, Cell } from 'vux'
 import { mapState } from 'vuex'
 
 // import KandyJs from '../kandy'
@@ -179,11 +186,13 @@ export default {
   },
   data () {
     return {
+      myText: 'de',
+      textAreaVisible1: false,
       textAreaVisible: false,
       hasCollaborationService: false,
       isShowKeypad: true,
       activeCall: false,
-      callee: '',
+      callee: 'bkocak@genband.com',
       joinClicked: false,
       activeNote: '',
       filterByStatus: '',
@@ -220,6 +229,7 @@ export default {
     busy: state => state.busy
   }),
   components: {
+    Popup,
     XButton,
     XTextarea,
     Tabbar,
@@ -322,16 +332,18 @@ export default {
         // debugger
         this.$store.dispatch('end')
       }
-      console.log('make call')
+      console.log('make call started')
+      this.$router.push('call')
     },
     makeCall2 () {
-      this.$store.dispatch('call', 'saynaci@genband.com')
+      this.$router.push('call')
+      // this.$store.dispatch('call', 'saynaci@genband.com')
     },
     sendMessage () {
       let messageToSend = {
         type: 'IM',
-        text: 'deneme', // this.callee
-        userId: 'bkocak@genband.com'
+        text: this.myText, // 'deneme', // this.callee
+        userId: this.callee // 'bkocak@genband.com'
       }
       console.log('send clicked')
       this.$store.dispatch('sendMessage', messageToSend)
