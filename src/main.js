@@ -75,6 +75,7 @@ store.registerModule('vux', {
   state: {
     demoScrollTop: 0,
     isLoading: false,
+    joinStarted: false,
     direction: 'forward',
     showPlacement: 'left',
     currentPage: 'main',
@@ -181,6 +182,10 @@ store.registerModule('vux', {
           break
       }
     },
+    UPDATE_JOIN_STARTED (state, payload) {
+      console.log('mutated with ' + payload.top)
+      state.joinStarted = true
+    },
     UPDATE_ADDCONTACT (state, payload) {
       console.log('mutated with ' + payload.top)
       state.currentPageAddContact = true
@@ -200,6 +205,11 @@ store.registerModule('vux', {
     UPDATE_CALLS (state, calls) {
       console.log('add call if not exist')
       state.calls = calls
+      calls.forEach(function (call) {
+        if (call.id === state.activeCall.id) {
+          state.activeCall = call
+        }
+      })
     }
   },
   actions: {
@@ -230,6 +240,10 @@ store.registerModule('vux', {
       console.log('dispatching with ' + top)
       commit({type: 'UPDATE_ADDCONTACT', top: true})
     },
+    selectContactToAddCall ({commit}, top) {
+      console.log('selecting contact to add call ' + top)
+      commit({type: 'UPDATE_JOIN_STARTED', top: true})
+    },
     call ({commit}, params) {
       console.log('call to:' + params.callee)
       options.isVideoEnabled = params.mode
@@ -246,6 +260,30 @@ store.registerModule('vux', {
       //     kandy.call.end(this.state.vux.activeCall.id)
       //   }
       // })
+    },
+    reject ({ context }) {
+    //   context.commit(types.CALL_REJECT)
+    },
+    ignore ({ context }) {
+    // context.commit(types.CALL_IGNORE)
+    },
+    hold (context) {
+      kandy.call.hold(this.state.vux.activeCall.id)
+    },
+    unhold (context) {
+      kandy.call.unhold(this.state.vux.activeCall.id)
+    },
+    mute (context) {
+      kandy.call.mute(this.state.vux.activeCall.id)
+    },
+    unmute (context) {
+      kandy.call.unmute(this.state.vux.activeCall.id)
+    },
+    startVideo (context) {
+      kandy.call.startVideo(this.state.vux.activeCall.id)
+    },
+    stopVideo (context) {
+      kandy.call.stopVideo(this.state.vux.activeCall.id)
     },
     getMessages: ({ commit }) => {
       let messages = IMService.getMessages()
@@ -518,9 +556,10 @@ function addEventListeners () {
   })
 
   kandy.on('call:stateChange', function (call) {
-    store.commit('SET_ACTIVECALL_STATE', call.state)
-    store.commit('SET_ACTIVECALL', call)
-    var calls = kandy.call.getAll()
+    // store.commit('SET_ACTIVECALL_STATE', call.state)
+    // store.commit('SET_ACTIVECALL', call)
+    // store.commit('SET_ACTIVE_CALL', call)
+    const calls = kandy.call.getAll()
     store.commit('UPDATE_CALLS', calls)
     kandy.call.getAll().filter(function (call) {
       // if (call.state === 'IN_CALL') {

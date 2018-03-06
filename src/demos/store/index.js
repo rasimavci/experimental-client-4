@@ -353,13 +353,10 @@ const actions = {
     kandy.call.mute(state.activeCall.id)
   },
 
-  end (context) {
-    kandy.call.end(state.activeCall.id)
-  },
-
   unmute (context) {
     kandy.call.unmute(state.activeCall.id)
   },
+
   startVideo (context) {
     kandy.call.startVideo(state.activeCall.id)
   },
@@ -367,6 +364,9 @@ const actions = {
     kandy.call.stopVideo(state.activeCall.id)
   },
 
+  end (context) {
+    kandy.call.end(state.activeCall.id)
+  },
   join (context, targetId) {
     kandy.call.hold(state.activeCall.id)
     waitMiliseconds(3000).then(() => {

@@ -1,7 +1,6 @@
 <template>
   <div>
 
-
     <div>
        <tab :line-width=2 active-color='#fc378c' v-model="index">
        <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
@@ -10,10 +9,10 @@
         <swiper-item v-for="(item, index) in list2" :key="index">
           <div class="tab-swiper vux-center">{{item}} Screen
               <div class="box"  v-show="item === 'VIDEO'">
-              <x-button @click.native="prev" type="primary" @click="makeCall(true)">Call {{activeCallTo}}</x-button>
+              <x-button @click.native="prev" type="primary" @click="makeCall(true)">Audio Call {{activeCall.calleeName}}</x-button>
               </div>
               <div class="box"  v-show="item === 'VOICE'">
-              <x-button @click.native="prev" type="primary" @click="makeCall(false)">Call {{activeCallTo}}</x-button>
+              <x-button @click.native="prev" type="primary" @click="makeCall(false)">Video Call {{activeCall.calleeName}}</x-button>
               </div>
           </div>
         </swiper-item>
@@ -22,76 +21,133 @@
 
     <tabbar>
       <tabbar-item>
-        <img slot="icon" src="../assets/demo/dp_action_keyboard.png">
-        <span slot="label">Keyboard</span>
-      </tabbar-item>
-      <tabbar-item show-dot>
-        <img slot="icon" src="../assets/demo/add_party_outline_blue.png" @click="textAreaVisible = true">
-        <span slot="label">Message</span>
+        <img slot="icon" src="../assets/demo/call_speaker_blue_outline.png" @click="speakerSelection = !speakerSelection">
       </tabbar-item>
       <tabbar-item>
-        <img slot="icon" src="../assets/demo/hold_outline_blue.png" @click="makeCall(false)">
-        <span slot="label">Call</span>
+        <img slot="icon" src="../assets/demo/add_party_outline_blue.png" @click="addContact(false)">
       </tabbar-item>
-      <tabbar-item badge="2">
-        <img slot="icon" src="../assets/demo/mute_outline_blue.png" @click="makeCall(true)">
-        <span slot="label">Vide Call</span>
+      <tabbar-item>
+        <img slot="icon" src="../assets/demo/hold_outline_blue.png" @click="holdCall(false)">
       </tabbar-item>
-      <tabbar-item badge="2">
-        <img slot="icon" src="../assets/demo/dp_action_voicemail.png">
-        <span slot="label">VoiceMail</span>
+      <tabbar-item>
+        <img slot="icon" src="../assets/demo/mute_blue_outline.png" @click="muteCall(true)">
       </tabbar-item>
     </tabbar>
+
+    <div v-transfer-dom>
+           <popup v-model="speakerSelection" height="33%">
+                      <div class="popup1">
+
+    <popup-header
+    :left-text="$t('')"
+    :right-text="$t('Cancel')"
+    :title="$t()"
+    @on-click-left="edit = false"
+    @on-click-right="speakerSelection = false">
+    </popup-header></popup-header>
+            <group title="Speaker Selection">
+      <radio :options="radio001" @on-change="change"></radio>
+    </group>
+
+    </div>
+      </popup>
+</div>
 
 
   </div>
 </template>
 
-<i18n>
-set bar-active-color:
-  zh-CN: 设置bar颜色
-</i18n>
-
 <script>
-import { Tabbar, TabbarItem, Tab, TabItem, Sticky, Divider, XButton, Swiper, SwiperItem } from 'vux'
+import { Tabbar, TabbarItem, Tab, TabItem, Sticky, Swiper, SwiperItem, Confirm, Rater, CellBox, CellFormPreview, PopupHeader, ButtonTab, ButtonTabItem, Divider, XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
 import { mapState } from 'vuex'
 
 const list = () => ['CHAT', 'VOICE', 'VIDEO', 'PEOPLE']
 
 export default {
+  ...mapState({
+    currentPageAddContact: state => state.vux.currentPageAddContact,
+    joinStarted: state => state.vux.joinStarted
+  }),
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'call')
     this.$store.dispatch('updateShowPlacement', 'right')
   },
-  computed: mapState({
-    user: state => state.user,
-    activeCallTo: state => state.vux.activeCall.to,
-    activeCallRinging: state => state.activeCallRinging,
-    activeCallExist: state => state.activeCallExist,
-    activeCallInCall: state => state.activeCallInCall,
-    activeCallOnHold: state => state.activeCallOnHold,
-    activeCallState: state => state.activeCallState,
-    activeCallMuted: state => state.activeCallOnHold,
-    activeCallsendingVideo: state => state.activeCallOnHold,
-    activeCallEnded: state => state.activeCallOnHold,
-    callstart: state => state.callstart,
-    // callState: state => { if(callState === 'RINGING') { return true } else {return false}},
-    isloadingComplete: state => state.isloadingComplete,
-    busy: state => state.busy
-  }),
+  directives: {
+    TransferDom
+  },
   components: {
     Tabbar,
     TabbarItem,
     Tab,
     TabItem,
     Sticky,
-    Divider,
-    XButton,
     Swiper,
-    SwiperItem
+    SwiperItem,
+    Confirm,
+    Rater,
+    CellBox,
+    CellFormPreview,
+    PopupHeader,
+    ButtonTab,
+    ButtonTabItem,
+    Divider,
+    XImg,
+    Checklist,
+    Alert,
+    Radio,
+    Popup,
+    Group,
+    Cell,
+    XSwitch,
+    XInput,
+    Toast,
+    XAddress,
+    XButton
   },
   data () {
     return {
+      activeCallTo: '',
+      confirmDelete: false,
+      selectedContact: {},
+      showdata: 'all',
+      list: [],
+      error: false,
+      checklist001: true,
+      src: 'https://o5omsejde.qnssl.com/demo/test1.jpg',
+      labelPosition: 'left',
+      type: '',
+      show2: false,
+      addressData: ChinaAddressData,
+      data1: 1,
+      data2: 1,
+      data3: 1,
+      show: false,
+      create: false,
+      contact: false,
+      edit: false,
+      add: false,
+      favorites: false,
+      show1: false,
+      show3: false,
+      show4: false,
+      show5: false,
+      show6: false,
+      title6: 'The default is empty',
+      value6: [],
+      show7: false,
+      showToast: false,
+      show8: false,
+      show9: false,
+      show10: false,
+      show11: false,
+      show12: false,
+      show13: false,
+      commonList: [ 'Show Presence Status' ],
+      commonList1: [ 'Manage Favorites' ],
+      commonList2: [ 'Remove From Personal Contacts List' ],
+      commonList3: [ 'Remove From Personal Contacts List' ],
+      radio001: [ 'Speakerohone', 'Earpiece', 'Bluettoh Headset', 'Stereo Mix (Realtek High Definition Audio)' ],
+      speakerSelection: false,
       index01: 0,
       list2: list(),
       demo2: 'Food',
@@ -107,6 +163,72 @@ export default {
     }
   },
   methods: {
+    change (val, label) {
+      console.log('change', val, label)
+    },
+    onCreateContact () {
+      this.$store.dispatch('updateAddContact', true)
+    },
+    log (str) {
+      console.log(str)
+    },
+    logout () {
+      this.$store.dispatch('disconnect')
+    },
+    onImgError (item, $event) {
+      console.log(item, $event)
+    },
+    onCancel () {
+      console.log('on cancel')
+    },
+    onConfirm () {
+      console.log('contact deleted')
+    },
+    onConfirm5 () {
+    },
+    onShow () {
+    },
+    onShow5 () {
+    },
+    onHide () {
+    },
+    success () {
+    },
+    addcontact () {
+      this.add = true
+      this.$store.dispatch('updateCurrentPage', 'addcontact')
+    },
+    onClickBack () {
+      // this.add = true
+    },
+    updateActiveCell (args) {
+      if (this.$store.state.vux.joinStarted) {
+        console.log('selected for join ' + args.primaryContact)
+      } else {
+        this.selectedContact = args
+        this.contact = true
+        console.log('edit ' + args.firstName)
+      }
+    },
+    addContact () {
+      this.$store.dispatch('selectContactToAddCall', true)
+      this.$router.push('contact')
+    },
+    holdCall (mode) {
+      if (this.activeCall.state === 'ON_HOLD') {
+        this.$store.dispatch('unhold', true)
+      } else {
+        this.$store.dispatch('hold', true)
+      }
+    },
+    muteCall (mode) {
+      console.log(this.activeCall)
+      if (this.activeCall.muted) {
+        this.$store.dispatch('unmute', true)
+      } else {
+        this.$store.dispatch('mute', true)
+      }
+    },
     switchTabItem (index) {
       console.log('on-before-index-change', index)
       this.$vux.loading.show({
@@ -171,31 +293,95 @@ export default {
       }
       console.log('make call')
     }
+
+  },
+  computed: mapState({
+    user: state => state.user,
+    activeCall: state => state.vux.activeCall,
+    activeCallTo: state => state.vux.activeCall.to,
+    activeCallRinging: state => state.activeCallRinging,
+    activeCallExist: state => state.activeCallExist,
+    activeCallInCall: state => state.activeCallInCall,
+    activeCallOnHold: state => state.activeCallOnHold,
+    activeCallState: state => state.activeCallState,
+    activeCallMuted: state => state.activeCallOnHold,
+    activeCallsendingVideo: state => state.activeCallOnHold,
+    activeCallEnded: state => state.activeCallOnHold,
+    callstart: state => state.callstart,
+    // callState: state => { if(callState === 'RINGING') { return true } else {return false}},
+    isloadingComplete: state => state.isloadingComplete,
+    busy: state => state.busy
+  }),
+  watch: {
+    show10 (val) {
+      if (val) {
+        setTimeout(() => {
+          this.show10 = false
+        }, 1000)
+      }
+    }
   }
 }
 </script>
 
 <style lang="less" scoped>
-@import '~vux/src/styles/1px.less';
-@import '~vux/src/styles/center.less';
+@import '~vux/src/styles/close.less';
 
-.box {
+.popup0 {
+  padding-bottom:15px;
+  height:200px;
+}
+.popup1 {
+  width:100%;
+  height:100%;
+}
+.popup2 {
+  padding-bottom:15px;
+  height:400px;
+}
+.position-vertical-demo {
+  background-color: #ffe26d;
+  color: #000;
+  text-align: center;
   padding: 15px;
 }
-.active-6-1 {
-  color: rgb(252, 55, 140) !important;
-  border-color: rgb(252, 55, 140) !important;
+.position-horizontal-demo {
+  position: relative;
+  height: 100%;
+  .vux-close {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(4);
+    color: #000;
+  }
+  .img1 {
+    float: right;
+  }
+  .img2 {
+    float: left;
+  }
 }
-.active-6-2 {
-  color: #04be02 !important;
-  border-color: #04be02 !important;
+#block_container
+{
+    text-align:center;
 }
-.active-6-3 {
-  color: rgb(55, 174, 252) !important;
-  border-color: rgb(55, 174, 252) !important;
+
+#bloc1
+{
+    display:inline;
+    float:left;
 }
-.tab-swiper {
-  background-color: #fff;
-  height: 100px;
+
+#bloc2
+{
+    display:inline;
+    float:right;
+}
+
+#bloc3
+{
+    display:inline;
+    float:center;
 }
 </style>

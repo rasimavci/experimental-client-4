@@ -277,7 +277,8 @@ import { mapState, mapGetters } from 'vuex'
 
 export default {
   ...mapState({
-    currentPageAddContact: state => state.vux.currentPageAddContact
+    currentPageAddContact: state => state.vux.currentPageAddContact,
+    joinStarted: state => state.vux.joinStarted
   }),
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'contact')
@@ -392,9 +393,13 @@ export default {
       // this.add = true
     },
     updateActiveCell (args) {
-      this.selectedContact = args
-      this.contact = true
-      console.log('edit ' + args.firstName)
+      if (this.$store.state.vux.joinStarted) {
+        console.log('selected for join ' + args.primaryContact)
+      } else {
+        this.selectedContact = args
+        this.contact = true
+        console.log('edit ' + args.firstName)
+      }
     }
 
   },
