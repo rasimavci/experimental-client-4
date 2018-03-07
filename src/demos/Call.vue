@@ -106,7 +106,6 @@ export default {
   },
   data () {
     return {
-      activeCallTo: '',
       confirmDelete: false,
       selectedContact: {},
       showdata: 'all',

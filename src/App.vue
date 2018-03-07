@@ -20,7 +20,6 @@
           <cell title="Presences" link="/component/presences" value="Presences" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
           </cell>
 
-
           <cell title="Login" link="/component/login" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
           <cell title="Call" link="/component/call" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
@@ -42,6 +41,8 @@
           <cell title="Sessions" link="/component/sessions" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
           <cell title="Collaboration" link="/component/conference" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
+          </cell>
+          <cell title="Setggings" link="/component/settings" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
         </group>
         <group title="showMode" v-show="this.stateShowPlacement === 'left'">
@@ -67,7 +68,7 @@
           <radio v-model="showPlacement" :options="['Personal Addressbook', 'Global Addressbook']" @on-change="onPlacementChange"></radio>
         </group>
         <group title="Show..." v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'history'">
-          <radio v-model="showPlacement" :options="['Incoming Call', 'Outgoing Call', 'Missed Call', 'Message', 'Conference']" @on-change="onPlacementChange"></radio>
+          <radio v-model="showPlacement" :options="['All Call', 'Incoming Call', 'Outgoing Call', 'Missed Call', 'Message', 'Conference']" @on-change="onHistoryFilterChange"></radio>
         </group>
         <group title="Display As" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'favorites'">
           <radio v-model="showPlacement" :options="['Tiles', 'List']" @on-change="onPlacementChange"></radio>
@@ -188,6 +189,9 @@ export default {
           this.drawerVisibility = !this.drawerVisibility
         }, 300)
       }
+    },
+    onHistoryFilterChange (val) {
+      this.$store.dispatch('updateHistoryFilter', val)
     },
     changeLocale (locale) {
       this.$i18n.set(locale)

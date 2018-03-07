@@ -93,7 +93,8 @@ store.registerModule('vux', {
     contacts: [],
     conversations: [],
     conversations2: [],
-    currentPageAddContact: false
+    currentPageAddContact: false,
+    historyFilterSelection: 'All Call'
   },
 
   mutations: {
@@ -190,6 +191,10 @@ store.registerModule('vux', {
       console.log('mutated with ' + payload.top)
       state.currentPageAddContact = true
     },
+    UPDATE_HISTORYFILTER (state, payload) {
+      console.log('mutate historyFilterSelection ' + payload.top)
+      state.historyFilterSelection = payload.top
+    },
     REFRESH_DIRECTORY (state, data) {
       console.log('data refreshed')
       if (data) state.contacts = data
@@ -239,6 +244,10 @@ store.registerModule('vux', {
     updateAddContact ({commit}, top) {
       console.log('dispatching with ' + top)
       commit({type: 'UPDATE_ADDCONTACT', top: true})
+    },
+    updateHistoryFilter ({commit}, top) {
+      console.log('dispatching UPDATE_HISTORYFILTER with ' + top)
+      commit({type: 'UPDATE_HISTORYFILTER', top: top})
     },
     selectContactToAddCall ({commit}, top) {
       console.log('selecting contact to add call ' + top)

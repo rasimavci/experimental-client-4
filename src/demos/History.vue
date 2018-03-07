@@ -11,7 +11,7 @@
 
 
     <group :title="$t('This will be data for the group')">
-          <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="getDate(logrecord.startTime)">
+          <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="goCall(logrecord)">
       <img  src="../assets/demo/avatar_generic.png">
       <cell :title="$t(logrecord.callerName)">{{logrecord.startTime.trim ().substring (0, 4)}}</cell>
           </a>
@@ -64,7 +64,13 @@ Call prompt by using plugin:
 <script>
 import { Cell, ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
 import Moment from 'moment'
+import { mapState } from 'vuex'
+
 export default {
+  ...mapState({
+    historyFilterSelection: state => state.vux.historyFilterSelection
+  }),
+
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'history')
     this.$store.dispatch('updateShowPlacement', 'right')
@@ -96,6 +102,15 @@ export default {
     }
   },
   methods: {
+    goCall (logrecord) {
+      console.log('go call page for ' + logrecord.callerDisplayNumber)
+      const params = {
+        callee: 'saynaci@genband.com',
+        mode: false
+      }
+      this.$store.dispatch('call', params)
+      this.$router.push('call')
+    },
     onCancel () {
       console.log('on cancel')
     },
@@ -176,14 +191,14 @@ export default {
   },
   computed: {
     getCallLogs () {
-      if (this.show === 'all') {
+      if (this.$store.state.vux.historyFilterSelection === 'All Call') {
         console.log(this.$store.state.vux.history)
         return this.$store.state.vux.history
-      } else if (this.show === 'incoming') {
+      } else if (this.$store.state.vux.historyFilterSelection === 'Incoming Call') {
         return this.$store.state.vux.history.filter(note => note.direction === 'incoming')
-      } else if (this.show === 'outgoing') {
+      } else if (this.$store.state.vux.historyFilterSelection === 'Outgoing Call') {
         return this.$store.state.vux.history.filter(note => note.direction === 'outgoing')
-      } else if (this.show === 'missed') {
+      } else if (this.$store.state.vux.historyFilterSelection === 'Missed Call') {
         return this.$store.state.vux.history.filter(note => note.direction === 'missed')
       }
     }

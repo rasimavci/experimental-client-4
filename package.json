@@ -1,8 +1,8 @@
 {
   "name": "experimental-client-4",
-  "version": "2.7.9",
+  "version": "4.0.0",
   "main": "index.js",
-  "description": "Mobile web UI based on Vue and WeUI",
+  "description": "Mobile WebRTC client based on Vue and Vuex",
   "keywords": [
     "vux",
     "vue",
