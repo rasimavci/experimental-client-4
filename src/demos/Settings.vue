@@ -1,11 +1,6 @@
 <template>
   <div>
 
-      <button-tab>
-        <button-tab-item selected @click.native="showdata = 'all'">{{ $t('All Contacts') }}</button-tab-item>
-        <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
-      </button-tab>
-
     <group :title="$t('Application Settings')">
       <cell :title="$t('Language Settings')" is-link></cell>
       <cell :title="$t('Vibration Settings')" is-link @click.native="showvibrationsettings = !showvibrationsettings"></cell>
@@ -28,10 +23,9 @@
             <group title="Log Level Selection">
       <radio :options="radio001" @on-change="change"></radio>
     </group>
-
     </div>
       </popup>
-</div>
+    </div>
 
     <div v-transfer-dom>
     <popup v-model="showvibrationsettings" height="100%">
@@ -45,10 +39,10 @@
     @on-click-right="showvibrationsettings = false">
     </popup-header></popup-header>
 
-      <group :placeholder="$t('PREFERRED SETIINGS')">
+    <group :placeholder="$t('PREFERRED SETIINGS')">
     <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
     <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist002" @on-change="change"></checklist>
- </group>
+    </group>
 
         </div>
       </popup>
@@ -64,7 +58,6 @@
       <x-button @click.native="addContact" type="primary"> {{ $t('Add') }} </x-button>
     </div>
 
-
     <div v-transfer-dom>
     <popup v-model="create" height="100%">
     <div class="popup1">
@@ -76,8 +69,6 @@
     @on-click-left="create = false"
     @on-click-right="edit = false">
     </popup-header></popup-header>
-
-
 
       <group :placeholder="$t('IDENTIFICATION')">
       <x-input :placeholder="$t(this.selectedContact.firstName)"></x-input>
@@ -94,9 +85,8 @@
 
     <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
-
-        </div>
-      </popup>
+    </div>
+    </popup>
     </div>
 
 

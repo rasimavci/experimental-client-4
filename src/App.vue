@@ -42,22 +42,19 @@
           </cell>
           <cell title="Collaboration" link="/component/conference" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Setggings" link="/component/settings" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
+          <cell>
           </cell>
-        </group>
-        <group title="showMode" v-show="this.stateShowPlacement === 'left'">
-          <radio v-model="showMode" :options="['push', 'overlay']" @on-change="onShowModeChange"></radio>
-        </group>
-        <group title="placement" v-show="this.stateShowPlacement === 'left'">
-          <radio v-model="showPlacement" :options="['left', 'right']" @on-change="onPlacementChange"></radio>
-        </group>
-        </group>
-        <group title="showMode" v-show="this.stateShowPlacement === 'left'">
-          <radio v-model="showMode" :options="['push', 'overlay']" @on-change="onShowModeChange"></radio>
-        </group>
-        <group title="Manage" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
-          <radio v-model="showPlacement" :options="['Create Contact']" @on-change="onCreateContact"></radio>
-          <cell title="Create Contact" @click.native="onCreateContact" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell title="Settings" link="/component/settings" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
         </group>
 
@@ -105,20 +102,7 @@
           <router-view class="router-view"></router-view>
         </transition>
 
-        <tabbar class="vux-demo-tabbar" icon-class="vux-center" v-show="this.stateCurrentPage !== 'dialpad' && this.stateCurrentPage !== 'call'" slot="bottom">
-          <tabbar-item :link="{path:'/'}" :selected="route.path === '/'">
-            <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
-            <span slot="label">Chat</span>
-          </tabbar-item>
-          <tabbar-item :link="{path:'/demo'}" :selected="isDemo" badge="9">
-            <span class="demo-icon-22" slot="icon">&#xe633;</span>
-            <span slot="label"><span v-if="componentName" class="vux-demo-tabbar-component">{{componentName}}</span><span v-else>Voicemail</span></span>
-          </tabbar-item>
-          <tabbar-item :link="{path:'/'}" :selected="route.path === '/'">
-            <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
-            <span slot="label">Call</span>
-          </tabbar-item>
-        </tabbar>
+
 
       </view-box>
     </drawer>
