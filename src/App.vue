@@ -277,6 +277,16 @@ export default {
       if (this.route.path === '/demo') return 'Smart Office'
       if (this.route.path === '/contact') return 'Smart Office Contact'
       if (this.route.path === '/component/messages') return 'Inbox'
+      if (this.route.path === '/component/contact') return 'Contacts'
+      if (this.route.path === '/component/sessions') return 'Sessions'
+      if (this.route.path === '/component/history') return 'History'
+      if (this.route.path === '/component/diaplad') return 'Dialpad'
+      if (this.route.path === '/component/settings') return 'Settings'
+      if (this.route.path === '/component/call') return 'Call'
+      if (this.route.path === '/component/login') return 'Login'
+      if (this.route.path === '/component/favorites') return 'Favorites'
+      if (this.route.path === '/component/collaboration') return 'Collaboration'
+      if (this.route.path === '/component/presences') return 'ravci@genband.com'
       return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
     },
     viewTransition () {

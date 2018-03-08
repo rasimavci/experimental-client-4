@@ -6,50 +6,19 @@
         <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
       </button-tab>
 
-    <group>
-      <cell>
-        <img  src="../assets/demo/genband.png">
-        Meetme Audio Conference</cell>
-      <cell-form-preview :list="getContacts"></cell-form-preview>
+    <group :title="'Services'">
+    <cell :title="'Meetme Audio Conference'">
+      <img slot="icon" src="../assets/demo/genband.png" />
+    </cell>
     </group>
 
-    <group>
-          <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCell(logrecord)">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(logrecord.firstName + ' ' + logrecord.lastName)" value="hello">Personal</cell>
-          </a>
-    </group>
-
-    <group>
-      <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item">
-      <cell :title="$t(logrecord.firstName + ' ' + logrecord.lastName)" :value="$t('Personal')" @click.native="onClick"></cell>
-          </a>
-    </group>
-
-    <group>
-      <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
-
-      <cell class="bloc1" valueAlign: left value="deneme">
-        <img  src="../assets/demo/avatar_generic.png">
-        {{logrecord.firstName}} {{logrecord.lastName}}</cell>
-          </a>
-    </group>
-
-      <!-- render contacts in a list -->
-      <div class="container">
-        <div class="list-group">
-          <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
-            <h4 class="list-group-item-heading">
-                      <img  src="../assets/demo/avatar_generic.png">
-              <i :class="[
-                  'glyphicon',
-                  logrecord['direction'] === 'incoming' ? 'glyphicon-import' : 'glyphicon-export'
-                  ]"></i>
-              {{logrecord.firstName}} {{logrecord.lastName}}
-            </h4>
-          </a>
-        </div>
-      </div>
+            <group>
+      <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCell(logrecord)">
+    <cell :title="`  ${logrecord.firstName} ${logrecord.lastName}`" value="Personal">
+      <img slot="icon" src="../assets/demo/avatar_generic.png" />
+    </cell>
+      </a>
+              </group>
 
     <div style="padding:2px;">
       <x-button @click.native="create=true" type="primary">Create</x-button>

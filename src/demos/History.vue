@@ -9,29 +9,13 @@
         <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
       </button-tab>
 
-
     <group :title="$t('This will be data for the group')">
           <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="goCall(logrecord)">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(logrecord.callerName)">{{logrecord.startTime.trim ().substring (0, 4)}}</cell>
+    <cell :title="`  ${logrecord.callerName}`">{{logrecord.startTime.trim ().substring (0, 4)}}
+      <img slot="icon" src="../assets/demo/avatar_generic.png" />
+    </cell>
           </a>
     </group>
-
-      <!-- render calllogs in a list -->
-      <div class="container">
-        <div class="list-group">
-          <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCall(logrecord)">
-            <h4 class="list-group-item-heading">
-              <i :class="[
-                  'glyphicon',
-                  logrecord['direction'] === 'incoming' ? 'glyphicon-import' : 'glyphicon-export'
-                  ]"></i>
-              {{logrecord.callerName}} {{logrecord.startTime.trim ().substring (0, 4)}}
-            </h4>
-          </a>
-        </div>
-      </div>
-    </div>
 
   </div>
 </template>
