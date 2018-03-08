@@ -1,24 +1,24 @@
 <template>
   <div>
 
-      <button-tab>
-        <button-tab-item selected @click.native="showdata = 'all'">{{ $t('All Contacts') }}</button-tab-item>
-        <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
-      </button-tab>
+    <button-tab>
+      <button-tab-item selected @click.native="showdata = 'all'">{{ $t('All Contacts') }}</button-tab-item>
+      <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
+    </button-tab>
 
     <group :title="'Services'">
-    <cell :title="'Meetme Audio Conference'">
-      <img slot="icon" src="../assets/demo/genband.png" />
-    </cell>
+      <cell :title="'Meetme Audio Conference'">
+        <img slot="icon" src="../assets/demo/genband.png" />
+      </cell>
     </group>
 
-            <group>
+    <group>
       <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCell(logrecord)">
-    <cell :title="`  ${logrecord.firstName} ${logrecord.lastName}`" value="Personal">
-      <img slot="icon" src="../assets/demo/avatar_generic.png" />
-    </cell>
+        <cell :title="`  ${logrecord.firstName} ${logrecord.lastName}`" value="Personal">
+          <img slot="icon" src="../assets/demo/avatar_generic.png" />
+        </cell>
       </a>
-              </group>
+    </group>
 
     <div style="padding:2px;">
       <x-button @click.native="create=true" type="primary">Create</x-button>
@@ -30,129 +30,118 @@
       <x-button @click.native="addContact" type="primary"> {{ $t('Add') }} </x-button>
     </div>
 
-
-
     <div v-transfer-dom>
-    <popup v-model="create" height="100%">
-    <div class="popup1">
+      <popup v-model="create" height="100%">
+        <div class="popup1">
 
-    <popup-header
-    :left-text="$t('Back')"
-    :right-text="$t('Save')"
-    :title="$t('Create Profile')"
-    @on-click-left="create = false"
-    @on-click-right="edit = false">
-    </popup-header></popup-header>
+          <popup-header :left-text="$t('Back')" :right-text="$t('Save')" :title="$t('Create Profile')" @on-click-left="create = false" @on-click-right="edit = false">
+          </popup-header>
+          </popup-header>
 
-
-
-      <group :placeholder="$t('IDENTIFICATION')">
-      <x-input :placeholder="$t(this.selectedContact.firstName)"></x-input>
-      <x-input :placeholder="$t('Last Name*')"></x-input>
-      <x-input :placeholder="$t('NickName*')"></x-input>
-      <x-input :placeholder="$t('User ID')"></x-input>
-      <x-input :placeholder="$t('Email')"></x-input>
+          <group :placeholder="$t('IDENTIFICATION')">
+            <x-input :placeholder="$t(this.selectedContact.firstName)"></x-input>
+            <x-input :placeholder="$t('Last Name*')"></x-input>
+            <x-input :placeholder="$t('NickName*')"></x-input>
+            <x-input :placeholder="$t('User ID')"></x-input>
+            <x-input :placeholder="$t('Email')"></x-input>
           </group>
           <group :title="$t('CONTACT')">
-      <x-input :placeholder="$t('Home*')"></x-input>
-      <x-input :placeholder="$t('mobile*')"></x-input>
-      <x-input :placeholder="$t('Work*')"></x-input>
+            <x-input :placeholder="$t('Home*')"></x-input>
+            <x-input :placeholder="$t('mobile*')"></x-input>
+            <x-input :placeholder="$t('Work*')"></x-input>
           </group>
 
-    <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
-
+          <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
         </div>
       </popup>
     </div>
-
 
     <div v-transfer-dom>
       <popup v-model="contact" height="100%">
         <div class="popup1">
 
-    <popup-header
-    :left-text="$t('Back')"
-    :right-text="$t('Edit')"
-    :title="$t()"
-    @on-click-left="contact = false"
-    @on-click-right="favorites = true">
-    </popup-header></popup-header>
+          <popup-header :left-text="$t('Back')" :right-text="$t('Edit')" :title="$t()" @on-click-left="contact = false" @on-click-right="favorites = true">
+          </popup-header>
+          </popup-header>
 
-      <cell <img  src="../assets/demo/avatar_generic.png"><h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
-        <img  src="../assets/demo/call_outline_blue.png">
-        <img src="../assets/demo/video_outline_blue.png">
-         <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
-      </cell>
+          <div class="flex">
+            <div class="flex2">
+              <img src="../assets/demo/avatar_generic.png"" width="150" height="70">
+            </div>
+            <div class="flex column">
+              <div class="flex">
+                <h3> {{this.selectedContact.firstName}} {{this.selectedContact.lastName}} </h3>
+              </div>
+              <div class="flex">
+            <img src="../assets/demo/call_outline_blue.png">
+            <img src="../assets/demo/video_outline_blue.png" hspace="20">
+            <div hspace="20"> </div>
+            <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
+              </div>
+            </div>
+          </div>
 
-
-    <group :title="$t('CONTACT')">
-      <cell :title="$t('Home ' +  this.selectedContact.homePhone ) ">
-        {{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</cell>
-      </cell>
-      <cell :title="$t('mobile ' +  this.selectedContact.workPhone ) ">
-      </cell>
-      <cell :title="$t('Work ' +  this.selectedContact.workPhone ) ">
-                <img  src="../assets/demo/call_outline_blue2.png">
-      </cell>
-      <cell :title="$t('Mobile ' +  this.selectedContact.mobilePhone ) ">
-      </cell>
-      <cell :title="$t('Nickname ' +  this.selectedContact.nickname ) ">
-      </cell>
-      <cell :title="$t('User ID ' +  this.selectedContact.userId ) ">
-      </cell>
-      <cell :title="$t('Email ' +  this.selectedContact.email ) ">
-      </cell>
-    </group>
+          <group :title="$t('CONTACT')">
+            <cell :title="$t('Home ' +  this.selectedContact.homePhone ) ">
+              {{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</cell>
+            </cell>
+            <cell :title="$t('mobile ' +  this.selectedContact.workPhone ) ">
+            </cell>
+            <cell :title="$t('Work ' +  this.selectedContact.workPhone ) ">
+              <img src="../assets/demo/call_outline_blue2.png">
+            </cell>
+            <cell :title="$t('Mobile ' +  this.selectedContact.mobilePhone ) ">
+            </cell>
+            <cell :title="$t('Nickname ' +  this.selectedContact.nickname ) ">
+            </cell>
+            <cell :title="$t('User ID ' +  this.selectedContact.userId ) ">
+            </cell>
+            <cell :title="$t('Email ' +  this.selectedContact.email ) ">
+            </cell>
+          </group>
 
           <group :title="$t('SETTINGS')">
-      <cell :title="$t('Manage Favorites')"
-          @click.native="favorites = true">
-      </cell>
-      <cell :title="$t('Remove From Personal Contacts List')"
-          @click.native="confirmDelete = true">
-      </cell>
-    <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
+            <cell :title="$t('Manage Favorites')" @click.native="favorites = true">
+            </cell>
+            <cell :title="$t('Remove From Personal Contacts List')" @click.native="confirmDelete = true">
+            </cell>
+            <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
-         </group>
+          </group>
         </div>
       </popup>
     </div>
-
-
 
     <div v-transfer-dom>
       <popup v-model="edit" height="100%">
         <div class="popup1">
 
-    <popup-header
-    :left-text="$t('Back')"
-    :right-text="$t('Save')"
-    :title="$t()"
-    @on-click-left="edit = false"
-    @on-click-right="edit = false">
-    </popup-header></popup-header>
+          <popup-header :left-text="$t('Back')" :right-text="$t('Save')" :title="$t()" @on-click-left="edit = false" @on-click-right="edit = false">
+          </popup-header>
+          </popup-header>
 
-      <cell <img  src="../assets/demo/avatar_generic.png"><h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
-        <img  src="../assets/demo/call_outline_blue.png">
-        <img src="../assets/demo/video_outline_blue.png">
-         <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
+          <cell <img src="../assets/demo/avatar_generic.png">
+            <h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
+            <img src="../assets/demo/call_outline_blue.png">
+            <img src="../assets/demo/video_outline_blue.png">
+            <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
 
-      </cell>
+          </cell>
 
           <group :title="$t('CONTACT')">
-      <x-input :title="$t('Home')" :placeholder="$t(this.selectedContact.homePhone)">Home</x-input>
-      <x-input :title="$t('Mobile')" :placeholder="$t(this.selectedContact.mobilePhone)"></x-input>
-      <x-input :title="$t('work')" :placeholder="$t(this.selectedContact.workPhone)"></x-input>
-      <x-input :title="$t('Nickname')" :placeholder="$t(this.selectedContact.nickName)"></x-input>
-      <x-input :title="$t('User ID')" :placeholder="$t(this.selectedContact.userId)"></x-input>
-      <x-input :title="$t('Email')" :placeholder="$t(this.selectedContact.email)"></x-input>
+            <x-input :title="$t('Home')" :placeholder="$t(this.selectedContact.homePhone)">Home</x-input>
+            <x-input :title="$t('Mobile')" :placeholder="$t(this.selectedContact.mobilePhone)"></x-input>
+            <x-input :title="$t('work')" :placeholder="$t(this.selectedContact.workPhone)"></x-input>
+            <x-input :title="$t('Nickname')" :placeholder="$t(this.selectedContact.nickName)"></x-input>
+            <x-input :title="$t('User ID')" :placeholder="$t(this.selectedContact.userId)"></x-input>
+            <x-input :title="$t('Email')" :placeholder="$t(this.selectedContact.email)"></x-input>
           </group>
 
           <group :title="$t('SETTINGS')">
-    <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
+            <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
 
-         </group>
+          </group>
         </div>
       </popup>
     </div>
@@ -161,38 +150,28 @@
       <popup v-model="favorites" height="100%">
         <div class="popup1">
 
-    <popup-header
-    :left-text="$t('Back')"
-    :right-text="$t('Ok')"
-    :title="$t('Manage Favorites')"
-    @on-click-left="favorites = false"
-    @on-click-right="edit = false">
-    </popup-header></popup-header>
+          <popup-header :left-text="$t('Back')" :right-text="$t('Ok')" :title="$t('Manage Favorites')" @on-click-left="favorites = false" @on-click-right="edit = false">
+          </popup-header>
+          </popup-header>
 
-    <group title="__">
-      <cell title="Mahmut Oztemur">
-        <rater v-model="data1" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
-      </cell>
-      <cell title="Burak Kocak">
-        <rater v-model="data2" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
-      </cell>
-      <cell title="Burak Kocak">
-        <rater v-model="data3" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
-      </cell>
-    </group>
+          <group title="__">
+            <cell title="Mahmut Oztemur">
+              <rater v-model="data1" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+            </cell>
+            <cell title="Burak Kocak">
+              <rater v-model="data2" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+            </cell>
+            <cell title="Burak Kocak">
+              <rater v-model="data3" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+            </cell>
+          </group>
 
         </div>
       </popup>
     </div>
 
     <div v-transfer-dom>
-      <confirm v-model="confirmDelete"
-      :title="$t('Delete Contact')"
-      :confirmText="$t('Ok')"
-      @on-cancel="confirmDelete=false"
-      @on-confirm="onConfirm"
-      @on-show="onShow"
-      @on-hide="onHide">
+      <confirm v-model="confirmDelete" :title="$t('Delete Contact')" :confirmText="$t('Ok')" @on-cancel="confirmDelete=false" @on-confirm="onConfirm" @on-show="onShow" @on-hide="onHide">
         <p style="text-align:center;">{{ $t('Are you sure?') }}</p>
       </confirm>
     </div>
@@ -200,41 +179,36 @@
     <div v-transfer-dom>
       <popup v-model="add" height="100%">
         <div class="popup1">
-        <label>Add Screen</label>
+          <label>Add Screen</label>
           <group>
 
-        <img  src="../assets/demo/call_outline_blue.png">
-        <img src="../assets/demo/video_outline_blue.png">
-         <img src="../assets/demo/dp_action_keyboard.png">
+            <img src="../assets/demo/call_outline_blue.png">
+            <img src="../assets/demo/video_outline_blue.png">
+            <img src="../assets/demo/dp_action_keyboard.png">
 
           </group>
           <group :title="$t('CONTACT')">
-      <x-input :placeholder="$t('Home*')"></x-input>
-      <x-input :placeholder="$t('mobile*')"></x-input>
-      <x-input :placeholder="$t('Work*')"></x-input>
-      <x-input :placeholder="$t('NickName*')"></x-input>
-      <x-input :placeholder="$t('User ID')"></x-input>
-      <x-input :placeholder="$t('Email')"></x-input>
+            <x-input :placeholder="$t('Home*')"></x-input>
+            <x-input :placeholder="$t('mobile*')"></x-input>
+            <x-input :placeholder="$t('Work*')"></x-input>
+            <x-input :placeholder="$t('NickName*')"></x-input>
+            <x-input :placeholder="$t('User ID')"></x-input>
+            <x-input :placeholder="$t('Email')"></x-input>
           </group>
 
-
-
-
-
           <group :title="$t('SETTINGS')">
-    <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
-    <checklist :label-position="labelPosition" required :options2="commonList2" v-model="checklist001" @on-change="change"></checklist>
-    <checklist :label-position="labelPosition" required :options3="commonList3" v-model="checklist001" @on-change="change"></checklist>
+            <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
+            <checklist :label-position="labelPosition" required :options2="commonList2" v-model="checklist001" @on-change="change"></checklist>
+            <checklist :label-position="labelPosition" required :options3="commonList3" v-model="checklist001" @on-change="change"></checklist>
           </group>
           <group>
             <x-switch title="Close" v-model="show1"></x-switch>
-      <x-button @click.native="toast" type="primary">Save</x-button>
+            <x-button @click.native="toast" type="primary">Save</x-button>
           </group>
 
         </div>
       </popup>
     </div>
-
 
   </div>
 </template>
@@ -314,10 +288,10 @@ export default {
       show11: false,
       show12: false,
       show13: false,
-      commonList: [ 'Show Presence Status' ],
-      commonList1: [ 'Manage Favorites' ],
-      commonList2: [ 'Remove From Personal Contacts List' ],
-      commonList3: [ 'Remove From Personal Contacts List' ]
+      commonList: ['Show Presence Status'],
+      commonList1: ['Manage Favorites'],
+      commonList2: ['Remove From Personal Contacts List'],
+      commonList3: ['Remove From Personal Contacts List']
 
     }
   },
@@ -396,26 +370,60 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.large-icon {
+  font-size: 70px;
+  margin: 5px;
+  padding: 5px;
+}
+
+.flex {
+  display: flex;
+  margin: 10px;
+  padding: 5px;
+  border: 0px solid black;
+}
+
+.flex2 {
+  display: flex;
+  margin: 10px;
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.link {
+  color: blue;
+  font-size: 30px;
+}
+
+
 @import '~vux/src/styles/close.less';
 
 .popup0 {
-  padding-bottom:15px;
-  height:200px;
+  padding-bottom: 15px;
+  height: 200px;
 }
+
 .popup1 {
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
+
 .popup2 {
-  padding-bottom:15px;
-  height:400px;
+  padding-bottom: 15px;
+  height: 400px;
 }
+
 .position-vertical-demo {
   background-color: #ffe26d;
   color: #000;
   text-align: center;
   padding: 15px;
 }
+
 .position-horizontal-demo {
   position: relative;
   height: 100%;
@@ -433,26 +441,23 @@ export default {
     float: left;
   }
 }
-#block_container
-{
-    text-align:center;
+
+#block_container {
+  text-align: center;
 }
 
-#bloc1
-{
-    display:inline;
-    float:left;
+#bloc1 {
+  display: inline;
+  float: left;
 }
 
-#bloc2
-{
-    display:inline;
-    float:right;
+#bloc2 {
+  display: inline;
+  float: right;
 }
 
-#bloc3
-{
-    display:inline;
-    float:center;
+#bloc3 {
+  display: inline;
+  float: center;
 }
 </style>
