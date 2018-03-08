@@ -7,6 +7,22 @@
     <mt-button icon="more" slot="right"></mt-button>
   </mt-header>
 
+<div class = 'remoteVideoContainer'>
+</div>
+
+    <div class='remoteVideoContainers'>
+      <div>
+        Remote Video:
+        <div id='remoteVideoContainer' class='video-box'></div>
+      </div>
+      <div>
+        Local Video:
+        <div id='localVideoContainer' class='video-box'></div>
+      </div>
+    </div>
+
+
+
     <div class='modal-container' display='none'>
       <div class='input-group' v-show='!activeCallRinging'>
         <input type='text' class='form-control' v-model='callee' placeholder='Username or Number...'>
@@ -317,12 +333,17 @@ export default {
           callee: 'saynaci@genband.com',
           mode: mode
         }
+        let options = [{key: 'localVideoContainer', value: document.getElementById('localVideoContainer')},
+            {key: 'remoteVideoContainer', value: document.getElementById('remoteVideoContainer')}
+        ]
+        params.options = options
+        //  this.SET_CALL_OPTIONS(options)
         //    let incomingCallData = {
         //      callId: this.incomingCall.callId,
         //      active: false
         //    }
         // this.setIncomingCall(incomingCallData)
-        this.$store.dispatch('call', params)
+        this.$store.dispatch('call', options)
         //  this.$store.dispatch.answer(this.incomingCall.callId)
       // } else {
       //   this.$store.dispatch('end')
@@ -333,10 +354,10 @@ export default {
         this.$store.dispatch('end')
       }
       console.log('make call started')
-      this.$router.push('call')
+     // this.$router.push('call')
     },
     makeCall2 () {
-      this.$router.push('call')
+      // this.$router.push('call')
       // this.$store.dispatch('call', 'saynaci@genband.com')
     },
     sendMessage () {
@@ -652,4 +673,7 @@ export default {
     float:right;
 }
 
+#localVideoContainer, #remoteVideoContainer{
+  height: 200px;
+}
 </style>

@@ -255,8 +255,11 @@ store.registerModule('vux', {
     },
     call ({commit}, params) {
       console.log('call to:' + params.callee)
-      options.isVideoEnabled = params.mode
-      options.sendInitialVideo = params.mode
+      params.callee = 'saynaci@genband.com'
+      options.isVideoEnabled = true // params.mode
+      options.sendInitialVideo = true // params.mode
+      options.localVideoContainer = params.localVideoContainer
+      options.remoteVideoContainer = params.remoteVideoContainer
       kandy.call.make(params.callee, options)
       commit('SET_ACTIVECALL_STATE', 'IN_CALL')
       commit('SET_ACTIVECALL', params)

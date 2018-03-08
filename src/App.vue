@@ -280,7 +280,7 @@ export default {
       if (this.route.path === '/component/contact') return 'Contacts'
       if (this.route.path === '/component/sessions') return 'Sessions'
       if (this.route.path === '/component/history') return 'History'
-      if (this.route.path === '/component/diaplad') return 'Dialpad'
+      if (this.route.path === '/component/dialpad') return 'Dialpad'
       if (this.route.path === '/component/settings') return 'Settings'
       if (this.route.path === '/component/call') return 'Call'
       if (this.route.path === '/component/login') return 'Login'

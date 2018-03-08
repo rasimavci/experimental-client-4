@@ -83,7 +83,6 @@
         <img  src="../assets/demo/call_outline_blue.png">
         <img src="../assets/demo/video_outline_blue.png">
          <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
-
       </cell>
 
 
