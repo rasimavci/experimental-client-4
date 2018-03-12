@@ -16,55 +16,64 @@
 
       <!-- drawer content -->
       <div slot="drawer">
-        <group title="Rasim Avci" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
-          <cell title="Presences" link="/component/presences" value="Presences" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
+        <group title="Profile Rasim Avci" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
+          <cell title="Presences" link="/component/presences" value="Presences" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
           </cell>
 
-          <cell title="Login" link="/component/login" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Login" link="/component/login" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Call" link="/component/call" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Call" link="/component/call" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell data-v-5d4fb59a title="   Favorites" link="/component/favorites" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell data-v-5d4fb59a title="   Favorites" link="/component/favorites" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe606;</span>
           </cell>
-          <cell title="Contacts" link="/component/contact" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Contacts" link="/component/contact" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Inbox" link="/component/messages" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Chat" link="/component/messages" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe608;</span>
           </cell>
-          <cell title="History" link="/component/history" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="History" link="/component/history" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe619;</span>
           </cell>
-          <cell title="   Dialpad" link="/component/dialpad" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="   Dialpad" link="/component/dialpad" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe661;</span>
           </cell>
-          <cell title="Sessions" link="/component/sessions" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Sessions" link="/component/sessions" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Collaboration" link="/component/conference" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Collaboration" link="/component/conference" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
-          <cell title="Settings" link="/component/settings" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell>
+          </cell>
+          <cell title="Settings" link="/component/settings" @click.native="drawerVisibility = false" v-show="this.stateShowPlacement === 'left'">
           </cell>
         </group>
 
-        <group title="Manage" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'contact'">
-          <radio v-model="showPlacement" :options="['Create Contact']" @on-change="onPlacementChange"></radio>
-        </group>
-        <group title="Sort By" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'contact'">
+        <group title="Sort By" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
           <radio v-model="showPlacement" :options="['Last Name', 'First Name', 'Availability']" @on-change="onPlacementChange"></radio>
         </group>
-        <group title="Sources" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'contact'">
+        <group title="Sources" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'contact'">
           <radio v-model="showPlacement" :options="['Personal Addressbook', 'Global Addressbook']" @on-change="onPlacementChange"></radio>
         </group>
-        <group title="Show..." v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'history'">
+        <group title="Show..." v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'history'">
           <radio v-model="showPlacement" :options="['All Call', 'Incoming Call', 'Outgoing Call', 'Missed Call', 'Message', 'Conference']" @on-change="onHistoryFilterChange"></radio>
         </group>
-        <group title="Display As" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'favorites'">
+        <group title="Display As" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'favorites'">
           <radio v-model="showPlacement" :options="['Tiles', 'List']" @on-change="onPlacementChange"></radio>
         </group>
-        <group title="Sort By" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'favorites'">
+        <group title="Sort By" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'favorites'">
           <radio v-model="showPlacement" :options="['Last Name', 'First Name', 'Availability']" @on-change="onPlacementChange"></radio>
         </group>
-        <group title="Display" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'messages'">
+        <group title="Display" v-show="this.stateShowPlacement === 'right' && this.stateCurrentPage === 'messages'">
           <radio v-model="showPlacement" :options="['New', 'Saved']" @on-change="onPlacementChange"></radio>
         </group>
       </div>
@@ -79,7 +88,7 @@
         :title="title"
         :transition="headerTransition"
         @on-click-more="onClickMore">
-          <span v-if="route.path !== '/component/drawer'" slot="overwrite-left" @click="onClickLeft">
+          <span v-if="route.path !== '/component/drawer'" slot="overwrite-left" @click="drawerVisibility = !drawerVisibility">
             <x-icon type="navicon" size="35" style="fill:#fff;position:relative;top:-8px;left:-3px;"></x-icon>
           </span>
         </x-header>
@@ -155,25 +164,15 @@ export default {
         this.showPlacementValue = val
       }, 400)
     },
-    onClickLeft () {
-      console.log('left menu clicked')
-      this.showPlacementValue = 'left'
-      this.left = true
-      setTimeout(one => {
-        this.drawerVisibility = !this.drawerVisibility
-      }, 300)
-      // this.drawerVisibility = !this.drawerVisibility
-    },
     onClickMore () {
-      // this.left = false
-      // if (this.stateShowPlacement === 'left') {
-      //   this.showMenu = true
-      // } else {
-      this.showPlacementValue = 'right'
-      setTimeout(one => {
-        this.drawerVisibility = !this.drawerVisibility
-      }, 300)
-      // }
+      if (this.stateShowPlacement === 'left') {
+        this.showMenu = true
+      } else {
+        this.showPlacementValue = 'right'
+        setTimeout(one => {
+          this.drawerVisibility = !this.drawerVisibility
+        }, 300)
+      }
     },
     onHistoryFilterChange (val) {
       this.$store.dispatch('updateHistoryFilter', val)
@@ -297,7 +296,6 @@ export default {
   },
   data () {
     return {
-      left: true,
       showMenu: false,
       menus: {
         'language.noop': '<span class="menu-title">Language</span>',

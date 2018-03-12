@@ -63,12 +63,12 @@
 
           <popup-header :left-text="$t('Back')" :right-text="$t('Edit')" :title="$t()" @on-click-left="contact = false" @on-click-right="favorites = true">
           </popup-header>
-          </popup-header>
 
           <div class="flex">
             <div class="flex2">
               <img src="../assets/demo/avatar_generic.png"" width="150" height="70">
             </div>
+
             <div class="flex column">
               <div class="flex">
                 <h3> {{this.selectedContact.firstName}} {{this.selectedContact.lastName}} </h3>
@@ -81,6 +81,7 @@
               </div>
             </div>
           </div>
+
 
           <group :title="$t('CONTACT')">
             <cell :title="$t('Home ' +  this.selectedContact.homePhone ) ">

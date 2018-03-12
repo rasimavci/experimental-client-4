@@ -8,7 +8,7 @@
       </button-tab>
 
     <group :title="$t('This will be data for the group')">
-          <a v-for="conv in getConversations" :key='conv.deneme' class="list-group-item" href="#" @click="showConversation=true">
+          <a v-for="conv in getConversations" :key='conv.deneme' class="a list-group-item" href="#" @click="showConversation=true">
       <img  src="../assets/demo/avatar_generic.png">
       <cell :title="$t(conv.conversationId)"></cell>
           </a>
@@ -222,3 +222,8 @@ export default {
   }
 }
 </script>
+<style>
+a {
+    text-decoration: none;
+}
+</style>

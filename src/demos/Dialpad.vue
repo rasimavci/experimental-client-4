@@ -1,35 +1,13 @@
 <template>
   <div id='dialpad'>
-  <mt-header title="Dialpad">
-    <router-link to="/index" slot="left">
-      <mt-button icon="back">Return</mt-button>
-    </router-link>
-    <mt-button icon="more" slot="right"></mt-button>
-  </mt-header>
-
-<div class = 'remoteVideoContainer'>
-</div>
-
-    <div class='remoteVideoContainers'>
-      <div>
-        Remote Video:
-        <div id='remoteVideoContainer' class='video-box'></div>
-      </div>
-      <div>
-        Local Video:
-        <div id='localVideoContainer' class='video-box'></div>
-      </div>
-    </div>
-
-
 
     <div class='modal-container' display='none'>
-      <div class='input-group' v-show='!activeCallRinging'>
+      <div class='input-group flex1' v-show='!activeCallRinging'>
         <input type='text' class='form-control' v-model='callee' placeholder='Username or Number...'>
         <span class='input-group-btn'>
           <button class='backspace-button' type='button' @click="callee = ''">
-            <i class='material-icons'>backspace</i>
-                    <img slot="icon" src="../assets/demo/dp_action_keyboard.png">
+            <i class='material-icons'></i>
+                    <img slot="icon" src="../assets/demo/backspace_blue.png">
 
           </button>
         </span>
@@ -42,7 +20,7 @@
 
         <img class='media-object pull-center' :src='user'/>
       </div>
-      <div class='keypad'>
+      <div class='keypad' >
         <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
           <div>
             <button class='button' @click='press(1)'>
@@ -116,68 +94,23 @@
         </div>
       </div>
 
-      <div class='dropdown filterbox' :class="{ 'open': filterToggle }" v-show='activeCall'>
-        <button type='button' class='button glyphicon glyphicon-option-horizontal' v-on:click='filterToggle = !filterToggle'>
-          <i class='option-horizontal'></i>
-        </button>
-        <ul class='dropdown-menu list-group'>
-          <li class='list-group-item' @click='transferCall()'>
-            Transfer
-          </li>
-          <li class='list-group-item' @click='transferCall()'>
-            <label>Join</label>
-          </li>
-          <li class='list-group-item' @click='transferCall()'>
-            Mute
-          </li>
-          <li class='list-group-item' @click='transferCall()'>
-            <label>Send Conference Link</label>
-          </li>
-          <li class='list-group-item' @click='transferCall()'>
-            Hold
-          </li>
-          <li class='list-group-item' @click='transferCall()'>
-            <label>End Call</label>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <group class="block_container" v-if="textAreaVisible1">
-      <x-textarea :max="20" :placeholder="$t('placeholder')" class="bloc1" value="myText"></x-textarea>
-              <img slot="icon" src="../assets/demo/send_message.png">
-
-      <x-button @click.native="sendMessage" type="primary">Send</x-button>
-    </group>
-
-    <div v-transfer-dom>
-      <popup v-model="textAreaVisible" position="bottom">
-        <div class="position-vertical-demo">
-        I'm on bottom.
-        </div>
-      </popup>
     </div>
 
     <tabbar>
       <tabbar-item>
         <img slot="icon" src="../assets/demo/dp_action_keyboard.png">
-        <span slot="label">Keyboard</span>
       </tabbar-item>
       <tabbar-item show-dot>
         <img slot="icon" src="../assets/demo/images.png" @click="textAreaVisible = true">
-        <span slot="label">Message</span>
       </tabbar-item>
       <tabbar-item>
         <img slot="icon" src="../assets/demo/call_outline_blue.png" @click="makeCall(false)">
-        <span slot="label">Call</span>
       </tabbar-item>
       <tabbar-item badge="2">
         <img slot="icon" src="../assets/demo/video_outline_blue.png" @click="makeCall(true)">
-        <span slot="label">Vide Call</span>
       </tabbar-item>
       <tabbar-item badge="2">
         <img slot="icon" src="../assets/demo/dp_action_voicemail.png">
-        <span slot="label">VoiceMail</span>
       </tabbar-item>
     </tabbar>
 
@@ -208,7 +141,7 @@ export default {
       hasCollaborationService: false,
       isShowKeypad: true,
       activeCall: false,
-      callee: 'bkocak@genband.com',
+      callee: '',
       joinClicked: false,
       activeNote: '',
       filterByStatus: '',
@@ -508,6 +441,7 @@ export default {
   padding: 0;
   margin: 0;
   overflow: hidden;
+  border: 0px solid black;
 }
 
 .input-number {
@@ -523,6 +457,7 @@ export default {
 
 .keypad-container {
   overflow: hidden;
+  border: 0px solid black;
 }
 
 .keypad-container div {
@@ -675,5 +610,16 @@ export default {
 
 #localVideoContainer, #remoteVideoContainer{
   height: 200px;
+}
+
+.flex {
+  display: flex;
+  margin: 10px;
+  padding: 5px;
+  border: 0px solid black;
+}
+
+.flex1 {
+  border: 0px solid black;
 }
 </style>

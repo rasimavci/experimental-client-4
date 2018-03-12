@@ -1,44 +1,23 @@
 <template>
   <div>
-    <br>
-        </br>
-    <div style="padding:2px;">
-      <x-button @click.native="showPlugin" type="primary">{{ $t('START COLLABORATION') }}</x-button>
-    </div>
-<label>You can also send an automoted invitation</label>
-    <div style="padding:2px;">
-      <x-button @click.native="showPlugin" type="primary">{{ $t('Invıte By Email') }}</x-button>
-    </div>
 
-    <br>
-        </br>
-
-
-    <div style="padding:2px;">
-      <x-button @click.native="showPlugin" type="primary">{{ $t('Connection Information for your permanent collaboration room') }}</x-button>
-    </div>
-
-<label>Url</label>
-
-
-
-<label>{{conferenceData.videoConferenceRoomURL || conferenceData.webCollabRoomURL}}</label>
-
-<label>MeetmeAccess Code</label>
-
-<label>{{conferenceData.accessCode}}</label>
-
-<label>{{conferenceData.confBridgeNumList}}</label>
-
-
-    <group :title="$t('Presence')">
-      <radio title="type" v-model="type" :options="['Available', 'Busy', 'On Vacation', 'Away', 'Out to Lunch', 'Be Right Back', 'Appear Offline']"></radio>
+    <group :title="'Connection information for your permanent conference room'">
+      <cell :title="'https://pa.nuviacloud.com/collab/avci@genband.com'">
+        <img slot="icon" src="../assets/demo/genband.png" />
+      </cell>
     </group>
 
+    <group :title="'You can also send an automated invitation'">
+      <cell :title="'Invite By Email'">
+        <img slot="icon" src="../assets/demo/email.png" align="right"/>
+      </cell>
+    </group>
 
-
-
-
+    <br>
+        </br>
+    <div style="padding:2px;">
+      <x-button @click.native="showPlugin" type="primary">{{ $t('START CONFERENCE') }}</x-button>
+    </div>
 
   </div>
 </template>
@@ -53,10 +32,11 @@ More:
 </i18n>
 
 <script>
-import { Confirm, Group, XSwitch, XButton, Panel, Radio } from 'vux'
+import { Cell, Confirm, Group, XSwitch, XButton, Panel, Radio } from 'vux'
 
 export default {
   components: {
+    Cell,
     Panel,
     Group,
     Radio,

@@ -78,7 +78,7 @@ export default {
       callee: '',
       activeCallRinging: false,
       activeCallExist: false,
-      show: 'all',
+      show: 'All Call',
       show2: false,
       show3: false,
       show4: false,
