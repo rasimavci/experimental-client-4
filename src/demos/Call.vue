@@ -2,7 +2,7 @@
   <div>
 
     <div>
-       <tab :line-width=2 active-color='#fc378c' v-model="index">
+       <tab :line-width=2 active-color='#fc378c' v-model="index" class="my-class">
        <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
       </tab>
       <swiper v-model="index" height="100px" :show-dots="false">
@@ -382,5 +382,9 @@ export default {
 {
     display:inline;
     float:center;
+}
+
+div.my-class {
+    cursor: default;
 }
 </style>
