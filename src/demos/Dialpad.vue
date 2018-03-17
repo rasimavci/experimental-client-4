@@ -101,13 +101,13 @@
         <img slot="icon" src="../assets/demo/dp_action_keyboard.png">
       </tabbar-item>
       <tabbar-item show-dot>
-        <img slot="icon" src="../assets/demo/images.png" @click="textAreaVisible = true">
+        <img slot="icon" src="../assets/demo/images.png" @click="goCallPage(0)">
       </tabbar-item>
       <tabbar-item>
-        <img slot="icon" src="../assets/demo/call_outline_blue.png" @click="makeCall(false)">
+        <img slot="icon" src="../assets/demo/call_outline_blue.png" @click="goCallPage(1)">
       </tabbar-item>
       <tabbar-item badge="2">
-        <img slot="icon" src="../assets/demo/video_outline_blue.png" @click="makeCall(true)">
+        <img slot="icon" src="../assets/demo/video_outline_blue.png" @click="goCallPage(2)">
       </tabbar-item>
       <tabbar-item badge="2">
         <img slot="icon" src="../assets/demo/dp_action_voicemail.png">
@@ -256,38 +256,36 @@ export default {
         console.log('update active call')
       }
     },
-    makeCall (mode) {
+    goCallPage (mode) {
+      this.$store.dispatch('setCallPageInitialAction', mode)
+      this.$router.push('call')
   //   this.$store.commit('SET_USER_WITHID', 'saynaci@genband.com')
-      console.log('activeCall State ' + this.activeCallState)
-      console.log('activeCall State ' + this.activeCall.state)
-      //     this.$store.dispatch('call', 'bkocak@genband.com')
-      if (this.activeCallState === 'ENDED' || this.activeCallState === '') {
-        const params = {
-          callee: 'saynaci@genband.com',
-          mode: mode
-        }
-        let options = [{key: 'localVideoContainer', value: document.getElementById('localVideoContainer')},
-            {key: 'remoteVideoContainer', value: document.getElementById('remoteVideoContainer')}
-        ]
-        params.options = options
-        //  this.SET_CALL_OPTIONS(options)
-        //    let incomingCallData = {
-        //      callId: this.incomingCall.callId,
-        //      active: false
-        //    }
-        // this.setIncomingCall(incomingCallData)
-        this.$store.dispatch('call', options)
-        //  this.$store.dispatch.answer(this.incomingCall.callId)
-      // } else {
-      //   this.$store.dispatch('end')
-      } else {
-        // debugger
-        // this.toggleActiveCall()
-        // debugger
-        this.$store.dispatch('end')
-      }
-      console.log('make call started')
-     // this.$router.push('call')
+    //   console.log('activeCall State ' + this.activeCallState)
+    //   console.log('activeCall State ' + this.activeCall.state)
+    //   //     this.$store.dispatch('call', 'bkocak@genband.com')
+    //   if (this.activeCallState === 'ENDED' || this.activeCallState === '') {
+    //     const params = {
+    //       callee: 'saynaci@genband.com',
+    //       mode: mode
+    //     }
+
+    //     //  this.SET_CALL_OPTIONS(options)
+    //     //    let incomingCallData = {
+    //     //      callId: this.incomingCall.callId,
+    //     //      active: false
+    //     //    }
+    //     // this.setIncomingCall(incomingCallData)
+    //     this.$store.dispatch('call', options)
+    //     //  this.$store.dispatch.answer(this.incomingCall.callId)
+    //   // } else {
+    //   //   this.$store.dispatch('end')
+    //   } else {
+    //     // debugger
+    //     // this.toggleActiveCall()
+    //     // debugger
+    //     this.$store.dispatch('end')
+    //   }
+    //   console.log('make call started')
     },
     makeCall2 () {
       // this.$router.push('call')
@@ -622,4 +620,5 @@ export default {
 .flex1 {
   border: 0px solid black;
 }
+
 </style>

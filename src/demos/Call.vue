@@ -2,18 +2,25 @@
   <div>
 
     <div>
-       <tab :line-width=2 active-color='#fc378c' v-model="index" class="my-class">
-       <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
+      <tab :line-width=2 active-color='#fc378c' v-model="index" class="my-class">
+        <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
       </tab>
       <swiper v-model="index" height="100px" :show-dots="false">
         <swiper-item v-for="(item, index) in list2" :key="index">
-          <div class="tab-swiper vux-center">{{item}} Screen
-              <div class="box"  v-show="item === 'VIDEO'">
-              <x-button @click.native="prev" type="primary" @click="makeCall(true)">Audio Call {{activeCall.calleeName}}</x-button>
-              </div>
-              <div class="box"  v-show="item === 'VOICE'">
-              <x-button @click.native="prev" type="primary" @click="makeCall(false)">Video Call {{activeCall.calleeName}}</x-button>
-              </div>
+          <div class="tab-swiper vux-center">{{item}}
+            <div class="button" v-show="item === 'VIDEO'">
+              <x-button @click.native="prev" type="primary" @click="makeCall(true)">Video Call {{activeCall.calleeName}}</x-button>
+            </div>
+
+                    <div v-show="item === 'VOICE'" class="tabCenter" >
+                        <div class="call-button-container" @click="makeCall(false)">
+                            <div class="call-button-icon">
+                                <i class="icon icon-start_call_outline_white"></i>
+                            </div>
+                            <div class="call-button-text">Video Call</div>
+                        </div>
+                    </div>
+
           </div>
         </swiper-item>
       </swiper>
@@ -35,24 +42,19 @@
     </tabbar>
 
     <div v-transfer-dom>
-           <popup v-model="speakerSelection" height="33%">
-                      <div class="popup1">
+      <popup v-model="speakerSelection" height="33%">
+        <div class="popup1">
 
-    <popup-header
-    :left-text="$t('')"
-    :right-text="$t('Cancel')"
-    :title="$t()"
-    @on-click-left="edit = false"
-    @on-click-right="speakerSelection = false">
-    </popup-header></popup-header>
-            <group title="Speaker Selection">
-      <radio :options="radio001" @on-change="change"></radio>
-    </group>
+          <popup-header :left-text="$t('')" :right-text="$t('Cancel')" :title="$t()" @on-click-left="edit = false" @on-click-right="speakerSelection = false">
+          </popup-header>
+          </popup-header>
+          <group title="Speaker Selection">
+            <radio :options="radio001" @on-change="change"></radio>
+          </group>
 
-    </div>
+        </div>
       </popup>
-</div>
-
+    </div>
 
   </div>
 </template>
@@ -64,11 +66,14 @@ import { mapState } from 'vuex'
 const list = () => ['CHAT', 'VOICE', 'VIDEO', 'PEOPLE']
 
 export default {
-  ...mapState({
-    currentPageAddContact: state => state.vux.currentPageAddContact,
-    joinStarted: state => state.vux.joinStarted
-  }),
   created: function () {
+    console.log('callPageInitialAction value ' + this.callPageInitialAction)
+    this.index = this.callPageInitialAction
+    if (this.callPageInitialAction === 1) {
+      this.makeCall(false)
+    } else {
+      this.makeCall(true)
+    }
     this.$store.dispatch('updateCurrentPage', 'call')
     this.$store.dispatch('updateShowPlacement', 'right')
   },
@@ -141,11 +146,11 @@ export default {
       show11: false,
       show12: false,
       show13: false,
-      commonList: [ 'Show Presence Status' ],
-      commonList1: [ 'Manage Favorites' ],
-      commonList2: [ 'Remove From Personal Contacts List' ],
-      commonList3: [ 'Remove From Personal Contacts List' ],
-      radio001: [ 'Speakerohone', 'Earpiece', 'Bluettoh Headset', 'Stereo Mix (Realtek High Definition Audio)' ],
+      commonList: ['Show Presence Status'],
+      commonList1: ['Manage Favorites'],
+      commonList2: ['Remove From Personal Contacts List'],
+      commonList3: ['Remove From Personal Contacts List'],
+      radio001: ['Speakerohone', 'Earpiece', 'Bluettoh Headset', 'Stereo Mix (Realtek High Definition Audio)'],
       speakerSelection: false,
       index01: 0,
       list2: list(),
@@ -266,7 +271,12 @@ export default {
       }
     },
     makeCall (mode) {
-  //   this.$store.commit('SET_USER_WITHID', 'saynaci@genband.com')
+      //     //  this.SET_CALL_OPTIONS(options)
+      //     //    let incomingCallData = {
+      //     //      callId: this.incomingCall.callId,
+      //     //      active: false
+      //     //    }
+      //   this.$store.commit('SET_USER_WITHID', 'saynaci@genband.com')
       console.log('activeCall State ' + this.activeCallState)
       console.log('activeCall State ' + this.activeCall.state)
       //     this.$store.dispatch('call', 'bkocak@genband.com')
@@ -275,26 +285,39 @@ export default {
           callee: 'saynaci@genband.com',
           mode: mode
         }
+        let options = [{ key: 'localVideoContainer', value: document.getElementById('localVideoContainer') },
+        { key: 'remoteVideoContainer', value: document.getElementById('remoteVideoContainer') }
+        ]
+        params.options = options
         //    let incomingCallData = {
         //      callId: this.incomingCall.callId,
         //      active: false
         //    }
         // this.setIncomingCall(incomingCallData)
-        this.$store.dispatch('call', params)
+        this.$store.dispatch('call', options)
         //  this.$store.dispatch.answer(this.incomingCall.callId)
-      // } else {
-      //   this.$store.dispatch('end')
+        // } else {
+        //   this.$store.dispatch('end')
       } else {
         // debugger
         // this.toggleActiveCall()
         // debugger
         this.$store.dispatch('end')
       }
-      console.log('make call')
+      console.log('make call operation finished.')
+    },
+    sendMessage () {
+      let messageToSend = {
+        type: 'IM',
+        text: this.myText, // 'deneme', // this.callee
+        userId: this.callee // 'bkocak@genband.com'
+      }
+      console.log('send clicked')
+      this.$store.dispatch('sendMessage', messageToSend)
     }
-
   },
   computed: mapState({
+    callPageInitialAction: state => state.vux.callPageInitialAction,
     user: state => state.user,
     activeCall: state => state.vux.activeCall,
     activeCallTo: state => state.vux.activeCall.to,
@@ -327,23 +350,27 @@ export default {
 @import '~vux/src/styles/close.less';
 
 .popup0 {
-  padding-bottom:15px;
-  height:200px;
+  padding-bottom: 15px;
+  height: 200px;
 }
+
 .popup1 {
-  width:100%;
-  height:100%;
+  width: 100%;
+  height: 100%;
 }
+
 .popup2 {
-  padding-bottom:15px;
-  height:400px;
+  padding-bottom: 15px;
+  height: 400px;
 }
+
 .position-vertical-demo {
   background-color: #ffe26d;
   color: #000;
   text-align: center;
   padding: 15px;
 }
+
 .position-horizontal-demo {
   position: relative;
   height: 100%;
@@ -361,30 +388,84 @@ export default {
     float: left;
   }
 }
-#block_container
-{
-    text-align:center;
+
+#block_container {
+  text-align: center;
 }
 
-#bloc1
-{
-    display:inline;
-    float:left;
+#bloc1 {
+  display: inline;
+  float: left;
 }
 
-#bloc2
-{
-    display:inline;
-    float:right;
+#bloc2 {
+  display: inline;
+  float: right;
 }
 
-#bloc3
-{
-    display:inline;
-    float:center;
+#bloc3 {
+  display: inline;
+  float: center;
 }
 
 div.my-class {
-    cursor: default;
+  cursor: default;
 }
+
+.box {
+  padding: 15px;
+}
+
+.tab-swiper {
+  background-color: #fff;
+  height: 100px;
+}
+
+.button {
+  background-color: #4CAF50;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.tabCenter {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.calling-message {
+  font-family: lato-regular;
+  font-size: 18px;
+  color: black;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.call-button-container {
+  margin: 0 auto;
+  width: 203px;
+  height: 54px;
+  background: #29A3D8;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  font-family: lato-bold;
+  font-size: 17px;
+  color: white;
+}
+
+.call-button-icon {
+  width: 60px;
+  float: left;
+  padding-top: 15px;
+}
+
+
+
 </style>

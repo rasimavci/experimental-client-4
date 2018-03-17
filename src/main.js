@@ -94,7 +94,9 @@ store.registerModule('vux', {
     conversations: [],
     conversations2: [],
     currentPageAddContact: false,
-    historyFilterSelection: 'All Call'
+    historyFilterSelection: 'All Call',
+    callPageInitialAction: '',
+    isConnected: false
   },
 
   mutations: {
@@ -114,6 +116,11 @@ store.registerModule('vux', {
     updateCurrentPage (state, payload) {
       console.log('mutated with ' + payload.top)
       state.currentPage = payload.top
+    },
+
+    SET_CALLPAGE_INITIAL_ACTION (state, payload) {
+      console.log('mutated with ' + payload.top)
+      state.callPageInitialAction = payload.top
     },
     SET_USER_WITHID ({commit}, top) {
       console.log('dispatching with ' + top)
@@ -135,6 +142,10 @@ store.registerModule('vux', {
     SET_ACTIVE_CALL (state, call) {
       console.log('set chat participant as ' + call)
       state.activeCall = call
+    },
+    SET_CONNECTED (state, connected) {
+      console.log('set isConnected to ' + connected)
+      state.isConnected = connected
     },
     REFRESH_CALLLOGS (state, logs) {
       console.log('refresh call logs')
@@ -234,12 +245,16 @@ store.registerModule('vux', {
       kandy.disconnect()
     },
     updateShowPlacement ({commit}, top) {
-      console.log('dispatching with ' + top)
+      console.log('dispatching updateShowPlacement with ' + top)
       commit({type: 'updateShowPlacement', top: top})
     },
     updateCurrentPage ({commit}, top) {
-      console.log('dispatching with ' + top)
+      console.log('dispatching updateCurrentPage with ' + top)
       commit({type: 'updateCurrentPage', top: top})
+    },
+    setCallPageInitialAction ({commit}, top) {
+      console.log('dispatching setCallPageInitialAction with ' + top)
+      commit({type: 'SET_CALLPAGE_INITIAL_ACTION', top: top})
     },
     updateAddContact ({commit}, top) {
       console.log('dispatching with ' + top)
@@ -501,6 +516,7 @@ function addEventListeners () {
   kandy.on('auth:change', data => {
     console.log('auth:change Event Data: ' + JSON.stringify(data))
     if (kandy.getConnection().isConnected === true) {
+      store.commit('SET_CONNECTED', true)
       //  store.dispatch ('refresh')
       kandy.contacts.refresh()
       kandy.call.history.fetch()
@@ -510,6 +526,9 @@ function addEventListeners () {
       // Kandyjs.getCallLogs ()
       // Kandyjs.fetchConversations ()
       // Kandyjs.searchDirectory ()
+    }
+    if (isEmpty(data)) {
+      // store.commit('SET_CONNECTED', false)
     }
   })
 
@@ -586,3 +605,12 @@ function addEventListeners () {
 
 createKandy()
 kandy.connect('ravci@genband.com')
+
+function isEmpty (obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      return false
+    }
+  }
+  return true
+}

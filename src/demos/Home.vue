@@ -1,6 +1,40 @@
 <template>
   <div>
-    <div class="center">
+
+    <div id="login" class="container" v-if="!isConnected">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="login well well-small">
+        <div class="center">
+          <img src="../assets/favicon.png" alt="logo">
+        </div>
+        <form style="" class="login-form" id="UserLoginForm" method="post" accept-charset="utf-8">
+          <div class="control-group">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-user"></i></span>
+              <input name="data[User][username]" required="required" placeholder="Username" maxlength="255" type="text" id="UserUsername" v-model="UserUsername">
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="input-prepend">
+              <span class="add-on"><i class="icon-lock"></i></span>
+              <input name="data[User][password]" required="required" placeholder="Password" type="password" id="UserPassword" v-model="UserPassword">
+            </div>
+          </div>
+          <div class="control-group">
+            <label id="remember-me">
+              <input type="checkbox" name="data[User][remember_me]" value="1" id="UserRememberMe"> Remember me</label>
+          </div>
+          <div class="control-group">
+            <input class="btn btn-primary btn-large btn-block" type="button" value="SIGN IN" @click="connect()">
+          </div>
+        </form>
+      </div><!--/.login-->
+    </div><!--/.span12-->
+  </div><!--/.row-fluid-->
+</div><!--/.container-->
+
+    <div class="center" v-if="isConnected">
       <svg version="1.1" id="_x31_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="361.95px" height="340px" viewBox="0 0 361.95 340" enable-background="new 0 0 361.95 340" xml:space="preserve">
         <g>
           <path fill-rule="evenodd" clip-rule="evenodd" fill="#BDC3C7" d="M137.438,240.934c6.711-71.041,44.789-118.711,84.009-139.86
@@ -99,6 +133,7 @@
 
 <script>
 import { Cell, Group, Badge, Divider } from 'vux'
+import { mapState } from 'vuex'
 
 const pkg = require('../../package.json')
 const version = pkg.version
@@ -113,9 +148,27 @@ export default {
   },
   data () {
     return {
+      login: false,
       version,
-      vueVersion
+      vueVersion,
+      UserUsername: '',
+      UserPassword: ''
     }
+  },
+  methods: {
+    connect () {
+      this.login = true
+      console.log(this.UserUsername)
+      this.$store.dispatch('connect', {
+        username: this.UserUsername, // 'oztemur@genband.com',
+        password: this.UserPassword // 'Genband.1234'
+      })
+    }
+  },
+  computed: {
+    ...mapState({
+      isConnected: state => state.vux.isConnected
+    })
   }
 }
 </script>

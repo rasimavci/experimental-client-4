@@ -19,9 +19,6 @@
         <group title="Rasim Avci" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
           <cell title="Presences" link="/component/presences" value="Presences" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
           </cell>
-
-          <cell title="Login" link="/component/login" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
-          </cell>
           <cell title="Call" link="/component/call" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
           </cell>
           <cell data-v-5d4fb59a title="   Favorites" link="/component/favorites" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
@@ -72,7 +69,7 @@
       <!-- main content -->
       <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
 
-        <x-header slot="header"
+        <x-header v-if="isConnected" slot="header"
         style="width:100%;position:absolute;left:0;top:0;z-index:100;"
         :left-options="leftOptions"
         :right-options="rightOptions"
@@ -228,6 +225,7 @@ export default {
   },
   computed: {
     ...mapState({
+      isConnected: state => state.vux.isConnected,
       stateShowPlacement: state => state.vux.showPlacement,
       stateCurrentPage: state => state.vux.currentPage,
       route: state => state.route,

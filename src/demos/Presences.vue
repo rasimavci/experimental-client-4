@@ -10,7 +10,7 @@
       <x-button @click.native="show=true" type="primary">About</x-button>
     </div>
     <div style="padding:2px;">
-      <x-button @click.native="logout()" type="primary">{{ $t('Logout') }}</x-button>
+      <x-button @click.native="logout()" type="primary">{{ $t('Logouts') }}</x-button>
     </div>
     <div style="padding:2px;">
       <x-button @click.native="show1=true" type="primary"> {{ $t('Send Feedback') }} </x-button>
@@ -85,8 +85,13 @@ export default {
     log (str) {
       console.log(str)
     },
-    logout () {
+    logout (val) {
+      this.$store.commit('SET_CONNECTED', false)
+      setTimeout(() => {
+        console.log('loggin out')
+      }, 3000)
       this.$store.dispatch('disconnect')
+      this.$router.push('/')
     },
     onImgError (item, $event) {
       console.log(item, $event)
