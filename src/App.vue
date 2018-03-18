@@ -284,7 +284,7 @@ export default {
       if (this.route.path === '/component/call') return 'Call'
       if (this.route.path === '/component/login') return 'Login'
       if (this.route.path === '/component/favorites') return 'Favorites'
-      if (this.route.path === '/component/collaboration') return 'Collaboration'
+      if (this.route.path === '/component/conference') return 'Collaboration'
       if (this.route.path === '/component/presences') return 'ravci@genband.com'
       return this.componentName ? `Demo/${this.componentName}` : 'Demo/~~'
     },

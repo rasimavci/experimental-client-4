@@ -1,11 +1,18 @@
 <template>
   <div>
 
+    <br>
+        </br>
+    <div style="padding:2px;">
+      <x-button @click.native="showPlugin" type="primary">{{ $t('START COLLABORATION') }}</x-button>
+    </div>
+
     <group :title="'Connection information for your permanent conference room'">
       <cell :title="'https://pa.nuviacloud.com/collab/avci@genband.com'">
         <img slot="icon" src="../assets/demo/genband.png" />
       </cell>
     </group>
+
 
     <group :title="'You can also send an automated invitation'">
       <cell :title="'Invite By Email'">
@@ -13,11 +20,6 @@
       </cell>
     </group>
 
-    <br>
-        </br>
-    <div style="padding:2px;">
-      <x-button @click.native="showPlugin" type="primary">{{ $t('START CONFERENCE') }}</x-button>
-    </div>
 
   </div>
 </template>

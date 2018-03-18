@@ -5,25 +5,116 @@
       <tab :line-width=2 active-color='#fc378c' v-model="index" class="my-class">
         <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
       </tab>
-      <swiper v-model="index" height="100px" :show-dots="false">
+
+      <swiper v-model="index" height="100px" :show-dots="false" >
         <swiper-item v-for="(item, index) in list2" :key="index">
-          <div class="tab-swiper vux-center">{{item}}
-            <div class="button" v-show="item === 'VIDEO'">
-              <x-button @click.native="prev" type="primary" @click="makeCall(true)">Video Call {{activeCall.calleeName}}</x-button>
+          <div class="tab-swiper vux-center parent">
+
+            <div class="call-button-container" @click="endCall()" v-if = "index === 0">
+            <img slot="icon" src="../assets/demo/backspace_blue.png">End Call
             </div>
 
-                    <div v-show="item === 'VOICE'" class="tabCenter" >
-                        <div class="call-button-container" @click="makeCall(false)">
-                            <div class="call-button-icon">
-                                <i class="icon icon-start_call_outline_white"></i>
-                            </div>
-                            <div class="call-button-text">Video Call</div>
-                        </div>
-                    </div>
+
+            <div class="call-button-container" @click="makeCall(false)" v-if = "index === 1 && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
+              <div class="tabCenter">Call {{activeCall.to}}
+                </div>
+           </div>
+
+            <div class="call-button-containers" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">Video {{activeCall.to}}
+           </div>
+
+<div class="call-button-container" @click="endCall()" v-if = "activeCall.state === 'RINGING' || activeCall.state === 'INITIALIZING' " >Calling {{activeCall.to}}
+  <label>CANCEL</label>
+</div>
+
+<div class="call-button-container" v-if = "index === 2 && activeCall.state === 'IN_CALL'" >There should be video container here
+  <label>CANCEL</label>
+</div>
+
+
+     <div class='keypad' v-if = "index === 1 && activeCall.state === 'IN_CALL'">
+        <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
+          <div>
+            <button class='button' @click='press(1)'>
+              <div class='keypad-button-number'>1</div>
+              <div class='keypad-button-text'></div>
+            </button>
+            <button class='button' @click='press(2)'>
+              <div class='keypad-button-number'>2</div>
+              <div class='keypad-button-text'>
+                ABC
+              </div>
+            </button>
+            <button class='button' @click='press(3)'>
+              <div class='keypad-button-number'>3</div>
+              <div class='keypad-button-text'>
+                DEF
+              </div>
+            </button>
+          </div>
+          <div>
+            <button @click='press(4)'>
+              <div class='keypad-button-number'>4</div>
+              <div class='keypad-button-text'>
+                GHI
+              </div>
+            </button>
+            <button @click='press(5)'>
+              <div class='keypad-button-number'>5</div>
+              <div class='keypad-button-text'>
+                JKL
+              </div>
+            </button>
+            <button class='button' @click='press(6)'>
+              <div class='keypad-button-number'>6</div>
+              <div class='keypad-button-text'>
+                MNO
+              </div>
+            </button>
+          </div>
+          <div>
+            <button class='button' @click='press(7)'>
+              <div class='keypad-button-number'>7</div>
+              <div class='keypad-button-text'>
+                PQRS
+              </div>
+            </button>
+            <button class='button' @click='press(8)'>
+              <div class='keypad-button-number'>8</div>
+              <div class='keypad-button-text'>
+                TUV
+              </div>
+            </button>
+            <button class='button' @click='press(9)'>
+              <div class='keypad-button-number'>9</div>
+              <div class='keypad-button-text'>
+                WXYZ
+              </div>
+            </button>
+          </div>
+          <div>
+            <button class='button' @click="press('*')">
+              *
+            </button>
+            <button class='button' @click='press(0)'>
+              0
+            </button>
+            <button class='button' @click="press('#')">
+              #
+            </button>
+          </div>
+        </div>
+      </div>
+
+        <cell :title="`${activeCall.to}`" value="Corporate" v-if = "index === 3">
+          <img slot="icon" src="../assets/demo/avatar_generic.png" />
+        </cell>
 
           </div>
+
         </swiper-item>
       </swiper>
+
     </div>
 
     <tabbar>
@@ -279,8 +370,8 @@ export default {
       //   this.$store.commit('SET_USER_WITHID', 'saynaci@genband.com')
       console.log('activeCall State ' + this.activeCallState)
       console.log('activeCall State ' + this.activeCall.state)
-      //     this.$store.dispatch('call', 'bkocak@genband.com')
-      if (this.activeCallState === 'ENDED' || this.activeCallState === '') {
+
+      if (!this.activeCallState || this.activeCallState === 'ENDED' || this.activeCallState === '') {
         const params = {
           callee: 'saynaci@genband.com',
           mode: mode
@@ -294,7 +385,7 @@ export default {
         //      active: false
         //    }
         // this.setIncomingCall(incomingCallData)
-        this.$store.dispatch('call', options)
+        this.$store.dispatch('call', params)
         //  this.$store.dispatch.answer(this.incomingCall.callId)
         // } else {
         //   this.$store.dispatch('end')
@@ -305,6 +396,9 @@ export default {
         this.$store.dispatch('end')
       }
       console.log('make call operation finished.')
+    },
+    endCall () {
+      this.$store.dispatch('end')
     },
     sendMessage () {
       let messageToSend = {
@@ -448,9 +542,11 @@ div.my-class {
 }
 
 .call-button-container {
-  margin: 0 auto;
-  width: 203px;
-  height: 54px;
+  margin: auto;
+  width: 233px;
+  height: 74px;
+  vertical-align: middle;
+  padding: 10px;
   background: #29A3D8;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -460,12 +556,81 @@ div.my-class {
   color: white;
 }
 
+.ex1 {
+    padding-top: 125px;
+}
+
 .call-button-icon {
   width: 60px;
   float: left;
   padding-top: 15px;
 }
 
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
 
+.keypad {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 0px solid black;
+}
 
+.input-number {
+  width: 100%;
+  margin: 0 auto;
+  /* margin-top: 5px; */
+  border: 0;
+  background-color: #eceff0;
+  height: 50px;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.keypad-container {
+  overflow: hidden;
+  border: 0px solid black;
+}
+
+.keypad-container div {
+  width: 100%;
+}
+
+.keypad-container div button {
+  width: 33.33%;
+  padding: 0;
+  margin: 0;
+  display: block;
+  float: left;
+  height: 70px;
+  border: 1px solid gray;
+  background: white;
+  color: rgba(0, 0, 0, 0.8);
+  border-radius: 5px;
+  font-size: 1.5em;
+  margin: 5px 0;
+}
+
+.swiper {
+   position: absolute;
+   transform: translateY(50%); /* or translateX(50%) -  */
+   transform: translateY(-50%); /* translateX(-50%) */
+}
+
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.child {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
 </style>

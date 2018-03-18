@@ -272,7 +272,7 @@ store.registerModule('vux', {
       console.log('call to:' + params.callee)
       params.callee = 'saynaci@genband.com'
       options.isVideoEnabled = true // params.mode
-      options.sendInitialVideo = true // params.mode
+      options.sendInitialVideo = params.mode
       options.localVideoContainer = params.localVideoContainer
       options.remoteVideoContainer = params.remoteVideoContainer
       kandy.call.make(params.callee, options)
