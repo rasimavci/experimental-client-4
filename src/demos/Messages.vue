@@ -7,11 +7,12 @@
         <button-tab-item @click.native="showConversation = true">{{ $t('Unread Messages') }}</button-tab-item>
       </button-tab>
 
-    <group :title="$t('This will be data for the group')">
-          <a v-for="conv in getConversations" :key='conv.deneme' class="a list-group-item" href="#" @click="showConversation=true">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(conv.conversationId)"></cell>
-          </a>
+    <group>
+      <a v-for="conv in getConversations" :key='conv.recordId' class="list-group-item" href="#" @click="showConversation1(conv)">
+        <cell :title="`${conv.conversationId}`" value="Personal">
+          <img slot="icon" src="../assets/demo/avatar_generic.png" />
+        </cell>
+      </a>
     </group>
 
 
@@ -28,7 +29,7 @@
     </popup-header></popup-header>
 
 
-      <a v-for="msg in getConversations2" :key='msg.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
+      <a v-for="msg in getMessages1" :key='msg.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
         <group :title="$t(getTime(msg.timestamp))">
          <cell :title="$t(msg.parts[0].text)"></cell>
        </group>
@@ -93,6 +94,7 @@ export default {
   },
   data () {
     return {
+      conv: '',
       selectedContact: '',
       selectedConv: '',
       showConversation: false,
@@ -194,7 +196,23 @@ export default {
           // return Moment(timestamp).calendar()
         }
       })
+    },
+    showConversation1 (conv) {
+      console.log('selected conv1 ' + JSON.stringify(conv))
+      console.log('selected conv1 id ' + conv.conversationId)
+      this.showConversation = true
+      this.conv = conv
+    },
+    getMessages (conv) {
+      let convList = this.$store.state.vux.conversations.conversations
+      convList.forEach(conv => {
+        console.log(conv)
+      })
+        // let mymsg = this.$store.state.vux.conversations.conversations[0].messages
+        // console.log('messages ' + mymsg[0].timestamp)
+        // return this.$store.state.vux.conversations.conversations[0].messages
     }
+
   },
   computed: {
     getConversations2 () {
@@ -213,8 +231,21 @@ export default {
         return this.$store.state.vux.conversations.filter(note => note.direction === 'incoming')
       }
     },
-    getMessages () {
-      return this.$store.state.vux.conversations
+    getMessages1 () {
+      console.log('selected conv id ' + this.conv.conversationId)
+      let convList = this.$store.state.vux.conversations.conversations
+      console.log('selected conv1 ' + JSON.stringify(convList))
+      return convList.filter(conv => conv.conversationId === this.conv.conversationId)
+      // let convList = this.$store.state.vux.conversations.conversations
+      // convList.forEach(conv => {
+      //   if (conv.conversationId === conv1.conversationId) {
+      //     console.log('conv ' + conv)
+      //   }
+      // })
+      // this.showConversation = true
+        // let mymsg = this.$store.state.vux.conversations.conversations[0].messages
+        // console.log('messages ' + mymsg[0].timestamp)
+        // return this.$store.state.vux.conversations.conversations[0].messages
     }
     // mapState({
     //    results: state => state.vux.conversations

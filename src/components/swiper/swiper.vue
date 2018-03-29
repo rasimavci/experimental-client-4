@@ -266,6 +266,7 @@ export default {
   > .@{pre}-swiper {
     overflow: hidden;
     position: relative;
+    height: 1000px;
 
     > .@{pre}-swiper-item {
       position: absolute;

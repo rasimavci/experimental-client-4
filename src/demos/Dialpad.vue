@@ -1,7 +1,7 @@
 <template>
   <div id='dialpad'>
 
-    <div class='modal-container' display='none'>
+    <div class='modal-container1'>
       <div class='input-group flex1' v-show='!activeCallRinging'>
         <input type='text' class='form-control' v-model='callee' placeholder='Username or Number...'>
         <span class='input-group-btn'>
@@ -12,7 +12,9 @@
           </button>
         </span>
       </div>
-
+    <div class='modal-container2'>
+     </div>
+    <div class='modal-container' display='none'>
       <div align='center' class='h3' v-show='activeCallRinging || activeCallExist'>
         <h3>
           {{activeCallState}}
@@ -93,7 +95,7 @@
           </div>
         </div>
       </div>
-
+      </div>
     </div>
 
     <tabbar>
@@ -414,13 +416,27 @@ export default {
   transition: opacity 0.3s ease;
 }
 
-.modal-container {
-  width: 300px;
-  margin: 40px auto 0;
-  padding: 20px 30px;
+.modal-container1 {
+  width: 400px;
+  height: 930px;
+  padding: 1px 1px;
   background-color: #fff;
   border-radius: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-container2 {
+  padding-top: 250px;
+}
+
+
+.modal-container {
+  width: 400px;
+  background-color: #fff;
+  border-radius: 0px;
+  box-shadow: 0;
   transition: all 0.3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -456,10 +472,12 @@ export default {
 .keypad-container {
   overflow: hidden;
   border: 0px solid black;
+  padding: 1px;
 }
 
 .keypad-container div {
-  width: 100%;
+  width: 90%;
+  padding: 1px;
 }
 
 .keypad-container div button {
@@ -622,3 +640,4 @@ export default {
 }
 
 </style>
+

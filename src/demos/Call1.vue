@@ -6,36 +6,33 @@
         <tab-item class="vux-center" :selected="demo2 === item" v-for="(item, index) in list2" @click="demo2 = item" :key="index">{{item}}</tab-item>
       </tab>
 
-      <swiper v-model="index" height="400px" :show-dots="false" >
+      <swiper v-model="index" height="100px" :show-dots="false" >
         <swiper-item v-for="(item, index) in list2" :key="index">
-          <div class="tab-swiper vux-center">
+          <div class="tab-swiper vux-center parent">
 
-<div class="call-button-container1">
             <div class="call-button-container" @click="endCall()" v-if = "index === 0">
-              <div class="tabCenter">
             <img slot="icon" src="../assets/demo/backspace_blue.png">End Call
             </div>
-            </div>
 
-<div class="call-button-container" @click="makeCall(false)" v-if = "index === 1 && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
-<div Class="tabCenter">Call {{activeCall.to}}</div>
-  </div>
-            <div class="call-button-container tabCenter" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">Video {{activeCall.to}}
-  </div>
+<div class"call-button-container1">
+            <div class="call-button-container" @click="makeCall(false)" v-if = "index === 1 && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">Call {{activeCall.to}}
+                </div>
+</div>
 
+            <div class="call-button-containers" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">Video {{activeCall.to}}
+           </div>
 
 <div class="call-button-container" @click="endCall()" v-if = "activeCall.state === 'RINGING' || activeCall.state === 'INITIALIZING' " >Calling {{activeCall.to}}
   <label>CANCEL</label>
 </div>
 
-
 <div class="call-button-container" v-if = "index === 2 && activeCall.state === 'IN_CALL'" >There should be video container here
   <label>CANCEL</label>
 </div>
-</div>
 
-     <div class='keypad' v-if = "index === 1 && activeCall.state === 'IN_CALL1'">
-        <div class='keypad-container'>
+
+     <div class='keypad' v-if = "index === 1 && activeCall.state === 'IN_CALL'">
+        <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
           <div>
             <button class='button' @click='press(1)'>
               <div class='keypad-button-number'>1</div>
@@ -514,7 +511,7 @@ div.my-class {
 
 .tab-swiper {
   background-color: #fff;
-  height: 800px;
+  height: 100px;
 }
 
 .button {
@@ -530,7 +527,7 @@ div.my-class {
 }
 
 .tabCenter {
-  display:table-cell;
+  display: table-cell;
   text-align: center;
   vertical-align: middle;
 }
@@ -544,24 +541,9 @@ div.my-class {
 }
 
 .call-button-container1 {
-  padding-top: 260px;
+  padding-top:50px;
 }
 .call-button-container {
-  margin: auto;
-  width: 233px;
-  height: 80px;
-  vertical-align: middle;
-  padding: 10px;
-  background: #29A3D8;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  font-family: lato-bold;
-  font-size: 17px;
-  color: white;
-}
-
-.call-button {
   margin: auto;
   width: 233px;
   height: 74px;
