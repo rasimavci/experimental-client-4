@@ -8,11 +8,11 @@
       </button-tab>
 
     <group>
-      <a v-for="conv in getConversations" :key='conv.recordId' class="list-group-item" href="#" @click="showConversation1(conv)">
+      <div v-for="conv in getConversations" :key='conv.recordId' class="list-group-item a" href="#" @click="showConversation1(conv)">
         <cell :title="`${conv.conversationId}`" value="Personal">
           <img slot="icon" src="../assets/demo/avatar_generic.png" />
         </cell>
-      </a>
+      </div>
     </group>
 
 
@@ -27,13 +27,6 @@
     @on-click-left="showConversation = false"
     @on-click-right="favorites = true">
     </popup-header></popup-header>
-
-
-      <a v-for="msg in getMessages1" :key='msg.deneme' class="list-group-item" href="#" @click.native="getDate(conv)">
-        <group :title="$t(getTime(msg.timestamp))">
-         <cell :title="$t(msg.parts[0].text)"></cell>
-       </group>
-          </a>
 
         </div>
       </popup>

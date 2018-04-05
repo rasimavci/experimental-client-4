@@ -12,11 +12,13 @@
 
       <!-- render active calls in a list -->
     <group :title="$t('Active Call')">
-          <a v-for="call in getCalls" :key='call.recordId' class="list-group-item" href="#" @click="goCall(call)">
-      <img  src="../assets/demo/avatar_generic.png">
-      <cell :title="$t(call.calleeName)">{{call.state}} {{call.startTime}}</cell>
+          <a v-for="call in getCalls" :key='call.recordId' class="list-group-item a" href="#" @click="goCall(call)">
+      <cell v-if="call.state === 'IN_CALL'" :title="$t(call.calleeName)">{{call.state}} {{String(call.startTime).trim().substring (0, 4)}}
+            <img slot="icon" src="../assets/demo/avatar_generic.png">
+      </cell>
           </a>
     </group>
+
 
 
   </div>
@@ -186,4 +188,8 @@ export default {
   }
 }
 </script>
-
+<style>
+a {
+    text-decoration: none;
+}
+</style>

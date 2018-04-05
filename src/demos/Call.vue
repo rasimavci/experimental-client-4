@@ -22,25 +22,21 @@
 
             <div class="call-button-container" @click="makeCall(false)" v-if = "index === 1  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
               <div class="tabCenter">
-            <img slot="icon" src="../assets/demo/call_outline_white.png">Call {{activeCall.to.substring(0, activeCall.to.indexOf('@'))}}
+            <img slot="icon" src="../assets/demo/call_outline_white.png">Call {{activeCall.calleeName}}
             </div>
             </div>
 
-            <div class="call-button-container" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
+            <div class="call-button-container" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING'">
               <div class="tabCenter">
-            <img slot="icon" src="../assets/demo/camera_outline_white.png">Video {{activeCall.to.substring(0, activeCall.to.indexOf('@'))}}
+            <img slot="icon" src="../assets/demo/camera_outline_white.png">Video {{activeCall.calleeName}}
             </div>
             </div>
 
 
-<div class="call-button-container" @click="endCall()" v-if = "activeCall.state === 'RINGING' || activeCall.state === 'INITIALIZING' " >Calling {{activeCall.to}}
-  <label>CANCEL</label>
+<div class="call-button-container-calling" @click="endCall()" v-if = "activeCall.state === 'RINGING' || activeCall.state === 'INITIALIZING'" >Calling {{activeCall.calleeName}}
+  <label class="call-button-container-cancel">CANCEL</label>
 </div>
 
-
-<div class="call-button-container" v-if = "index === 2 && activeCall.state === 'IN_CALL'" >Video container
-  <label>CANCEL</label>
-</div>
 
 
      <div class='keypad' v-if = "index === 1 && activeCall.state === 'IN_CALL'">
@@ -173,10 +169,12 @@ export default {
   created: function () {
     console.log('callPageInitialAction value ' + this.callPageInitialAction)
     this.index = this.callPageInitialAction
-    if (this.callPageInitialAction === 1) {
-      this.makeCall(false)
-    } else {
-      this.makeCall(true)
+    if (this.activeCall.state === 'ENDED') {
+      if (this.callPageInitialAction === 1) {
+        this.makeCall(false)
+      } else {
+        this.makeCall(true)
+      }
     }
     this.$store.dispatch('updateCurrentPage', 'call')
     this.$store.dispatch('updateShowPlacement', 'right')
@@ -581,6 +579,37 @@ div.my-class {
   font-size: 17px;
   color: white;
 }
+
+.call-button-container-calling {
+  margin: auto;
+  width: 233px;
+  height: 80px;
+  vertical-align: middle;
+  padding: 10px;
+  background: white;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  font-family: lato-bold;
+  font-size: 24px;
+  color: black;
+}
+
+.call-button-container-cancel {
+  margin: auto;
+  width: 233px;
+  height: 80px;
+  vertical-align: middle;
+  padding: 10px;
+  background: white;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  font-family: lato-bold;
+  font-size: 24px;
+  color: blue;
+}
+
 
 .call-button {
   margin: auto;

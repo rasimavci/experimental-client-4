@@ -24,9 +24,20 @@ This project can be developed using necessary libraries
 + node@^7.6(development)
 
 
-cd projectPath
-npm install // or yarn
-npm run dev // or yarn dev
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+
+# build for production and view the bundle analyzer report
+npm run build --report
 ```
 
 

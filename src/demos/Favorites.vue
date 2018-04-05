@@ -2,7 +2,9 @@
   <div>
 
     <div class='modal-container' display='none'>
-      <label>Favorites will be listed here</label>
+      <br>
+      </br>
+      <label>Your favorites tab is empty. To add favorites, click on the Contacts tab and add a contact to your favorites tab.</label>
     </div>
 
   </div>
