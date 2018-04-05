@@ -2,25 +2,8 @@
   <div>
 
     <div class='modal-container' display='none'>
-      <div class='input-group' v-show='!activeCallRinging'>
-        <input type='text' class='form-control' v-model='callee' placeholder='Search for a log...'>
-        <span class='input-group-btn'>
-<label>Favorites will be listed here</label>
-        </span>
-      </div>
-      </div>
-
-     <div class='keypad'>
-        <div class='keypad-container' v-show='!activeCallExist  && !activeCallRinging'>
-          <div>
-
-            <button class='button' @click='connect()'>
-              Login
-            </button>
-          </div>
-        </div>
-      </div>
-
+      <label>Favorites will be listed here</label>
+    </div>
 
   </div>
 </template>

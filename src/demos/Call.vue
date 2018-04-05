@@ -11,17 +11,26 @@
           <div class="tab-swiper vux-center">
 
 <div class="call-button-container1">
-            <div class="call-button-container" @click="endCall()" v-if = "index === 0">
+            <div class="tabCenter" @click="endCall()" v-if = "index === 0">
+    <group class="weui-cells_form">
+      <x-input placeholder="Message"class="weui-cell_vcode">
+        <img slot="right" class="weui-vcode-img" src="../assets/demo/send_message.png" @click="endCall()">
+      </x-input>
+    </group>
+
+            </div>
+
+            <div class="call-button-container" @click="makeCall(false)" v-if = "index === 1  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
               <div class="tabCenter">
-            <img slot="icon" src="../assets/demo/backspace_blue.png">End Call
+            <img slot="icon" src="../assets/demo/call_outline_white.png">Call {{activeCall.to.substring(0, activeCall.to.indexOf('@'))}}
             </div>
             </div>
 
-<div class="call-button-container" @click="makeCall(false)" v-if = "index === 1 && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
-<div Class="tabCenter">Call {{activeCall.to}}</div>
-  </div>
-            <div class="call-button-container tabCenter" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">Video {{activeCall.to}}
-  </div>
+            <div class="call-button-container" @click="makeCall(true)" v-if = "index === 2  && activeCall.state !== 'RINGING' && activeCall.state !== 'IN_CALL'">
+              <div class="tabCenter">
+            <img slot="icon" src="../assets/demo/camera_outline_white.png">Video {{activeCall.to.substring(0, activeCall.to.indexOf('@'))}}
+            </div>
+            </div>
 
 
 <div class="call-button-container" @click="endCall()" v-if = "activeCall.state === 'RINGING' || activeCall.state === 'INITIALIZING' " >Calling {{activeCall.to}}
@@ -29,12 +38,12 @@
 </div>
 
 
-<div class="call-button-container" v-if = "index === 2 && activeCall.state === 'IN_CALL'" >There should be video container here
+<div class="call-button-container" v-if = "index === 2 && activeCall.state === 'IN_CALL'" >Video container
   <label>CANCEL</label>
 </div>
-</div>
 
-     <div class='keypad' v-if = "index === 1 && activeCall.state === 'IN_CALL1'">
+
+     <div class='keypad' v-if = "index === 1 && activeCall.state === 'IN_CALL'">
         <div class='keypad-container'>
           <div>
             <button class='button' @click='press(1)'>
@@ -55,13 +64,13 @@
             </button>
           </div>
           <div>
-            <button @click='press(4)'>
+            <button class='button' @click='press(4)'>
               <div class='keypad-button-number'>4</div>
               <div class='keypad-button-text'>
                 GHI
               </div>
             </button>
-            <button @click='press(5)'>
+            <button class='button' @click='press(5)'>
               <div class='keypad-button-number'>5</div>
               <div class='keypad-button-text'>
                 JKL
@@ -107,6 +116,8 @@
           </div>
         </div>
       </div>
+
+</div>
 
         <cell :title="`${activeCall.to}`" value="Corporate" v-if = "index === 3">
           <img slot="icon" src="../assets/demo/avatar_generic.png" />
@@ -518,21 +529,31 @@ div.my-class {
 }
 
 .button {
-  background-color: #4CAF50;
-  /* Green */
+  background-color: #4caf50;
   border: none;
-  color: white;
+  color: blue;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  height: 50px;
+  width: 10px;
 }
+
 
 .tabCenter {
   display:table-cell;
   text-align: center;
   vertical-align: middle;
+}
+
+.tabCenter2 {
+  display:table-cell;
+  text-align: center;
+  vertical-align: bottom;
 }
 
 .calling-message {
@@ -544,7 +565,7 @@ div.my-class {
 }
 
 .call-button-container1 {
-  padding-top: 260px;
+  padding-top: 160px;
 }
 .call-button-container {
   margin: auto;
@@ -599,6 +620,7 @@ div.my-class {
   margin: 0;
   overflow: hidden;
   border: 0px solid black;
+  height: 35%
 }
 
 .input-number {
@@ -615,10 +637,14 @@ div.my-class {
 .keypad-container {
   overflow: hidden;
   border: 0px solid black;
+  padding: 5px;
+    margin: auto;
+    width: 75%;
 }
 
 .keypad-container div {
   width: 100%;
+  border: 0px;
 }
 
 .keypad-container div button {
@@ -628,9 +654,9 @@ div.my-class {
   display: block;
   float: left;
   height: 70px;
-  border: 1px solid gray;
+  border: 0px solid gray;
   background: white;
-  color: rgba(0, 0, 0, 0.8);
+  color: #1E90FF;
   border-radius: 5px;
   font-size: 1.5em;
   margin: 5px 0;

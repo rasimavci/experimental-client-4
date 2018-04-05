@@ -13,11 +13,11 @@
     </group>
 
     <group>
-      <a v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item" href="#" @click="updateActiveCell(logrecord)">
-        <cell :title="`  ${logrecord.firstName} ${logrecord.lastName}`" value="Personal">
+      <div v-for="logrecord in getContacts" :key='logrecord.recordId' class="list-group-item a" @click="updateActiveCell(logrecord)">
+        <cell :title="`${logrecord.firstName} ${logrecord.lastName}`" value="Personal">
           <img slot="icon" src="../assets/demo/avatar_generic.png" />
         </cell>
-      </a>
+      </div>
     </group>
 
     <div style="padding:2px;">
@@ -389,7 +389,8 @@ export default {
   margin: 10px;
   padding: 5px;
   border: 1px solid black;
-}
+  width: 200%
+  }
 
 .column {
   flex-direction: column;
@@ -460,5 +461,8 @@ export default {
 #bloc3 {
   display: inline;
   float: center;
+}
+#a {
+    text-decoration: none;
 }
 </style>

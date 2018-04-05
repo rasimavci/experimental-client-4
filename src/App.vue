@@ -17,7 +17,7 @@
       <!-- drawer content -->
       <div slot="drawer">
         <group title="Rasim Avci" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
-          <cell title="Presences" link="/component/presences" value="Presences" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
+          <cell title="Presences" link="/component/presences" @click.native="drawerVisibility = false" v-show="left && this.showPlacementValue === 'left'">
           </cell>
           <cell title="Call" link="/component/call" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
           </cell>
