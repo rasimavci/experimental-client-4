@@ -32,7 +32,7 @@
           <cell title="History" link="/component/history" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe619;</span>
           </cell>
-          <cell title="   Dialpad" link="/component/dialpad" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
+          <cell title="Dialpad" link="/component/dialpad" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
             <span class="demo-icon-22 vux-demo-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe661;</span>
           </cell>
           <cell title="Sessions" link="/component/sessions" @click.native="drawerVisibility = false" v-show="this.showPlacementValue === 'left'">
@@ -50,7 +50,7 @@
           <radio v-model="showPlacement" :options="['Last Name', 'First Name', 'Availability']" @on-change="onPlacementChange"></radio>
         </group>
         <group title="Sources" v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'contact'">
-          <radio v-model="showPlacement" :options="['Personal Addressbook', 'Global Addressbook']" @on-change="onPlacementChange"></radio>
+          <radio v-model="showPlacement" :options="['Personal Addressbook', 'Global Addressbook']" @on-change="onContactTypeChange"></radio>
         </group>
         <group title="Show..." v-show="this.showPlacementValue === 'right' && this.stateCurrentPage === 'history'">
           <radio v-model="showPlacement" :options="['All Call', 'Incoming Call', 'Outgoing Call', 'Missed Call', 'Message', 'Conference']" @on-change="onHistoryFilterChange"></radio>
@@ -151,6 +151,9 @@ export default {
       setTimeout(one => {
         this.showPlacementValue = val
       }, 400)
+    },
+    onContactTypeChange (val) {
+      this.$store.commit('SET_CONTACTTYPE', val)
     },
     onClickLeft () {
       console.log('left menu clicked')

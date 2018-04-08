@@ -11,11 +11,16 @@
           <div class="tab-swiper vux-center">
 
 <div class="call-button-container1">
-            <div class="tabCenter" @click="endCall()" v-if = "index === 0">
+            <div class="tabCenter" @click="sendMessage()" v-if = "index === 0">
     <group class="weui-cells_form">
-      <x-input placeholder="Message"class="weui-cell_vcode">
+      <x-input v-model="message" placeholder="Message" class="weui-cell_vcode">
         <img slot="right" class="weui-vcode-img" src="../assets/demo/send_message.png" @click="endCall()">
       </x-input>
+
+            <x-input placeholder="Message" class="weui-cell_vcode">
+        <img slot="right" class="weui-vcode-img" src="../assets/demo/send_message.png" @click="endCall()">
+      </x-input>
+
     </group>
 
             </div>
@@ -167,9 +172,10 @@ const list = () => ['CHAT', 'VOICE', 'VIDEO', 'PEOPLE']
 
 export default {
   created: function () {
-    console.log('callPageInitialAction value ' + this.callPageInitialAction)
+    console.log('active call ' + JSON.stringify(this.activeCall))
+    console.log('callPageInitialAction value ' + this.callPageInitialAction + ' activeCallstate ' + this.activeCallState)
     this.index = this.callPageInitialAction
-    if (this.activeCall.state === 'ENDED') {
+    if (!this.activeCallState || this.activeCallState === 'ENDED') {
       if (this.callPageInitialAction === 1) {
         this.makeCall(false)
       } else {
@@ -213,6 +219,7 @@ export default {
   },
   data () {
     return {
+      message: '',
       confirmDelete: false,
       selectedContact: {},
       showdata: 'all',
@@ -379,12 +386,12 @@ export default {
       //     //      active: false
       //     //    }
       //   this.$store.commit('SET_USER_WITHID', 'saynaci@genband.com')
-      console.log('activeCall State ' + this.activeCallState)
+      // console.log('activeCall State ' + this.activeCallState)
       console.log('activeCall State ' + this.activeCall.state)
-
+      console.log('make call to ' + this.callee)
       if (!this.activeCallState || this.activeCallState === 'ENDED' || this.activeCallState === '') {
         const params = {
-          callee: 'saynaci@genband.com',
+          callee: this.callee, // 'saynaci@genband.com',
           mode: mode
         }
         let options = [{ key: 'localVideoContainer', value: document.getElementById('localVideoContainer') },
@@ -414,23 +421,24 @@ export default {
     sendMessage () {
       let messageToSend = {
         type: 'IM',
-        text: this.myText, // 'deneme', // this.callee
+        text: this.message, // 'deneme', // this.callee
         userId: this.callee // 'bkocak@genband.com'
       }
-      console.log('send clicked')
       this.$store.dispatch('sendMessage', messageToSend)
+      this.message = ''
     }
   },
   computed: mapState({
     callPageInitialAction: state => state.vux.callPageInitialAction,
     user: state => state.user,
+    callee: state => state.vux.callee,
     activeCall: state => state.vux.activeCall,
     activeCallTo: state => state.vux.activeCall.to,
     activeCallRinging: state => state.activeCallRinging,
     activeCallExist: state => state.activeCallExist,
     activeCallInCall: state => state.activeCallInCall,
-    activeCallOnHold: state => state.activeCallOnHold,
-    activeCallState: state => state.activeCallState,
+    activeCallOnHold: state => state.vux.activeCallOnHold,
+    activeCallState: state => state.vux.activeCall.state,
     activeCallMuted: state => state.activeCallOnHold,
     activeCallsendingVideo: state => state.activeCallOnHold,
     activeCallEnded: state => state.activeCallOnHold,

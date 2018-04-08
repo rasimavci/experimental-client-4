@@ -6,6 +6,11 @@
       <button-tab-item @click.native="showdata = 'favorites'">{{ $t('Favorites') }}</button-tab-item>
     </button-tab>
 
+  <div>
+    <br>
+    <search @on-submit="onSubmit" :auto-fixed="false" v-model="value2" @on-focus="onFocus" @on-cancel="onCancel"></search>
+  </div>
+  
     <group :title="'Services'">
       <cell :title="'Meetme Audio Conference'">
         <img slot="icon" src="../assets/demo/genband.png" />
@@ -36,7 +41,6 @@
 
           <popup-header :left-text="$t('Back')" :right-text="$t('Save')" :title="$t('Create Profile')" @on-click-left="create = false" @on-click-right="edit = false">
           </popup-header>
-          </popup-header>
 
           <group :placeholder="$t('IDENTIFICATION')">
             <x-input :placeholder="$t(this.selectedContact.firstName)"></x-input>
@@ -66,7 +70,7 @@
 
           <div class="flex">
             <div class="flex2">
-              <img src="../assets/demo/avatar_generic.png"" width="150" height="70">
+              <img src="../assets/demo/avatar_generic.png" width="150" height="70">
             </div>
 
             <div class="flex column">
@@ -74,10 +78,10 @@
                 <h3> {{this.selectedContact.firstName}} {{this.selectedContact.lastName}} </h3>
               </div>
               <div class="flex">
-            <img src="../assets/demo/call_outline_blue.png">
-            <img src="../assets/demo/video_outline_blue.png" hspace="20">
+            <img src="../assets/demo/call_outline_blue.png" @click="goCallPage(1)">
+            <img src="../assets/demo/video_outline_blue.png" hspace="20" @click="goCallPage(2)">
             <div hspace="20"> </div>
-            <img src="../assets/demo/bubble-clipart-chat-box-15d.png">
+            <img src="../assets/demo/bubble-clipart-chat-box-15d.png" @click="goCallPage(0)">
               </div>
             </div>
           </div>
@@ -85,7 +89,7 @@
 
           <group :title="$t('CONTACT')">
             <cell :title="$t('Home ' +  this.selectedContact.homePhone ) ">
-              {{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</cell>
+              {{this.selectedContact.firstName}} {{this.selectedContact.lastName}}
             </cell>
             <cell :title="$t('mobile ' +  this.selectedContact.workPhone ) ">
             </cell>
@@ -120,9 +124,9 @@
 
           <popup-header :left-text="$t('Back')" :right-text="$t('Save')" :title="$t()" @on-click-left="edit = false" @on-click-right="edit = false">
           </popup-header>
-          </popup-header>
 
-          <cell <img src="../assets/demo/avatar_generic.png">
+          <cell 
+            img src="../assets/demo/avatar_generic.png">
             <h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
             <img src="../assets/demo/call_outline_blue.png">
             <img src="../assets/demo/video_outline_blue.png">
@@ -141,7 +145,6 @@
 
           <group :title="$t('SETTINGS')">
             <checklist :label-position="labelPosition" required :options="commonList" v-model="checklist001" @on-change="change"></checklist>
-
           </group>
         </div>
       </popup>
@@ -152,7 +155,6 @@
         <div class="popup1">
 
           <popup-header :left-text="$t('Back')" :right-text="$t('Ok')" :title="$t('Manage Favorites')" @on-click-left="favorites = false" @on-click-right="edit = false">
-          </popup-header>
           </popup-header>
 
           <group title="__">
@@ -199,8 +201,8 @@
 
           <group :title="$t('SETTINGS')">
             <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
-            <checklist :label-position="labelPosition" required :options2="commonList2" v-model="checklist001" @on-change="change"></checklist>
-            <checklist :label-position="labelPosition" required :options3="commonList3" v-model="checklist001" @on-change="change"></checklist>
+            <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist001" @on-change="change"></checklist>
+            <checklist :label-position="labelPosition" required :options="commonList3" v-model="checklist001" @on-change="change"></checklist>
           </group>
           <group>
             <x-switch title="Close" v-model="show1"></x-switch>
@@ -215,14 +217,10 @@
 </template>
 
 <script>
-import { Confirm, Rater, CellBox, CellFormPreview, PopupHeader, ButtonTab, ButtonTabItem, Divider, XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
+import { Search, Confirm, Rater, CellBox, CellFormPreview, PopupHeader, ButtonTab, ButtonTabItem, Divider, XImg, Checklist, Alert, Radio, TransferDom, Popup, Group, Cell, XButton, XSwitch, XInput, Toast, XAddress, ChinaAddressData } from 'vux'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
-  ...mapState({
-    currentPageAddContact: state => state.vux.currentPageAddContact,
-    joinStarted: state => state.vux.joinStarted
-  }),
   created: function () {
     this.$store.dispatch('updateCurrentPage', 'contact')
     this.$store.dispatch('updateShowPlacement', 'right')
@@ -231,6 +229,7 @@ export default {
     TransferDom
   },
   components: {
+    Search,
     Confirm,
     Rater,
     CellBox,
@@ -254,12 +253,14 @@ export default {
   },
   data () {
     return {
+      value2: '',
       confirmDelete: false,
       selectedContact: {},
       showdata: 'all',
+      filterWord: '',
       list: [],
       error: false,
-      checklist001: true,
+      checklist001: [],
       src: 'https://o5omsejde.qnssl.com/demo/test1.jpg',
       labelPosition: 'left',
       type: '',
@@ -289,14 +290,19 @@ export default {
       show11: false,
       show12: false,
       show13: false,
-      commonList: ['Show Presence Status'],
-      commonList1: ['Manage Favorites'],
-      commonList2: ['Remove From Personal Contacts List'],
-      commonList3: ['Remove From Personal Contacts List']
+      commonList: ['Show Presence Status', 'dene'],
+      commonList1: ['Manage Favorites', 'dene2'],
+      commonList2: ['Remove From Personal Contacts List', 'de'],
+      commonList3: ['Remove From Personal Contacts List', 'dee']
 
     }
   },
   methods: {
+    goCallPage (mode) {
+      this.$store.dispatch('setCallPageInitialAction', mode)
+      this.$store.commit('SET_CALLEE', this.selectedContact.primaryContact)
+      this.$router.push('call')
+    },
     change (val, label) {
       console.log('change', val, label)
     },
@@ -312,9 +318,6 @@ export default {
     onImgError (item, $event) {
       console.log(item, $event)
     },
-    onCancel () {
-      console.log('on cancel')
-    },
     onConfirm () {
       console.log('contact deleted')
     },
@@ -327,6 +330,27 @@ export default {
     onHide () {
     },
     success () {
+    },
+    resultClick (item) {
+      window.alert('you click the result item: ' + JSON.stringify(item))
+    },
+    getResult (val) {
+      // this.results = val ? getResult(this.value) : []
+    },
+    onSubmit (val) {
+      console.log('contactType ' + this.contactType + ' val ' + val)
+      if (this.contactType === 'Global Addressbook') {
+        this.$store.dispatch('search', val)
+      }
+      this.showdata = 'filtered'
+      this.filterWord = val
+      // window.alert('on submit ' + val)
+    },
+    onCancel () {
+      console.log('on cancel')
+    },
+    onFocus () {
+      console.log('on focus')
     },
     addcontact () {
       this.add = true
@@ -350,13 +374,20 @@ export default {
     ...mapGetters(['mystate']),
     getContacts () {
       if (this.showdata === 'all') {
-        console.log(this.$store.state.vux.contacts)
+        // console.log(this.$store.state.vux.contacts)
         this.list = this.$store.state.vux.contacts
         return this.$store.state.vux.contacts
-      } else if (this.showdata === 'favorites') {
-        return this.$store.state.vux.contacts // this.$store.state.vux.contacts.filter(note => note.direction === 'incoming')
+      } else if (this.showdata === 'filtered') {
+        return this.$store.state.vux.contacts.filter(note => note.firstName.startsWith(this.filterWord))
+      } else if (this.showdata === 'Global Addressbook') {
+        return this.$store.state.vux.directory // .filter(note => note.firstName.startsWith(this.filterWord))
       }
-    }
+    },
+    ...mapState({
+      currentPageAddContact: state => state.vux.currentPageAddContact,
+      joinStarted: state => state.vux.joinStarted,
+      contactType: state => state.vux.contactType
+    })
   },
   watch: {
     show10 (val) {

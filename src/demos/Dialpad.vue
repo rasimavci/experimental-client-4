@@ -142,7 +142,7 @@ export default {
       textAreaVisible: false,
       hasCollaborationService: false,
       isShowKeypad: true,
-      activeCall: false,
+      // activeCall: false,
       callee: '',
       joinClicked: false,
       activeNote: '',
@@ -260,6 +260,7 @@ export default {
     },
     goCallPage (mode) {
       this.$store.dispatch('setCallPageInitialAction', mode)
+      this.$store.commit('SET_CALLEE', this.callee)
       this.$router.push('call')
   //   this.$store.commit('SET_USER_WITHID', 'saynaci@genband.com')
     //   console.log('activeCall State ' + this.activeCallState)

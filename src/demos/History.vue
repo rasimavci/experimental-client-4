@@ -9,13 +9,15 @@
         <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
       </button-tab>
 
-    <group :title="$t('This will be data for the group')">
-          <a v-for="logrecord in getCallLogs" :key='logrecord.recordId' class="list-group-item" href="#" @click="goCall(logrecord)">
-    <cell :title="`  ${logrecord.callerName}`">{{logrecord.startTime.trim ().substring (0, 4)}}
+  <a v-for="(logGroup,key) in groupedLogs" :key='logGroup.recordId' class="list-group-item">
+    <group :title="$t(key)">
+          <a v-for="logrecord in logGroup" :key='logrecord.recordId' class="list-group-item" href="#" @click="goCall(logrecord)">
+    <cell :title="`  ${logrecord.callerName}`">{{getMoment(logrecord.date)}}
       <img slot="icon" src="../assets/demo/avatar_generic.png" />
     </cell>
           </a>
     </group>
+     </a>
 
   </div>
 </template>
@@ -47,9 +49,9 @@ Call prompt by using plugin:
 
 <script>
 import { Cell, ButtonTab, ButtonTabItem, Divider, Confirm, Group, XSwitch, XButton, TransferDomDirective as TransferDom } from 'vux'
-import Moment from 'moment'
 import { mapState } from 'vuex'
-
+import moment from 'moment'
+import _ from 'lodash'
 export default {
   ...mapState({
     historyFilterSelection: state => state.vux.historyFilterSelection
@@ -74,7 +76,6 @@ export default {
   },
   data () {
     return {
-      moment: Moment,
       callee: '',
       activeCallRinging: false,
       activeCallExist: false,
@@ -94,6 +95,26 @@ export default {
       }
       this.$store.dispatch('call', params)
       this.$router.push('call')
+    },
+    getDate (timestamp) {
+      console.log(moment(timestamp).calendar())
+      // return Moment(timestamp).calendar()
+      return moment(timestamp).format('MMM Do YY')
+    },
+    getMoment (timestamp) {
+      return moment(timestamp).format('h:mm:ss')
+    },
+    getCallLogs () {
+      if (this.$store.state.vux.historyFilterSelection === 'All Call') {
+        console.log(this.$store.state.vux.history)
+        return this.$store.state.vux.history
+      } else if (this.$store.state.vux.historyFilterSelection === 'Incoming Call') {
+        return this.$store.state.vux.history.filter(note => note.direction === 'incoming')
+      } else if (this.$store.state.vux.historyFilterSelection === 'Outgoing Call') {
+        return this.$store.state.vux.history.filter(note => note.direction === 'outgoing')
+      } else if (this.$store.state.vux.historyFilterSelection === 'Missed Call') {
+        return this.$store.state.vux.history.filter(note => note.direction === 'missed')
+      }
     },
     onCancel () {
       console.log('on cancel')
@@ -165,10 +186,6 @@ export default {
         },
         onConfirm (msg) {
           alert(msg)
-        },
-        getDate (timestamp) {
-          console.log(Moment(timestamp).calendar())
-          return Moment(timestamp).calendar()
         }
       })
     }
@@ -185,6 +202,18 @@ export default {
       } else if (this.$store.state.vux.historyFilterSelection === 'Missed Call') {
         return this.$store.state.vux.history.filter(note => note.direction === 'missed')
       }
+    },
+    groupedLogs () {
+      let history = this.$store.state.vux.history
+      history.forEach(log => {
+        // console.log('startTime ' + Date(log.startTime.replace(/\/Date\((\d+)\)\//, '$1')))
+        // console.log('date ' + moment(log.startTime).format('MMMM Do YYYY, h:mm:ss a'))
+        // log.date = moment(String(log.startTime)).format('MMM Do YY') // log.startTime.trim().substring(0, 4)
+        let fullDate = Date(log.startTime.replace(/\/Date\((\d+)\)\//, '$1'))
+        log.date = fullDate
+        log.date1 = moment(fullDate).format('MMMM Do YYYY') // Date(log.startTime.replace(/\/Date\((\d+)\)\//, '$1')) // log.startTime.trim().substring(0, 4)
+      })
+      return _.groupBy(history, 'date1')
     }
   }
 }

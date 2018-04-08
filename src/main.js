@@ -96,7 +96,10 @@ store.registerModule('vux', {
     currentPageAddContact: false,
     historyFilterSelection: 'All Call',
     callPageInitialAction: '',
-    isConnected: false
+    isConnected: false,
+    callee: '',
+    contactType: '',
+    directory: []
   },
 
   mutations: {
@@ -124,6 +127,14 @@ store.registerModule('vux', {
     },
     SET_USER_WITHID ({commit}, top) {
       console.log('dispatching with ' + top)
+    },
+    SET_CALLEE (state, top) {
+      console.log('set callee ' + top)
+      state.callee = top
+    },
+    SET_CONTACTTYPE (state, top) {
+      console.log('set contact type ' + top)
+      state.contactType = top
     },
     INITIALIZE_ACTIVE_CALL (state) {
       state.activeCall.state = ''
@@ -210,6 +221,11 @@ store.registerModule('vux', {
       console.log('data refreshed')
       if (data) state.contacts = data
     },
+
+    SET_DIRECTORY (state, data) {
+      state.directory = data
+    },
+
     SET_CONVERSATIONS (state, conversations) {
       state.conversations = conversations
       state.conversations2 = state.conversations[1]
@@ -224,6 +240,8 @@ store.registerModule('vux', {
       calls.forEach(function (call) {
         if (call.id === state.activeCall.id) {
           state.activeCall = call
+          // state.activeCall.state = call.state
+          state.activeCallState = call.state
         }
       })
     }
@@ -269,18 +287,19 @@ store.registerModule('vux', {
       commit({type: 'UPDATE_JOIN_STARTED', top: true})
     },
     call ({commit}, params) {
-      console.log('call to:' + params.callee)
-      params.callee = 'saynaci@genband.com'
+      // let callee = store.state.callee
+      console.log('start call to:' + params.callee)
       options.isVideoEnabled = true // params.mode
       options.sendInitialVideo = params.mode
       options.localVideoContainer = params.localVideoContainer
       options.remoteVideoContainer = params.remoteVideoContainer
       kandy.call.make(params.callee, options)
       commit('SET_ACTIVECALL_STATE', 'IN_CALL')
-      commit('SET_ACTIVECALL', params)
+      // commit('SET_ACTIVECALL', params)
     },
     end ({commit}, callee) {
       kandy.call.end(this.state.vux.activeCall.id)
+      commit('SET_ACTIVECALL_STATE', 'ENDED')
       // const calls = kandy.call.getAll()
       // calls.forEach(function (call) {
       //   if (call.id === this.state.vux.activeCall.id) {
@@ -327,6 +346,10 @@ store.registerModule('vux', {
       }
       let message = conv.createMessage(part)
       message.send()
+    },
+    search: ({ commit }, params) => {
+      console.log('search for ' + params)
+      kandy.contacts.search(params, 'USERNAME')
     }
   },
   getters: {
@@ -555,6 +578,16 @@ function addEventListeners () {
   kandy.on('contacts:change', params => {
     store.commit('REFRESH_DIRECTORY', params.contacts)
     // store.dispatch ('refresh', params.contacts)
+  })
+
+  kandy.on('directory:change', params => {
+    // store.dispatch('refresh')
+    //  store.commit ('REFRESH_DIRECTORY', params.results)
+    //   console.log ('directory' + params[0])
+    //  store.commit ('SET_USER', params.results[0])
+    // store.commit('SET_CONV_NAMES', params.results[0])
+    // store.commit('SET_CALL_NAMES', params.results[0])
+    store.commit('SET_DIRECTORY', params.results)
   })
 
   kandy.on('conversations:change', res => {
