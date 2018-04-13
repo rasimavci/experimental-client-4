@@ -1,25 +1,19 @@
 <template>
   <div>
 
-
       <button-tab>
-        <button-tab-item selected @click.native="show = 'all'">{{ $t('All') }}</button-tab-item>
-        <button-tab-item @click.native="show = 'incoming'">{{ $t('Incoming') }}</button-tab-item>
-        <button-tab-item @click.native="show = 'outgoing'">{{ $t('Outgoing') }}</button-tab-item>
-        <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
+        <button-tab-item selected @click.native="show = 'All'">{{ $t('All Calls') }}</button-tab-item>
+        <button-tab-item @click.native="show = 'incoming'">{{ $t('Active Calls') }}</button-tab-item>
       </button-tab>
-
 
       <!-- render active calls in a list -->
     <group :title="$t('Active Call')">
-          <a v-for="call in getCalls" :key='call.recordId' class="list-group-item a" href="#" @click="goCall(call)">
+          <div v-for="call in getCalls" :key='call.recordId' class="list-group-item a" href="#" @click="goCall(call)">
       <cell v-if="call.state === 'IN_CALL'" :title="$t(call.calleeName)">{{call.state}} {{String(call.startTime).trim().substring (0, 4)}}
             <img slot="icon" src="../assets/demo/avatar_generic.png">
       </cell>
-          </a>
+          </div>
     </group>
-
-
 
   </div>
 </template>
@@ -163,7 +157,6 @@ export default {
           return Moment(timestamp).calendar()
         },
         getTime (timestamp) {
-          // let myStr = String(timestamp)
           let time1 = timestamp.slice(0, 2) + ':' + timestamp.slice(2)
           let time = time1.trim().substring(0, 5)
           console.log('time' + time)
@@ -174,16 +167,7 @@ export default {
   },
   computed: {
     getCalls () {
-      if (this.show === 'all') {
-        console.log(this.$store.state.vux.calls)
-        return this.$store.state.vux.calls
-      } else if (this.show === 'incoming') {
-        return this.$store.state.vux.calls.filter(note => note.direction === 'incoming')
-      } else if (this.show === 'outgoing') {
-        return this.$store.state.vux.calls.filter(note => note.direction === 'outgoing')
-      } else if (this.show === 'missed') {
-        return this.$store.state.vux.calls.filter(note => note.direction === 'missed')
-      }
+      return this.$store.state.vux.calls
     }
   }
 }

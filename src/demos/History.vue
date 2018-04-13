@@ -9,15 +9,15 @@
         <button-tab-item @click.native="show = 'missed'">{{ $t('Missed') }}</button-tab-item>
       </button-tab>
 
-  <a v-for="(logGroup,key) in groupedLogs" :key='logGroup.recordId' class="list-group-item">
+  <div v-for="(logGroup,key) in groupedLogs" :key='logGroup.recordId' class="list-group-item a">
     <group :title="$t(key)">
-          <a v-for="logrecord in logGroup" :key='logrecord.recordId' class="list-group-item" href="#" @click="goCall(logrecord)">
-    <cell :title="`  ${logrecord.callerName}`">{{getMoment(logrecord.date)}}
+          <div v-for="logrecord in logGroup" :key='logrecord.recordId' class="list-group-item a" @click="goCall(logrecord)">
+    <cell :title="`  ${logrecord.callerName}`">{{logrecord.date1}}
       <img slot="icon" src="../assets/demo/avatar_generic.png" />
     </cell>
-          </a>
+          </div>
     </group>
-     </a>
+     </div>
 
   </div>
 </template>
@@ -95,14 +95,6 @@ export default {
       }
       this.$store.dispatch('call', params)
       this.$router.push('call')
-    },
-    getDate (timestamp) {
-      console.log(moment(timestamp).calendar())
-      // return Moment(timestamp).calendar()
-      return moment(timestamp).format('MMM Do YY')
-    },
-    getMoment (timestamp) {
-      return moment(timestamp).format('h:mm:ss')
     },
     getCallLogs () {
       if (this.$store.state.vux.historyFilterSelection === 'All Call') {
@@ -204,18 +196,22 @@ export default {
       }
     },
     groupedLogs () {
-      let history = this.$store.state.vux.history
+      let history = this.getCallLogs // this.$store.state.vux.history
       history.forEach(log => {
-        // console.log('startTime ' + Date(log.startTime.replace(/\/Date\((\d+)\)\//, '$1')))
-        // console.log('date ' + moment(log.startTime).format('MMMM Do YYYY, h:mm:ss a'))
-        // log.date = moment(String(log.startTime)).format('MMM Do YY') // log.startTime.trim().substring(0, 4)
-        let fullDate = Date(log.startTime.replace(/\/Date\((\d+)\)\//, '$1'))
-        log.date = fullDate
-        log.date1 = moment(fullDate).format('MMMM Do YYYY') // Date(log.startTime.replace(/\/Date\((\d+)\)\//, '$1')) // log.startTime.trim().substring(0, 4)
+        log.date1 = moment(parseInt(log.startTime)).format('h:mm:ss a')
+        log.date = moment(parseInt(log.startTime)).format('MMMM Do YYYY')
       })
-      return _.groupBy(history, 'date1')
+      return _.groupBy(history, 'date')
     }
   }
 }
-</script>
 
+ // span {{call.callerDisplayNumber}}
+ // span {{moment(parseInt(call.startTime)).format('MMMM Do YYYY, h:mm:ss a')}}
+ // span {{call.direction}}
+</script>
+<style>
+a {
+    text-decoration: none;
+}
+</style>

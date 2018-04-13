@@ -10,7 +10,7 @@
     <br>
     <search @on-submit="onSubmit" :auto-fixed="false" v-model="value2" @on-focus="onFocus" @on-cancel="onCancel"></search>
   </div>
-  
+
     <group :title="'Services'">
       <cell :title="'Meetme Audio Conference'">
         <img slot="icon" src="../assets/demo/genband.png" />
@@ -24,16 +24,6 @@
         </cell>
       </div>
     </group>
-
-    <div style="padding:2px;">
-      <x-button @click.native="create=true" type="primary">Create</x-button>
-    </div>
-    <div style="padding:2px;">
-      <x-button @click.native="edit=true" type="primary">{{ $t('Edit') }}</x-button>
-    </div>
-    <div style="padding:2px;">
-      <x-button @click.native="addContact" type="primary"> {{ $t('Add') }} </x-button>
-    </div>
 
     <div v-transfer-dom>
       <popup v-model="create" height="100%">
@@ -125,7 +115,7 @@
           <popup-header :left-text="$t('Back')" :right-text="$t('Save')" :title="$t()" @on-click-left="edit = false" @on-click-right="edit = false">
           </popup-header>
 
-          <cell 
+          <cell
             img src="../assets/demo/avatar_generic.png">
             <h4>{{this.selectedContact.firstName}} {{this.selectedContact.lastName}}</h4>
             <img src="../assets/demo/call_outline_blue.png">
@@ -154,17 +144,24 @@
       <popup v-model="favorites" height="100%">
         <div class="popup1">
 
-          <popup-header :left-text="$t('Back')" :right-text="$t('Ok')" :title="$t('Manage Favorites')" @on-click-left="favorites = false" @on-click-right="edit = false">
+          <popup-header :left-text="$t('Back')" :right-text="$t('Ok')" :title="$t('Manage Favorites')" @on-click-left="closeUpdateFavorites()" @on-click-right="closeUpdateFavorites()">
           </popup-header>
 
-          <group title="__">
-            <cell title="Mahmut Oztemur">
+          <group title="_">
+            <cell :title="$t(this.selectedContact.firstName)" :placeholder="$t('Voice')">
+              {{this.selectedContact.email}}{{' Chat'}}
               <rater v-model="data1" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
             </cell>
-            <cell title="Burak Kocak">
+            <cell :title="$t(this.selectedContact.firstName)">
+             {{this.selectedContact.email}}{{' Voice'}}
               <rater v-model="data2" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
             </cell>
-            <cell title="Burak Kocak">
+            <cell :title="$t(this.selectedContact.firstName)">
+             {{this.selectedContact.email}}{{' Video'}}
+              <rater v-model="data3" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
+            </cell>
+            <cell :title="$t(this.selectedContact.firstName)">
+             {{this.selectedContact.workPhone}}{{' Work'}}
               <rater v-model="data3" :max="1" active-color="#00BFFF" inline-desc="email"></rater>
             </cell>
           </group>
@@ -182,31 +179,55 @@
     <div v-transfer-dom>
       <popup v-model="add" height="100%">
         <div class="popup1">
-          <label>Add Screen</label>
-          <group>
 
-            <img src="../assets/demo/call_outline_blue.png">
-            <img src="../assets/demo/video_outline_blue.png">
-            <img src="../assets/demo/dp_action_keyboard.png">
+          <popup-header :left-text="$t('Back')" :right-text="$t('Add')" :title="$t()" @on-click-left="add = false" @on-click-right="add = false">
+          </popup-header>
 
-          </group>
+          <div class="flex">
+            <div class="flex2">
+              <img src="../assets/demo/avatar_generic.png" width="150" height="70">
+            </div>
+
+            <div class="flex column">
+              <div class="flex">
+                <h3> {{this.selectedContact.firstName}} {{this.selectedContact.lastName}} </h3>
+              </div>
+              <div class="flex">
+            <img src="../assets/demo/call_outline_blue.png" @click="goCallPage(1)">
+            <img src="../assets/demo/video_outline_blue.png" hspace="20" @click="goCallPage(2)">
+            <div hspace="20"> </div>
+            <img src="../assets/demo/bubble-clipart-chat-box-15d.png" @click="goCallPage(0)">
+              </div>
+            </div>
+          </div>
+
           <group :title="$t('CONTACT')">
-            <x-input :placeholder="$t('Home*')"></x-input>
-            <x-input :placeholder="$t('mobile*')"></x-input>
-            <x-input :placeholder="$t('Work*')"></x-input>
-            <x-input :placeholder="$t('NickName*')"></x-input>
-            <x-input :placeholder="$t('User ID')"></x-input>
-            <x-input :placeholder="$t('Email')"></x-input>
+            <cell :title="$t('Home ' ) ">
+              {{this.selectedContact.firstName}} {{this.selectedContact.lastName}}
+            </cell>
+            <cell :title="$t('mobile')">
+            {{this.selectedContact.workPhone}}
+            </cell>
+            <cell :title="$t('Work')">
+              {{this.selectedContact.workPhone}} <img src="../assets/demo/call_outline_blue2.png">
+            </cell>
+            <cell :title="$t('Mobile')">
+            {{this.selectedContact.mobilePhone}}
+            </cell>
+            <cell :title="$t('Nickname') ">
+              {{this.selectedContact.nickname}}
+            </cell>
+            <cell :title="$t('User ID')">
+              {{this.selectedContact.userId}}
+            </cell>
+            <cell :title="$t('Email')">
+              {{this.selectedContact.email}}
+            </cell>
           </group>
 
           <group :title="$t('SETTINGS')">
-            <checklist :label-position="labelPosition" required :options="commonList1" v-model="checklist001" @on-change="change"></checklist>
-            <checklist :label-position="labelPosition" required :options="commonList2" v-model="checklist001" @on-change="change"></checklist>
-            <checklist :label-position="labelPosition" required :options="commonList3" v-model="checklist001" @on-change="change"></checklist>
-          </group>
-          <group>
-            <x-switch title="Close" v-model="show1"></x-switch>
-            <x-button @click.native="toast" type="primary">Save</x-button>
+            <cell :title="$t('Manage Favorites')" @click.native="updateFavorites()">
+            </cell>
           </group>
 
         </div>
@@ -274,6 +295,8 @@ export default {
       contact: false,
       edit: false,
       add: false,
+      contact_temp: false,
+      add_temp: false,
       favorites: false,
       show1: false,
       show3: false,
@@ -290,10 +313,10 @@ export default {
       show11: false,
       show12: false,
       show13: false,
-      commonList: ['Show Presence Status', 'dene'],
-      commonList1: ['Manage Favorites', 'dene2'],
-      commonList2: ['Remove From Personal Contacts List', 'de'],
-      commonList3: ['Remove From Personal Contacts List', 'dee']
+      commonList: ['Show Presence Status'],
+      commonList1: ['Manage Favorites'],
+      commonList2: ['Remove From Personal Contacts List'],
+      commonList3: ['Remove From Personal Contacts List']
 
     }
   },
@@ -339,11 +362,13 @@ export default {
     },
     onSubmit (val) {
       console.log('contactType ' + this.contactType + ' val ' + val)
+      this.filterWord = val
       if (this.contactType === 'Global Addressbook') {
         this.$store.dispatch('search', val)
+        this.showdata = 'Global Addressbook'
+      } else {
+        this.showdata = 'filtered'
       }
-      this.showdata = 'filtered'
-      this.filterWord = val
       // window.alert('on submit ' + val)
     },
     onCancel () {
@@ -360,13 +385,33 @@ export default {
       // this.add = true
     },
     updateActiveCell (args) {
+      if (this.$store.state.vux.contactType === 'Global Addressbook') {
+        this.add = true
+        this.contact = false
+      } else {
+        this.add = false
+        this.contact = true
+      }
+      console.log('updateActiveCell add ' + this.add + ' contact ' + this.contact)
       if (this.$store.state.vux.joinStarted) {
         console.log('selected for join ' + args.primaryContact)
       } else {
         this.selectedContact = args
-        this.contact = true
+        // this.contact = true
         console.log('edit ' + args.firstName)
       }
+    },
+    updateFavorites () {
+      this.favorites = true
+      this.add_temp = this.add
+      this.contact_temp = this.contact
+      this.add = false
+      this.contact = false
+    },
+    closeUpdateFavorites () {
+      this.favorites = true
+      this.add = this.add_temp
+      this.contact = this.contact_temp
     }
 
   },
@@ -380,7 +425,16 @@ export default {
       } else if (this.showdata === 'filtered') {
         return this.$store.state.vux.contacts.filter(note => note.firstName.startsWith(this.filterWord))
       } else if (this.showdata === 'Global Addressbook') {
-        return this.$store.state.vux.directory // .filter(note => note.firstName.startsWith(this.filterWord))
+        console.log('global selected')
+        return this.$store.state.vux.directory.filter(note => note.firstName.startsWith(this.filterWord))
+      }
+    },
+    getContactType () {
+      let statue = this.$store.state.vux.contactType
+      if (statue === 'Global Addressbook') {
+        return false
+      } else {
+        return true
       }
     },
     ...mapState({
@@ -419,8 +473,8 @@ export default {
   display: flex;
   margin: 10px;
   padding: 5px;
-  border: 1px solid black;
-  width: 200%
+  border: 0px solid black;
+  width: 100%
   }
 
 .column {

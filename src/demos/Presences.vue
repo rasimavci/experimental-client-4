@@ -10,7 +10,7 @@
       <x-button @click.native="show=true" type="primary">About</x-button>
     </div>
     <div style="padding:2px;">
-      <x-button @click.native="logout()" type="primary">{{ $t('Logouts') }}</x-button>
+      <x-button @click.native="logout()" type="primary">{{ $t('Logout') }}</x-button>
     </div>
     <div style="padding:2px;">
       <x-button @click.native="show1=true" type="primary"> {{ $t('Send Feedback') }} </x-button>
